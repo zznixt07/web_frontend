@@ -1,7 +1,7 @@
 import React from 'react'
 
 // sauce: https://www.joshwcomeau.com/snippets/react-hooks/use-timeout/
-export default function useTimeout(callback, delay) {
+const useTimeout = (callback, delay) => {
     const timeoutRef = React.useRef(null)
     const savedCallback = React.useRef(callback)
     React.useEffect(() => {
@@ -18,7 +18,7 @@ export default function useTimeout(callback, delay) {
 }
 
 // sauce: https://www.joshwcomeau.com/snippets/react-hooks/use-interval/
-function useInterval(callback, delay) {
+const useInterval = (callback, delay) => {
     const intervalRef = React.useRef(null)
     const savedCallback = React.useRef(callback)
     React.useEffect(() => {
