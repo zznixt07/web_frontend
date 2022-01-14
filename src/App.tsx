@@ -2,44 +2,45 @@ import * as React from 'react';
 import logo from './logo.svg';
 import FeatherMenu from './assets/svg/FeatherMenu';
 import FeatherBell from './assets/svg/FeatherBell';
+import { Flex } from './components/Structure';
 
 const Search = (): JSX.Element => {
   return (
-    <div>
+    <Flex>
       <input type="text" placeholder="Search..." />
       <div>
         <button>Search</button>
       </div>
-    </div>
+    </Flex>
   );
 };
 
 const Profile = (): JSX.Element => {
   return (
-    <div>
+    <span>
       <img src={logo} alt="logo" width="60" height="60" />
-    </div>
+    </span>
   );
 };
 
 const App = (): JSX.Element => {
   return (
-    <div className="App">
-      <nav>
-        <section>
+    <div className="App" >
+      <Flex as="nav" justify='space-between'>
+        <Flex as="section">
           <FeatherMenu />
           <img src={logo} className="App-logo" alt="logo" width="60" height="60" />
           <h1>FramaMotion</h1>
-        </section>
+        </Flex>
         <section>
           <Search />
         </section>
-        <section>
+        <Flex as="section">
           <span>Upload</span>
           <FeatherBell />
           <Profile />
-        </section>
-      </nav>
+        </Flex>
+      </Flex>
     </div>
   );
 }
