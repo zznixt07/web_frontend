@@ -50,7 +50,7 @@ const VideoCard = ({
     video
 }: any) => {
     return (
-        <Flex wrap="wrap">
+        <Flex wrap="wrap" justify="flex-start">
             <Thumbnail src={video.thumbSrc} viewersCount={video.views} isLive={video.isLive}/>
             <div>
                 <div>

@@ -60,7 +60,7 @@ const App = (): JSX.Element => {
         </Flex>
       </Flex>
 
-      <Flex>
+      <Flex align='flex-start'>
         <Aside>
           <IconLabel>
             <FeatherHome />
