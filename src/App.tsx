@@ -4,7 +4,8 @@ import FeatherMenu from './assets/svg/FeatherMenu';
 import FeatherBell from './assets/svg/FeatherBell';
 import FeatherHome from './assets/svg/FeatherHome';
 import { Flex } from './components/Structure';
-import styled, { StyledComponent } from 'styled-components';
+import Browse from './views/Browse';
+import styled from 'styled-components';
 import FeatherCompass from './assets/svg/FeatherCompass';
 import EosIconsSubscriptionsCreatedOutlined from './assets/svg/EosIconsSubscriptionsCreatedOutlined';
 import MdiPlaylistPlay from './assets/svg/MdiPlaylistPlay';
@@ -20,9 +21,6 @@ const Search = (): JSX.Element => {
   );
 };
 
-type Props = {
-  children: React.ReactNode;
-}
 
 const Aside = styled.aside`
   text-align: center;
@@ -83,6 +81,7 @@ const App = (): JSX.Element => {
 
         </Aside>
         <main>
+          <Browse />
 
         </main>
       </Flex>
