@@ -21,10 +21,11 @@ img7,
 
 const Browse = () => {
     return (
-        <Grid maxColumns={6}>
+        <Grid maxColumns={6} itemMaxWidth="350px" gap="0.6rem">
             {thumbs.map(i => (
                 <VideoCard
                     video={{thumbSrc: i, title: "Video Title", views: "1.2M", channel: "Channel Name", durationSecs: 101, isLive: false}}
+                    cardFlow="column"
                 />
                 )
             )}

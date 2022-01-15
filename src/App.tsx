@@ -80,7 +80,7 @@ const App = (): JSX.Element => {
           </IconLabel>
 
         </Aside>
-        <main>
+        <main style={{flex: 1}}>
           <Browse />
 
         </main>

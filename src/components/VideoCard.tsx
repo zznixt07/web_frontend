@@ -25,6 +25,10 @@ const Thumb = styled.div`
     }
 `
 
+const ThumbImage = styled.img`
+    object-fit: cover;
+`
+
 type ThumbProp = {
     src: string;
     duration: string;
@@ -35,7 +39,7 @@ type ThumbProp = {
 const Thumbnail = ({src, duration, viewersCount, isLive = false}: ThumbProp): JSX.Element => {
     return (
         <Thumb>
-            <img loading="lazy" src={src} />
+            <ThumbImage loading="lazy" src={src} width="350" height="200"  />
             <LenIndicator>
                 {isLive ? <>
                     <IcBaselinePeopleAlt />
@@ -67,10 +71,11 @@ const secToHumanReadable = (seconds: number): string => {
 
 
 const VideoCard = ({
-    video
+    video,
+    cardFlow = 'column',
 }: any) => {
     return (
-        <Flex wrap="wrap" justify="flex-start">
+        <Flex direction={cardFlow} align="flex-start">
             <Thumbnail src={video.thumbSrc} duration={secToHumanReadable(video.durationSecs)} viewersCount={video.views} isLive={video.isLive}/>
             <div>
                 <div>
@@ -78,8 +83,7 @@ const VideoCard = ({
                     <MiOptionsVertical />
                 </div>
                 <Info>
-                    <img loading="lazy" src={video.thumbSrc} width="20" height="20" />
-                    <span>{video.channel}</span>
+                    <img loading="lazy" src={video.thumbSrc} width="20" height="20" />                    <span>{video.channel}</span>
                     <span>{video.views}</span>
                     <span>2 weeks ago</span>
                 </Info>
