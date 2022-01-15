@@ -27,16 +27,22 @@ const Thumb = styled.div`
 
 type ThumbProp = {
     src: string;
+    duration: string;
     viewersCount: number;
     isLive?: boolean;
 }
 
-const Thumbnail = ({src, viewersCount, isLive = false}: ThumbProp): JSX.Element => {
+const Thumbnail = ({src, duration, viewersCount, isLive = false}: ThumbProp): JSX.Element => {
     return (
         <Thumb>
-            <img src={src} />
+            <img loading="lazy" src={src} />
             <LenIndicator>
-                {isLive ? <IcBaselinePeopleAlt /> : ''} {viewersCount}
+                {isLive ? <>
+                    <IcBaselinePeopleAlt />
+                    viewersCount
+                    </> :
+                    duration
+                }
             </LenIndicator>
         </Thumb>
     )
@@ -46,19 +52,33 @@ const Info = styled(Flex)`
 
 `
 
+const secToHumanReadable = (seconds: number): string => {
+    const rem = seconds % 3600
+    let HH = Math.floor(seconds / 3600).toString()
+    let MM = Math.floor(rem / 60).toString()
+    let SS = (rem % 60).toString()
+
+    // precede with 0s if width < 2
+    if (HH.length < 2) HH = '0' + HH
+    if (MM.length < 2) MM = '0' + MM
+    if (SS.length < 2) SS = '0' + SS
+    return HH === '00' ? `${MM}:${SS}` : `${HH}:${MM}:${SS}`
+}
+
+
 const VideoCard = ({
     video
 }: any) => {
     return (
         <Flex wrap="wrap" justify="flex-start">
-            <Thumbnail src={video.thumbSrc} viewersCount={video.views} isLive={video.isLive}/>
+            <Thumbnail src={video.thumbSrc} duration={secToHumanReadable(video.durationSecs)} viewersCount={video.views} isLive={video.isLive}/>
             <div>
                 <div>
                     <span>{video.title}</span>
                     <MiOptionsVertical />
                 </div>
                 <Info>
-                    <img src={video.thumbSrc} width="20" height="20" />
+                    <img loading="lazy" src={video.thumbSrc} width="20" height="20" />
                     <span>{video.channel}</span>
                     <span>{video.views}</span>
                     <span>2 weeks ago</span>

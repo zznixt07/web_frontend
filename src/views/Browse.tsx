@@ -24,7 +24,7 @@ const Browse = () => {
         <Grid maxColumns={6}>
             {thumbs.map(i => (
                 <VideoCard
-                    video={{thumbSrc: i, title: "Video Title", views: "1.2M", channel: "Channel Name", isLive: true}}
+                    video={{thumbSrc: i, title: "Video Title", views: "1.2M", channel: "Channel Name", durationSecs: 101, isLive: false}}
                 />
                 )
             )}
