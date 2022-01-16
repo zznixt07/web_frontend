@@ -9,6 +9,15 @@ type Props = {
     children: React.ReactNode;
 }
 
+// this anchor tag covers whole card.
+const CardLink = styled.a`
+    &::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+    }
+`
+
 const LenIndicator = styled(Flex)`
     padding: 0.2rem;
     border-radius: 0.2rem;
@@ -99,8 +108,11 @@ const VideoCard = ({
     cardFlow = 'column',
 }: any) => {
     return (
-        <Flex $direction={cardFlow} align="flex-start" justify='flex-start'>
-            <Thumbnail src={video.thumbSrc} duration={secToHumanReadable(video.durationSecs)} viewersCount={video.views} isLive={video.isLive} />
+        // position: relative for capturing CardLink's position: absolute
+        <Flex $direction={cardFlow} align="flex-start" justify='flex-start' style={{position: 'relative'}}>
+            <CardLink href="/vid">
+                <Thumbnail src={video.thumbSrc} duration={secToHumanReadable(video.durationSecs)} viewersCount={video.views} isLive={video.isLive} />
+            </CardLink>
             <div style={{ width: '100%' }}>
                 <Flex justify='space-between'>
                     <VideoTitle>{video.title}</VideoTitle>
@@ -109,7 +121,8 @@ const VideoCard = ({
                 <Info>
                     <ChannelInfo>
                         <img loading="lazy" src={video.thumbSrc} width="20" height="20" />
-                        <span className="channel-name">{video.channel}</span>
+                        {/* to make inner links clickable without setting z-index, make position: relative*/}
+                        <a href="/channel" className="channel-name" style={{position: 'relative'}}>{video.channel}</a>
                     </ChannelInfo>
                     <VideoInfo>
                         <span>{video.views} views</span>
