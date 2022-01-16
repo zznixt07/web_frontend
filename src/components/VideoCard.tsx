@@ -53,6 +53,12 @@ const Thumbnail = ({ src, duration, viewersCount, isLive = false }: ThumbProp): 
 }
 
 const Info = styled.div`
+    color: #373737;
+`
+
+const VideoTitle = styled.span`
+    font-weight: bold;
+    font-size: 1.0rem;
 `
     
 const ChannelInfo = styled(Flex)`
@@ -96,8 +102,8 @@ const VideoCard = ({
         <Flex $direction={cardFlow} align="flex-start" justify='flex-start'>
             <Thumbnail src={video.thumbSrc} duration={secToHumanReadable(video.durationSecs)} viewersCount={video.views} isLive={video.isLive} />
             <div style={{ width: '100%' }}>
-                <Flex justify='space-between' >
-                    <span>{video.title}</span>
+                <Flex justify='space-between'>
+                    <VideoTitle>{video.title}</VideoTitle>
                     <MiOptionsVertical />
                 </Flex>
                 <Info>
