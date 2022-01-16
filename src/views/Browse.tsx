@@ -19,12 +19,22 @@ img6,
 img7,
 ]
 
+const randomName = (): string => {
+    const names = [
+        "How stuff works",
+        "How stuff worked",
+        "10 hour meme song loop",
+        "Amogus night 3am SUS challenge. OMG!!! Pranking ghost in the after life."
+    ]
+    return names[Math.floor(Math.random() * names.length)]
+}
+
 const Browse = () => {
     return (
         <Grid maxColumns={6} itemMaxWidth="350px" gap="0.6rem">
             {thumbs.map(i => (
                 <VideoCard
-                    video={{thumbSrc: i, title: "Video Title", views: "1.2M", channel: "Channel Name", durationSecs: 101, isLive: false}}
+                    video={{thumbSrc: i, title: randomName(), views: "1.2M", channel: randomName(), durationSecs: 101, isLive: false}}
                     cardFlow="column"
                 />
                 )

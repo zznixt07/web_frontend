@@ -8,7 +8,7 @@ import { Flex } from "./Structure";
 type Props = {
     children: React.ReactNode;
 }
-  
+
 const LenIndicator = styled(Flex)`
     padding: 0.2rem;
     border-radius: 0.2rem;
@@ -36,15 +36,15 @@ type ThumbProp = {
     isLive?: boolean;
 }
 
-const Thumbnail = ({src, duration, viewersCount, isLive = false}: ThumbProp): JSX.Element => {
+const Thumbnail = ({ src, duration, viewersCount, isLive = false }: ThumbProp): JSX.Element => {
     return (
         <Thumb>
-            <ThumbImage loading="lazy" src={src} width="350" height="200"  />
+            <ThumbImage loading="lazy" src={src} width="350" height="200" />
             <LenIndicator>
                 {isLive ? <>
                     <IcBaselinePeopleAlt />
                     viewersCount
-                    </> :
+                </> :
                     duration
                 }
             </LenIndicator>
@@ -52,8 +52,26 @@ const Thumbnail = ({src, duration, viewersCount, isLive = false}: ThumbProp): JS
     )
 }
 
-const VideoInfo = styled(Flex)`
+const Info = styled.div`
+`
+    
+const ChannelInfo = styled(Flex)`
+    & > .channel-name {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
     justify-content: flex-start;
+`
+
+const VideoInfo = styled.div`
+    & > span::after {
+        content: '•';
+        margin: 0 0.2rem;
+    }
+    & > span:last-child::after {
+        content: '';
+    }
 `
 
 const secToHumanReadable = (seconds: number): string => {
@@ -75,18 +93,23 @@ const VideoCard = ({
     cardFlow = 'column',
 }: any) => {
     return (
-        <Flex $direction={cardFlow} align="flex-start">
-            <Thumbnail src={video.thumbSrc} duration={secToHumanReadable(video.durationSecs)} viewersCount={video.views} isLive={video.isLive}/>
-            <div style={{width: '100%'}}>
+        <Flex $direction={cardFlow} align="flex-start" justify='flex-start'>
+            <Thumbnail src={video.thumbSrc} duration={secToHumanReadable(video.durationSecs)} viewersCount={video.views} isLive={video.isLive} />
+            <div style={{ width: '100%' }}>
                 <Flex justify='space-between' >
                     <span>{video.title}</span>
                     <MiOptionsVertical />
                 </Flex>
-                <VideoInfo>
-                    <img loading="lazy" src={video.thumbSrc} width="20" height="20" />                    <span>{video.channel}</span>
-                    <span>{video.views}</span>
-                    <span>2 weeks ago</span>
-                </VideoInfo>
+                <Info>
+                    <ChannelInfo>
+                        <img loading="lazy" src={video.thumbSrc} width="20" height="20" />
+                        <span className="channel-name">{video.channel}</span>
+                    </ChannelInfo>
+                    <VideoInfo>
+                        <span>{video.views} views</span>
+                        <span>2 weeks ago</span>
+                    </VideoInfo>
+                </Info>
             </div>
         </Flex>
     );
