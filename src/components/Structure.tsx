@@ -1,13 +1,15 @@
 import styled from 'styled-components';
 
+// direction is prefixed with $ to prevent it from being passed to
+// the underlying div (cuz direction is a CSS attribute. "rtl | ltr")
 export const Flex = styled.div<{ 
-        direction?: 'row' | 'column',
+        $direction?: 'row' | 'column',
         wrap?: 'wrap' | 'nowrap',
         justify?: string,
         align?: string,
         gap?: string }>`
     display: flex;
-    flex-direction: ${props => props.direction || 'row'};
+    flex-direction: ${props => props.$direction || 'row'};
     flex-wrap: ${props => props.wrap || 'nowrap'};
     justify-content: ${props => props.justify || 'center'};
     align-items: ${props => props.align || 'center'};

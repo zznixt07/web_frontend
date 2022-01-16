@@ -52,8 +52,8 @@ const Thumbnail = ({src, duration, viewersCount, isLive = false}: ThumbProp): JS
     )
 }
 
-const Info = styled(Flex)`
-
+const VideoInfo = styled(Flex)`
+    justify-content: flex-start;
 `
 
 const secToHumanReadable = (seconds: number): string => {
@@ -75,18 +75,18 @@ const VideoCard = ({
     cardFlow = 'column',
 }: any) => {
     return (
-        <Flex direction={cardFlow} align="flex-start">
+        <Flex $direction={cardFlow} align="flex-start">
             <Thumbnail src={video.thumbSrc} duration={secToHumanReadable(video.durationSecs)} viewersCount={video.views} isLive={video.isLive}/>
-            <div>
-                <div>
+            <div style={{width: '100%'}}>
+                <Flex justify='space-between' >
                     <span>{video.title}</span>
                     <MiOptionsVertical />
-                </div>
-                <Info>
+                </Flex>
+                <VideoInfo>
                     <img loading="lazy" src={video.thumbSrc} width="20" height="20" />                    <span>{video.channel}</span>
                     <span>{video.views}</span>
                     <span>2 weeks ago</span>
-                </Info>
+                </VideoInfo>
             </div>
         </Flex>
     );
