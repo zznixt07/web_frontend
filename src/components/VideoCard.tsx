@@ -1,18 +1,18 @@
-
-import * as React from 'react';
-import styled from 'styled-components';
-import IcBaselinePeopleAlt from '../assets/svg/IcBaselinePeopleAlt';
-import MiOptionsVertical from '../assets/svg/MiOptionsVertical';
-import { Flex } from "./Structure";
+import * as React from 'react'
+import styled from 'styled-components'
+import IcBaselinePeopleAlt from '../assets/svg/IcBaselinePeopleAlt'
+import MiOptionsVertical from '../assets/svg/MiOptionsVertical'
+import { Flex } from './Structure'
 
 type Props = {
-    children: React.ReactNode;
+    children: React.ReactNode
 }
 
-// this anchor tag covers whole card.
+// this anchor tag covers whole card. Which means the text inside the card are
+// *NOT* selectable. Unfortunately, there seems to no way.
 const CardLink = styled.a`
     &::after {
-        content: "";
+        content: '';
         position: absolute;
         inset: 0;
     }
@@ -39,23 +39,30 @@ const ThumbImage = styled.img`
 `
 
 type ThumbProp = {
-    src: string;
-    duration: string;
-    viewersCount: number;
-    isLive?: boolean;
+    src: string
+    duration: string
+    viewersCount: number
+    isLive?: boolean
 }
 
-const Thumbnail = ({ src, duration, viewersCount, isLive = false }: ThumbProp): JSX.Element => {
+const Thumbnail = ({
+    src,
+    duration,
+    viewersCount,
+    isLive = false,
+}: ThumbProp): JSX.Element => {
     return (
         <Thumb>
-            <ThumbImage loading="lazy" src={src} width="350" height="200" />
+            <ThumbImage loading='lazy' src={src} width='350' height='200' />
             <LenIndicator>
-                {isLive ? <>
-                    <IcBaselinePeopleAlt />
-                    viewersCount
-                </> :
+                {isLive ? (
+                    <>
+                        <IcBaselinePeopleAlt />
+                        viewersCount
+                    </>
+                ) : (
                     duration
-                }
+                )}
             </LenIndicator>
         </Thumb>
     )
@@ -67,9 +74,9 @@ const Info = styled.div`
 
 const VideoTitle = styled.span`
     font-weight: bold;
-    font-size: 1.0rem;
+    font-size: 1rem;
 `
-    
+
 const ChannelInfo = styled(Flex)`
     & > .channel-name {
         white-space: nowrap;
@@ -102,16 +109,25 @@ const secToHumanReadable = (seconds: number): string => {
     return HH === '00' ? `${MM}:${SS}` : `${HH}:${MM}:${SS}`
 }
 
+const VideoCard = ({ video, cardFlow = 'column' }: any) => {
 
-const VideoCard = ({
-    video,
-    cardFlow = 'column',
-}: any) => {
     return (
-        // position: relative for capturing CardLink's position: absolute
-        <Flex $direction={cardFlow} align="flex-start" justify='flex-start' style={{position: 'relative'}}>
-            <CardLink href="/vid">
-                <Thumbnail src={video.thumbSrc} duration={secToHumanReadable(video.durationSecs)} viewersCount={video.views} isLive={video.isLive} />
+        /*position: relative for capturing CardLink's position: absolute*/
+        <Flex
+            $direction={cardFlow}
+            align='flex-start'
+            justify='flex-start'
+            style={{ position: 'relative' }}
+        >
+            <CardLink
+                href='/vid'
+            >
+                <Thumbnail
+                    src={video.thumbSrc}
+                    duration={secToHumanReadable(video.durationSecs)}
+                    viewersCount={video.views}
+                    isLive={video.isLive}
+                />
             </CardLink>
             <div style={{ width: '100%' }}>
                 <Flex justify='space-between'>
@@ -120,9 +136,20 @@ const VideoCard = ({
                 </Flex>
                 <Info>
                     <ChannelInfo>
-                        <img loading="lazy" src={video.thumbSrc} width="20" height="20" />
+                        <img
+                            loading='lazy'
+                            src={video.thumbSrc}
+                            width='20'
+                            height='20'
+                        />
                         {/* to make inner links clickable without setting z-index, make position: relative*/}
-                        <a href="/channel" className="channel-name" style={{position: 'relative'}}>{video.channel}</a>
+                        <a
+                            href='/channel'
+                            className='channel-name'
+                            style={{ position: 'relative' }}
+                        >
+                            {video.channel}
+                        </a>
                     </ChannelInfo>
                     <VideoInfo>
                         <span>{video.views} views</span>
@@ -131,7 +158,7 @@ const VideoCard = ({
                 </Info>
             </div>
         </Flex>
-    );
-};
+    )
+}
 
-export default VideoCard;
+export default VideoCard
