@@ -80,7 +80,7 @@ const Thumbnail = ({
 }
 
 const Info = styled.div`
-    color: #373737;
+    color: var(--text2);
 `
 
 const VideoTitle = styled.span`
