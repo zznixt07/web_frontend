@@ -12,7 +12,7 @@ const MyCard = styled(Flex)`
     padding: 0.3rem;
     position: relative;
     border-radius: 0.3rem;
-    &:hover{
+    &:hover {
         box-shadow: 0 0 0.5rem 0 #272727;
     }
 `
@@ -20,6 +20,7 @@ const MyCard = styled(Flex)`
 // this anchor tag covers whole card. Which means the text inside the card are
 // *NOT* selectable. Unfortunately, there seems to no way.
 const CardLink = styled.a`
+    width: 100%;
     &::after {
         content: '';
         position: absolute;
@@ -44,6 +45,7 @@ const Thumb = styled.div`
 `
 
 const ThumbImage = styled.img`
+    width: 100%;
     object-fit: cover;
 `
 
@@ -62,7 +64,7 @@ const Thumbnail = ({
 }: ThumbProp): JSX.Element => {
     return (
         <Thumb>
-            <ThumbImage loading='lazy' src={src} width='350' height='200' />
+            <ThumbImage loading='lazy' src={src} height="200" />
             <LenIndicator>
                 {isLive ? (
                     <>

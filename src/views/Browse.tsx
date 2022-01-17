@@ -22,7 +22,7 @@ const randomName = (): string => {
 
 const Browse = () => {
     return (
-        <Grid maxColumns={6} itemBaseWidth='350px' gap='0.2rem'>
+        <Grid maxColumns={10} itemBaseWidth='350px' gap='0.2rem'>
             {thumbs.map((i) => (
                 <VideoCard
                     video={{
