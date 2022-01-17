@@ -8,6 +8,15 @@ type Props = {
     children: React.ReactNode
 }
 
+const MyCard = styled(Flex)`
+    padding: 0.3rem;
+    position: relative;
+    border-radius: 0.3rem;
+    &:hover{
+        box-shadow: 0 0 0.5rem 0 #272727;
+    }
+`
+
 // this anchor tag covers whole card. Which means the text inside the card are
 // *NOT* selectable. Unfortunately, there seems to no way.
 const CardLink = styled.a`
@@ -113,11 +122,10 @@ const VideoCard = ({ video, cardFlow = 'column' }: any) => {
 
     return (
         /*position: relative for capturing CardLink's position: absolute*/
-        <Flex
+        <MyCard
             $direction={cardFlow}
             align='flex-start'
             justify='flex-start'
-            style={{ position: 'relative' }}
         >
             <CardLink
                 href='/vid'
@@ -157,7 +165,7 @@ const VideoCard = ({ video, cardFlow = 'column' }: any) => {
                     </VideoInfo>
                 </Info>
             </div>
-        </Flex>
+        </MyCard>
     )
 }
 

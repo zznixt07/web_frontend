@@ -16,12 +16,12 @@ export const Flex = styled.div<{
     gap: ${props => props.gap || '0.2rem'};
 `
 
-// grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+/* itemBaseWidth is like flex-basis */
 export const Grid = styled.div<{
         maxColumns: number,
-        itemMaxWidth?: string,
+        itemBaseWidth?: string,
         gap?: string}>`
-    --w: ${props => props.itemMaxWidth || '400px'};
+    --w: ${props => props.itemBaseWidth || '400px'};
     --n: ${props => props.maxColumns};
     display: grid;
     grid-template-columns: repeat(
