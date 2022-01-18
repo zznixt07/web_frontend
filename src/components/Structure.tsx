@@ -10,7 +10,7 @@ export const Flex = styled.div<{
         gap?: string }>`
     display: flex;
     flex-direction: ${props => props.$direction || 'row'};
-    flex-wrap: ${props => props.wrap || 'nowrap'};
+    flex-wrap: ${props => props.wrap || 'wrap'};
     justify-content: ${props => props.justify || 'center'};
     align-items: ${props => props.align || 'center'};
     gap: ${props => props.gap || '0.2rem'};
