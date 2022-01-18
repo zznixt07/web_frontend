@@ -4,13 +4,13 @@ import styled from 'styled-components';
 // the underlying div (cuz direction is a CSS attribute. "rtl | ltr")
 export const Flex = styled.div<{ 
         $direction?: 'row' | 'column',
-        wrap?: 'wrap' | 'nowrap',
+        $wrap?: 'wrap' | 'nowrap',
         justify?: string,
         align?: string,
         gap?: string }>`
     display: flex;
     flex-direction: ${props => props.$direction || 'row'};
-    flex-wrap: ${props => props.wrap || 'wrap'};
+    flex-wrap: ${props => props.$wrap || 'nowrap'};
     justify-content: ${props => props.justify || 'center'};
     align-items: ${props => props.align || 'center'};
     gap: ${props => props.gap || '0.2rem'};
@@ -32,3 +32,4 @@ export const Grid = styled.div<{
     );
     grid-gap: ${props => props.gap || '0.2rem'};
 `
+    // grid-auto-rows: 150px;

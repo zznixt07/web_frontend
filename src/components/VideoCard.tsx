@@ -45,8 +45,41 @@ const Thumb = styled.div`
 `
 
 const ThumbImage = styled.img`
-    width: 100%;
+    aspect-ratio: 7/4;
     object-fit: cover;
+`
+
+const Info = styled.div`
+    color: var(--text2);
+`
+
+const VideoTitle = styled.span`
+    font-weight: bold;
+    font-size: 1rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+`
+
+const ChannelInfo = styled(Flex)`
+    & > .channel-name {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+`
+
+const VideoInfo = styled(Flex)`
+    & > span::after {
+        content: '•';
+        margin: 0 0.2rem;
+    }
+    & > span:last-child::after {
+        content: '';
+    }
 `
 
 type ThumbProp = {
@@ -64,7 +97,7 @@ const Thumbnail = ({
 }: ThumbProp): JSX.Element => {
     return (
         <Thumb>
-            <ThumbImage loading='lazy' src={src} height="200" />
+            <ThumbImage loading='lazy' src={src} />
             <LenIndicator>
                 {isLive ? (
                     <>
@@ -78,34 +111,6 @@ const Thumbnail = ({
         </Thumb>
     )
 }
-
-const Info = styled.div`
-    color: var(--text2);
-`
-
-const VideoTitle = styled.span`
-    font-weight: bold;
-    font-size: 1rem;
-`
-
-const ChannelInfo = styled(Flex)`
-    & > .channel-name {
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-    justify-content: flex-start;
-`
-
-const VideoInfo = styled.div`
-    & > span::after {
-        content: '•';
-        margin: 0 0.2rem;
-    }
-    & > span:last-child::after {
-        content: '';
-    }
-`
 
 const secToHumanReadable = (seconds: number): string => {
     const rem = seconds % 3600
@@ -128,9 +133,11 @@ const VideoCard = ({ video, cardFlow = 'column' }: any) => {
             $direction={cardFlow}
             align='flex-start'
             justify='flex-start'
-        >
+            $wrap='wrap'
+        >    
             <CardLink
                 href='/vid'
+                style={{flex: '1 1 100px'}}
             >
                 <Thumbnail
                     src={video.thumbSrc}
@@ -139,10 +146,11 @@ const VideoCard = ({ video, cardFlow = 'column' }: any) => {
                     isLive={video.isLive}
                 />
             </CardLink>
-            <div style={{ width: '100%' }}>
-                <Flex justify='space-between'>
+            {/* width is needed for truncate and stop overflow */}
+            <div style={{ maxWidth: "100%", minWidth: '0', flex: '1 1 160px' }}>
+                <Flex justify='space-between' $wrap='nowrap' align="baseline" >
                     <VideoTitle>{video.title}</VideoTitle>
-                    <MiOptionsVertical />
+                    <MiOptionsVertical style={{flexShrink: "0"}} />
                 </Flex>
                 <Info>
                     <ChannelInfo>
@@ -161,7 +169,7 @@ const VideoCard = ({ video, cardFlow = 'column' }: any) => {
                             {video.channel}
                         </a>
                     </ChannelInfo>
-                    <VideoInfo>
+                    <VideoInfo justify="flex-start" $wrap="wrap">
                         <span>{video.views} views</span>
                         <span>2 weeks ago</span>
                     </VideoInfo>

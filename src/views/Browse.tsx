@@ -7,24 +7,26 @@ import img4 from '../assets/imgs/(4).jpg'
 import img5 from '../assets/imgs/(5).jpg'
 import img6 from '../assets/imgs/(6).jpg'
 import img7 from '../assets/imgs/(7).jpg'
+import img8 from '../assets/imgs/(8).jpg'
 
-const thumbs = [img1, img2, img3, img4, img5, img6, img7]
+const thumbs = [img1, img2, img3, img4, img5, img6, img7, img8]
+// const thumbs = [img7, img7, img7, img7, img7, img7, img7]
+// const thumbs = [img8, img8, img8, img8, img8, img8, img8]
 
 const randomName = (): string => {
     const names = [
-        'How stuff works',
-        'How stuff worked',
         '10 hour meme song loop',
-        'Amogus night 3am SUS challenge. OMG!!! Pranking ghost in the after life.',
+        'Amogus night 3am SUS challenge. OMG!!! Pranking ghost in the after life. Family vlogs video insert text 1 inster line five.',
     ]
     return names[Math.floor(Math.random() * names.length)]
 }
 
-const Browse = ({cardFlow = 'column'}: any) => {
+const Browse = ({cardFlow = 'row'}: any) => {
     return (
         <Grid maxColumns={10} itemBaseWidth='350px' gap='0.2rem'>
-            {thumbs.map((i) => (
+            {thumbs.map((i,j) => (
                 <VideoCard
+                    key={j}
                     video={{
                         thumbSrc: i,
                         title: randomName(),
