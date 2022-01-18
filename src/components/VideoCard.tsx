@@ -13,7 +13,7 @@ const MyCard = styled(Flex)`
     position: relative;
     border-radius: 0.3rem;
     &:hover {
-        box-shadow: 0 0 0.5rem 0 #272727;
+        box-shadow: 0 0 0.5rem 0 var(--surface4);
     }
 `
 
