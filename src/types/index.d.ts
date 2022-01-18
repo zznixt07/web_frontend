@@ -1,7 +1,8 @@
-declare module '*.jpg' {
+declare module '*' {
     const src: string
     export default src
 }
+
 
 declare module '*.svg' {
     import * as React from 'react';
