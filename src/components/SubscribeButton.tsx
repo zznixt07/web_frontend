@@ -16,9 +16,11 @@ interface BellProps {
     isNotificationOn: boolean
 }
 
-const Bell = (props: BellProps & React.ButtonHTMLAttributes<HTMLButtonElement>) => {
-    const {isNotificationOn, ...rest} = props
-    return <span {...rest}>{isNotificationOn ? "ON" : "OFF"}</span>
+const Bell = (
+    props: BellProps & React.ButtonHTMLAttributes<HTMLButtonElement>,
+) => {
+    const { isNotificationOn, ...rest } = props
+    return <span {...rest}>{isNotificationOn ? 'ON' : 'OFF'}</span>
 }
 
 type SubProp = {
@@ -32,17 +34,26 @@ const SubscribeButton = ({
     isSubscribed,
     isNotificationOn,
     onSubscriptionChange,
-    onNotificationChange
+    onNotificationChange,
 }: SubProp) => {
     return (
         <Flex gap='0.6rem'>
             {isSubscribed ? (
                 <>
-                    <UnSubscribe onClick={() => onSubscriptionChange((s) => !s)}>Subscribed</UnSubscribe>
-                    <Bell isNotificationOn={isNotificationOn} onClick={() => onNotificationChange((s) => !s)} />
+                    <UnSubscribe
+                        onClick={() => onSubscriptionChange((s) => !s)}
+                    >
+                        Subscribed
+                    </UnSubscribe>
+                    <Bell
+                        isNotificationOn={isNotificationOn}
+                        onClick={() => onNotificationChange((s) => !s)}
+                    />
                 </>
             ) : (
-                <Subscribe onClick={() => onSubscriptionChange((s) => !s)}>Subscribe</Subscribe>
+                <Subscribe onClick={() => onSubscriptionChange((s) => !s)}>
+                    Subscribe
+                </Subscribe>
             )}
         </Flex>
     )
