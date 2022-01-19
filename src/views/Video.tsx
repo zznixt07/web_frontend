@@ -3,6 +3,7 @@ import VideoCard from '../components/VideoCard'
 import styled from 'styled-components'
 import horiz from '../assets/vids/horizontal.mp4'
 import vert from '../assets/vids/vertical.mp4'
+import SubscribeButton from '../components/SubscribeButton'
 
 import img1 from '../assets/imgs/(1).jpg'
 import img2 from '../assets/imgs/(2).jpg'
@@ -55,9 +56,10 @@ const CurrentVideo = () => {
                     <img src={img1} width="20" height="20" />
                     <span>Very long channel name and this name is long.</span>
                 </Flex>
-                <button>Subscribe</button>
+                <SubscribeButton isSubscribed={true} isNotificationOn={false}/>
             </Flex>
             <hr />
+
         </div>
     )
 }
