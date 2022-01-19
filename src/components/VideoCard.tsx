@@ -137,7 +137,7 @@ const VideoCard = ({ video, cardFlow = 'column' }: any) => {
         >    
             <CardLink
                 href='/vid'
-                style={{flex: '1 1 100px'}}
+                style={{flex: '1 1 40px'}}
             >
                 <Thumbnail
                     src={video.thumbSrc}
@@ -147,7 +147,7 @@ const VideoCard = ({ video, cardFlow = 'column' }: any) => {
                 />
             </CardLink>
             {/* width is needed for truncate and stop overflow */}
-            <div style={{ maxWidth: "100%", minWidth: '0', flex: '1 1 160px' }}>
+            <div style={{ maxWidth: "100%", minWidth: '0', flex: '1 1 100px' }}>
                 <Flex justify='space-between' $wrap='nowrap' align="baseline" >
                     <VideoTitle>{video.title}</VideoTitle>
                     <MiOptionsVertical style={{flexShrink: "0"}} />

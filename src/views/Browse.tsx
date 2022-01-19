@@ -21,7 +21,7 @@ const randomName = (): string => {
     return names[Math.floor(Math.random() * names.length)]
 }
 
-const Browse = ({cardFlow = 'row'}: any) => {
+const Browse = ({cardFlow = 'column'}: any) => {
     return (
         <Grid maxColumns={10} itemBaseWidth='350px' gap='0.2rem'>
             {thumbs.map((i,j) => (
