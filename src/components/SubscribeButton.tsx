@@ -1,3 +1,4 @@
+import * as React from 'react'
 import styled from 'styled-components'
 import { Flex } from './Structure'
 
@@ -11,24 +12,37 @@ const UnSubscribe = styled.button`
     color: var(--text1);
 `
 
-const Bell = ({isNotificationOn = false}: {isNotificationOn?: boolean}) => {
-    return (
-        isNotificationOn ? <span>On</span> : <span>Off</span>
-    )
+interface BellProps {
+    isNotificationOn: boolean
+}
+
+const Bell = (props: BellProps & React.ButtonHTMLAttributes<HTMLButtonElement>) => {
+    const {isNotificationOn, ...rest} = props
+    return <span {...rest}>{isNotificationOn ? "ON" : "OFF"}</span>
+}
+
+type SubProp = {
+    isSubscribed: boolean
+    isNotificationOn: boolean
+    onSubscriptionChange: React.Dispatch<React.SetStateAction<boolean>>
+    onNotificationChange: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 const SubscribeButton = ({
-    isSubscribed = false,
-    isNotificationOn = false
-}: {
-    isSubscribed?: boolean, isNotificationOn?: boolean
-}) => {
+    isSubscribed,
+    isNotificationOn,
+    onSubscriptionChange,
+    onNotificationChange
+}: SubProp) => {
     return (
         <Flex gap='0.6rem'>
             {isSubscribed ? (
-                <><UnSubscribe>Subscribed</UnSubscribe><Bell isNotificationOn={isNotificationOn}/></>
+                <>
+                    <UnSubscribe onClick={() => onSubscriptionChange((s) => !s)}>Subscribed</UnSubscribe>
+                    <Bell isNotificationOn={isNotificationOn} onClick={() => onNotificationChange((s) => !s)} />
+                </>
             ) : (
-                <Subscribe>Subscribe</Subscribe>
+                <Subscribe onClick={() => onSubscriptionChange((s) => !s)}>Subscribe</Subscribe>
             )}
         </Flex>
     )

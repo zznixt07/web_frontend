@@ -1,3 +1,4 @@
+import * as React from 'react'
 import { Flex, Grid } from '../components/Structure'
 import VideoCard from '../components/VideoCard'
 import styled from 'styled-components'
@@ -27,6 +28,19 @@ const Related = styled.div`
 `
 
 const CurrentVideo = () => {
+    const [channelSubscription, setChannelSubscription] = React.useState<boolean>(false)
+    const [channelNotification, setChannelNotification] = React.useState<boolean>(false)
+
+    React.useEffect(() => {
+        // channel's subscription status changed.
+        console.log('subscribed to curr videos channel', channelSubscription)
+    }, [channelSubscription])
+
+    React.useEffect(() => {
+        // channel's notification status changed.
+        console.log('notif to curr videos channel', channelNotification)
+    }, [channelNotification])
+
     return (
         <div style={{}}>
             <video
@@ -50,16 +64,20 @@ const CurrentVideo = () => {
                     <span>Flag</span>
                 </div>
             </Flex>
-            <hr/>
-            <Flex justify="space-between">
-                <Flex justify="flex-start">
-                    <img src={img1} width="20" height="20" />
+            <hr />
+            <Flex justify='space-between'>
+                <Flex justify='flex-start'>
+                    <img src={img1} width='20' height='20' />
                     <span>Very long channel name and this name is long.</span>
                 </Flex>
-                <SubscribeButton isSubscribed={true} isNotificationOn={false}/>
+                <SubscribeButton
+                    isSubscribed={channelSubscription}
+                    isNotificationOn={channelNotification}
+                    onSubscriptionChange={setChannelSubscription}
+                    onNotificationChange={setChannelNotification}
+                />
             </Flex>
             <hr />
-
         </div>
     )
 }
