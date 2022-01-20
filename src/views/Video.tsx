@@ -27,6 +27,45 @@ const Related = styled.div`
     // flex: 30%;
 `
 
+// const countLines = (contents: string): number => contents.split('\n').length
+
+// const splitOnLine = (contents: string, lineNum: number): string[] => {
+//     let firsthalf: string = ''
+//     let lastHalf: string = ''
+//     let newlineCount = 0
+//     for (const character of contents) {
+//         firsthalf += character
+//         if (character === '\n') newlineCount++
+//         if (newlineCount >= lineNum) 
+//     }
+// }
+
+const Desc = styled.div<{height?: string}>`
+    width: 100%;
+    word-break: break-word;
+    overflow: hidden;
+    max-height: ${props => props.height || 'auto'}
+`
+
+const Description = (props: {children: React.ReactNode}) => {
+    const contractedHeight: string = '100px'
+    const [height, setHeight] = React.useState<string>(contractedHeight)
+    const expandOrContract = (event: any) => {
+        if (height === contractedHeight) {
+            // currently contracted. expand it.
+            setHeight('auto')
+        } else {
+            setHeight(contractedHeight)
+        }
+    }
+    return (
+        <>
+            <Desc height={height}>{props.children}</Desc>
+            <span style={{cursor: 'pointer'}} onClick={expandOrContract}>{height === contractedHeight ? "Show More" : "Show less"}</span>
+        </>
+    )
+}
+
 const CurrentVideo = () => {
     const [channelSubscription, setChannelSubscription] = React.useState<boolean>(false)
     const [channelNotification, setChannelNotification] = React.useState<boolean>(false)
@@ -78,6 +117,7 @@ const CurrentVideo = () => {
                 />
             </Flex>
             <hr />
+            <Description>This is the greatest description of all time. greatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreateststgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatest</Description>
         </div>
     )
 }
