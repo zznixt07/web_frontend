@@ -40,29 +40,37 @@ const Related = styled.div`
 //     }
 // }
 
-const Desc = styled.div<{height?: string}>`
+const Desc = styled.div<{isExpanded: boolean}>`
     width: 100%;
     word-break: break-word;
     overflow: hidden;
-    max-height: ${props => props.height || 'auto'}
+    line-height: 1.6;
+    max-height: ${props => props.isExpanded ? '30rem' : '3rem'};
+    transition: max-height 350ms linear;
+}
+`
+
+const MoreLessBtn = styled.span`
+    display: block;
+    cursor: pointer;
+    margin: 0.5rem 0;
 `
 
 const Description = (props: {children: React.ReactNode}) => {
-    const contractedHeight: string = '100px'
-    const [height, setHeight] = React.useState<string>(contractedHeight)
+    const [isExpanded, setIsExpanded] = React.useState<boolean>(false)
     const expandOrContract = (event: any) => {
-        if (height === contractedHeight) {
-            // currently contracted. expand it.
-            setHeight('auto')
+        if (isExpanded) {
+            // currently expanded. contract it.
+            setIsExpanded(false)
         } else {
-            setHeight(contractedHeight)
+            setIsExpanded(true)
         }
     }
     return (
-        <>
-            <Desc height={height}>{props.children}</Desc>
-            <span style={{cursor: 'pointer'}} onClick={expandOrContract}>{height === contractedHeight ? "Show More" : "Show less"}</span>
-        </>
+        <div style={{margin: '1rem'}}>
+            <Desc isExpanded={isExpanded} >{props.children}</Desc>
+            <MoreLessBtn onClick={expandOrContract}>{isExpanded ? "Show Less" : "Show More"}</MoreLessBtn>
+        </div>
     )
 }
 
@@ -116,8 +124,8 @@ const CurrentVideo = () => {
                     onNotificationChange={setChannelNotification}
                 />
             </Flex>
-            <hr />
             <Description>This is the greatest description of all time. greatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreateststgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatest</Description>
+            <hr />
         </div>
     )
 }
