@@ -56,7 +56,9 @@ const MoreLessBtn = styled.span`
     margin: 0.5rem 0;
 `
 
-const Description = (props: {children: React.ReactNode}) => {
+const sampledesc = 'This is the greatest description of all time. Lorem ipsum dolor sit amet consectetur adipisicing, elit. Ducimus, saepe incidunt fugiat consequuntur sequi error a debitis cupiditate distinctio harum at magnam reprehenderit id omnis ipsa nam quisquam nisi nihil. Lorem ipsum dolor sit amet consectetur adipisicing, elit. Ducimus, saepe incidunt fugiat consequuntur sequi error a debitis cupiditate distinctio harum at magnam reprehenderit id omnis ipsa nam quisquam nisi nihil. Lorem ipsum dolor sit amet consectetur adipisicing, elit. Ducimus, saepe incidunt fugiat consequuntur sequi error a debitis cupiditate distinctio harum at magnam reprehenderit id omnis ipsa nam quisquam nisi nihil. Lorem ipsum dolor sit amet consectetur adipisicing, elit. Ducimus, saepe incidunt fugiat consequuntur sequi error a debitis cupiditate distinctio harum at magnam reprehenderit id omnis ipsa nam quisquam nisi nihil. Lorem ipsum dolor sit amet consectetur adipisicing, elit. Ducimus, saepe incidunt fugiat consequuntur sequi error a debitis cupiditate distinctio harum at magnam reprehenderit id omnis ipsa nam quisquam nisi nihil.Lorem ipsum dolor sit amet consectetur adipisicing, elit. Ducimus, saepe incidunt fugiat consequuntur sequi error a debitis cupiditate distinctio harum at magnam reprehenderit id omnis ipsa nam quisquam nisi nihil.Lorem ipsum dolor sit amet consectetur adipisicing, elit. Ducimus, saepe incidunt fugiat consequuntur sequi error a debitis cupiditate distinctio harum at magnam reprehenderit id omnis ipsa nam quisquam nisi nihil.Lorem ipsum dolor sit amet consectetur adipisicing, elit. Ducimus, saepe incidunt fugiat consequuntur sequi error a debitis cupiditate distinctio harum at magnam reprehenderit id omnis ipsa nam quisquam nisi nihil.Lorem ipsum dolor sit amet consectetur adipisicing, elit. Ducimus, saepe incidunt fugiat consequuntur sequi error a debitis cupiditate distinctio harum at magnam reprehenderit id omnis ipsa nam quisquam nisi nihil.Lorem ipsum dolor sit amet consectetur adipisicing, elit. Ducimus, saepe incidunt fugiat consequuntur sequi error a debitis cupiditate distinctio harum at magnam reprehenderit id omnis ipsa nam quisquam nisi nihil.Lorem ipsum dolor sit amet consectetur adipisicing, elit. Ducimus, saepe incidunt fugiat consequuntur sequi error a debitis cupiditate distinctio harum at magnam reprehenderit id omnis ipsa nam quisquam nisi nihil.Lorem ipsum dolor sit amet consectetur adipisicing, elit. Ducimus, saepe incidunt fugiat consequuntur sequi error a debitis cupiditate distinctio harum at magnam reprehenderit id omnis ipsa nam quisquam nisi nihil.Lorem ipsum dolor sit amet consectetur adipisicing, elit. Ducimus, saepe incidunt fugiat consequuntur sequi error a debitis cupiditate distinctio harum at magnam reprehenderit id omnis ipsa nam quisquam nisi nihil.'
+
+const Description = (props: {children?: React.ReactNode}) => {
     const [isExpanded, setIsExpanded] = React.useState<boolean>(false)
     const expandOrContract = (event: any) => {
         if (isExpanded) {
@@ -67,7 +69,7 @@ const Description = (props: {children: React.ReactNode}) => {
         }
     }
     return (
-        <div style={{margin: '1rem'}}>
+        <div style={{margin: '1rem 3vw'}}>
             <Desc isExpanded={isExpanded} >{props.children}</Desc>
             <MoreLessBtn onClick={expandOrContract}>{isExpanded ? "Show Less" : "Show More"}</MoreLessBtn>
         </div>
@@ -124,7 +126,7 @@ const CurrentVideo = () => {
                     onNotificationChange={setChannelNotification}
                 />
             </Flex>
-            <Description>This is the greatest description of all time. greatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreateststgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatestgreatest</Description>
+            <Description>{sampledesc}</Description>
             <hr />
         </div>
     )
