@@ -1,13 +1,6 @@
 import { Formik, useField, Form } from 'formik'
-import { TextField, makeStyles, Button } from '@material-ui/core'
 import * as yup from 'yup'
 
-const formStyle = makeStyles((theme) => ({
-    commentField: {
-        width: 'inherit',
-        height: '40vh',
-    },
-}))
 
 const validationSchema = yup.object({
     content: yup
@@ -30,7 +23,6 @@ const ValidatingComment = ({ ...props }) => {
 }
 
 export const CommentForm = ({onComment}) => {
-    const classes = formStyle()
     return (
         <div>
             <Formik
