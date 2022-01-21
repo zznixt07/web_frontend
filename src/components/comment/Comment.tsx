@@ -1,11 +1,10 @@
 import * as React from 'react'
 import styled, { css } from 'styled-components'
+import {Flex} from '../Structure'
 import { CommentForm } from './CommentForm'
 
-const FlexWrapAlign = styled.div`
-    display: flex;
+const FlexWrapAlign = styled(Flex)`
     flex-wrap: wrap;
-    align-items: center;
     gap: 0.5rem;
 `
 
@@ -93,7 +92,7 @@ type ReactionItemProp = {
     emoji: string
     count: number
     reacted: boolean
-    onClick: any
+    onClick: () => void
 }
 
 const ReactionItem = ({ emoji, count, reacted, onClick }: ReactionItemProp) => {
@@ -143,27 +142,33 @@ const PopupEmoji = styled.span`
 
 type CommentProp = {
     id: string
-    reactionUpdateEndpoint: string
-    by: string
-    profileImg: string
-    text: string
-    time: string
-    edited: boolean
-    indent: number
+    authorName: string
+    authorImage: string
+    content: string
+    datetime: string
+    wasEdited: boolean
+    nestLevel: number
     replyIdSetter: any
+    reactionUpdateEndpoint: string
     reactionsArr: any[]
     onReactAsync: any
+}
+
+type Comment = {
+    id: string
+    count: number
+    reacted: boolean
 }
 
 const Comment = ({
     id,
     reactionUpdateEndpoint,
-    by,
-    profileImg,
-    text,
-    time,
-    edited,
-    indent,
+    authorName,
+    authorImage,
+    content,
+    datetime,
+    wasEdited,
+    nestLevel,
     replyIdSetter,
     reactionsArr,
     onReactAsync,
@@ -224,15 +229,15 @@ const Comment = ({
     }
     const unusedReactions = reactions.filter((r) => r.count === 0)
     return (
-        <CommentContainer indent={indent} data-id={id} id={id}>
+        <CommentContainer indent={nestLevel} data-id={id} id={id}>
             <CommentHead>
                 <Author>
-                    <AuthorImage src={profileImg} />
-                    <span>{by}</span>
+                    <AuthorImage src={authorImage} />
+                    <span>{authorName}</span>
                     <span className='date'>
-                        {new Date(time).toLocaleString()}
+                        {new Date(datetime).toLocaleString()}
                     </span>
-                    {edited ? (
+                    {wasEdited ? (
                         <span>
                             <i>{'edited'}</i>
                         </span>
@@ -242,7 +247,7 @@ const Comment = ({
                     <button>...</button>
                 </Options>
             </CommentHead>
-            <CommentText>{text}</CommentText>
+            <CommentText>{content}</CommentText>
             <CommentBottomAction>
                 <CommentAction>
                     <Reaction as='ul'>

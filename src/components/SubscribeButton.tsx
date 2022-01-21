@@ -12,18 +12,18 @@ const UnSubscribe = styled.button`
     color: var(--text1);
 `
 
-interface BellProps {
+type Bell = {
     isNotificationOn: boolean
 }
 
 const Bell = (
-    props: BellProps & React.ButtonHTMLAttributes<HTMLButtonElement>,
+    props: Bell & React.ButtonHTMLAttributes<HTMLButtonElement>,
 ) => {
     const { isNotificationOn, ...rest } = props
     return <span {...rest}>{isNotificationOn ? 'ON' : 'OFF'}</span>
 }
 
-type SubProp = {
+type SubscribeButton = {
     isSubscribed: boolean
     isNotificationOn: boolean
     onSubscriptionChange: React.Dispatch<React.SetStateAction<boolean>>
@@ -35,7 +35,7 @@ const SubscribeButton = ({
     isNotificationOn,
     onSubscriptionChange,
     onNotificationChange,
-}: SubProp) => {
+}: SubscribeButton) => {
     return (
         <Flex gap='0.6rem'>
             {isSubscribed ? (
