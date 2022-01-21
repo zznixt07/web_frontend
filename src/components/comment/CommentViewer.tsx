@@ -150,7 +150,6 @@ const sampleComments = [
     },
 ]
 
-
 export const createComment = async (
     content,
     userUrl,
@@ -232,22 +231,29 @@ type Comment = {
     updatedOn: string
     reactions: Reaction[]
     children: Comment[]
+    authUserReaction: string[]
 }
 
-const insertIndentAndflatten = (comms: Comment[]) => {
-    type ProbabilyIndentedComment = Comment & {indent?: number}
-    type IndentedCommentWithNoChildren = Omit<Comment, "children">
+type ProbabilyIndentedComment = Comment & { indent?: number }
+type IndentedComment = Comment & { indent: number }
+type FlatComment = Omit<IndentedComment, 'children'>
 
-    const flattened: IndentedCommentWithNoChildren[] = []
+const insertIndentAndflatten = (comms: Comment[]): FlatComment[] => {
+
+    const flattened: FlatComment[] = []
     const nextSiblingsLeft: Comment[] = []
     let arr = [...comms]
     let indent: number = 0
     while (true) {
         let broken = false
-        for (let i=0; i<arr.length; i++) {
+        for (let i = 0; i < arr.length; i++) {
             const item: ProbabilyIndentedComment = arr[i]
-            const {children, ...rest} = item
-            flattened.push({...rest, indent: item.hasOwnProperty('indent') ? item.indent : indent})
+            const { children, ...rest } = item
+            const indentValue =
+                item.hasOwnProperty('indent') && item.indent !== undefined
+                    ? item.indent
+                    : indent
+            flattened.push({ ...rest, indent: indentValue })
             if (children.length === 0) {
                 // # if no children, either go to item's next sibling or remaining siblings
                 continue
@@ -255,11 +261,11 @@ const insertIndentAndflatten = (comms: Comment[]) => {
             // # if item has children, then keep track of the next sibling.
             // # if item was the last element then nothing to track. check for index error
             if (i + 1 < arr.length) {
-                const sibling = arr[i+1]
+                const sibling: ProbabilyIndentedComment = arr[i + 1]
                 sibling.indent = indent
                 nextSiblingsLeft.push(sibling)
             }
-                
+
             // # prepare to iterate on children instead by breaking out.
             indent++
             arr = children
@@ -268,31 +274,34 @@ const insertIndentAndflatten = (comms: Comment[]) => {
         }
         if (!broken) {
             indent--
-            if (nextSiblingsLeft.length === 0)
-                break
-            arr = [nextSiblingsLeft.pop()]
+            const lastItem: Comment | undefined = nextSiblingsLeft.pop()
+            if (lastItem === undefined) break
+            arr = [lastItem]
         }
     }
     return flattened
 }
 
-
-const AllComments = ({ blogUrl, comments }: {blogUrl: string, comments: Comment[]}) => {
+const AllComments = ({
+    blogUrl,
+    comments,
+}: {
+    blogUrl: string
+    comments: Comment[]
+}) => {
     // const [nestedComments, setNestedComments] = useState([...comments]) // cannot use props directly in state
-    const [nestedComments, setNestedComments] = React.useState<Comment[]>(comments)
-    const flatComments = insertIndentAndflatten(nestedComments)
+    const [nestedComments, setNestedComments] =
+        React.useState<Comment[]>(comments)
+    const flatComments: FlatComment[] = insertIndentAndflatten(nestedComments)
     const [replyId, setReplyId] = React.useState(null)
     return (
         <>
-            {flatComments.map((comment, index) => {
-                const thisUserReaction = comment.user_reaction
-                const reactions = Object.entries(FIELD_EMOJI).map(
+            {flatComments.map((comment: FlatComment, index) => {
+                const reactions = Object.entries(comment.reactions).map(
                     ([k, v]) => ({
-                        id: v,
-                        count: comment[k] || 0,
-                        reacted: thisUserReaction
-                            ? thisUserReaction[k] > 0
-                            : false,
+                        id: k,
+                        count: v,
+                        reacted: comment.authUserReaction.includes('k')
                     }),
                 )
 
@@ -301,33 +310,30 @@ const AllComments = ({ blogUrl, comments }: {blogUrl: string, comments: Comment[
                         <Comment
                             // TODO remove unrequired kwargs
                             id={comment.id}
-                            reactionUpdateEndpoint={thisUserReaction?.url}
-                            by={comment.author.name}
-                            profileImg={comment.author.profile_pic}
-                            text={comment.body}
-                            time={comment.updated_on}
-                            edited={
-                                !(comment.updated_on === comment.created_on)
-                            }
-                            indent={2 * comment.indent}
+                            reactionUpdateEndpoint={''}
+                            author={comment.author}
+                            content={comment.body}
+                            datetime={comment.updatedOn}
+                            wasEdited={!(comment.updatedOn === comment.createdOn)}
+                            nestLevel={2 * comment.indent}                            
                             replyIdSetter={setReplyId}
                             reactionsArr={reactions}
                             onReactAsync={async (
-                                reactionId,
-                                reactionRemoved,
+                                reactionId: string,
+                                reactionRemoved: boolean,
                             ) => {
                                 const data = await onReact(
-                                    comment.url,
-                                    CURR_USER,
-                                    thisUserReaction?.url,
+                                    'comment.url',
+                                    'CURR_USER',
+                                    'thisUserReaction?.url',
                                     '/api/comment_like/',
                                     reactionId,
                                     reactionRemoved,
                                 )
-                                setNestedComments((cs) =>
-                                    cs.map((c, i) => {
+                                setNestedComments((cs: Comment[]) =>
+                                    cs.map((c: Comment, i) => {
                                         if (i === index)
-                                            c.user_reaction = { url: data[1] }
+                                            c.authUserReaction = data[1]
                                         // no need to add reaction count cuz
                                         // the count is internally managed in Comment
                                         return c
@@ -338,12 +344,12 @@ const AllComments = ({ blogUrl, comments }: {blogUrl: string, comments: Comment[
                         />
                         {comment.id === replyId ? (
                             <CommentForm
-                                onComment={async (content) => {
+                                onComment={async (content: any) => {
                                     const data = await createComment(
                                         content,
-                                        CURR_USER,
-                                        comment.blog,
-                                        comment.url,
+                                        'CURR_USER',
+                                        blogUrl,
+                                        'comment.url',
                                     )
                                     // nested reply is at top. should be at bottom
                                     // because comment follows cronological order.

@@ -142,8 +142,11 @@ const PopupEmoji = styled.span`
 
 type CommentProp = {
     id: string
-    authorName: string
-    authorImage: string
+    author: {
+        name: string
+        channelLink: string
+        imageLink: string
+    }
     content: string
     datetime: string
     wasEdited: boolean
@@ -163,8 +166,7 @@ type Comment = {
 const Comment = ({
     id,
     reactionUpdateEndpoint,
-    authorName,
-    authorImage,
+    author,
     content,
     datetime,
     wasEdited,
@@ -232,8 +234,8 @@ const Comment = ({
         <CommentContainer indent={nestLevel} data-id={id} id={id}>
             <CommentHead>
                 <Author>
-                    <AuthorImage src={authorImage} />
-                    <span>{authorName}</span>
+                    <AuthorImage src={author.imageLink} />
+                    <a href={author.channelLink}>{author.name}</a>
                     <span className='date'>
                         {new Date(datetime).toLocaleString()}
                     </span>
