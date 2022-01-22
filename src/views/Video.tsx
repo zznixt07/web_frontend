@@ -9,6 +9,14 @@ import vert from '../assets/vids/vertical.mp4'
 import SubscribeButton from '../components/SubscribeButton'
 import AllComments from '../components/comment/CommentViewer'
 
+import Like from '../assets/svg/LikeOutlined'
+import Liked from '../assets/svg/LikeFilled'
+import DisLike from '../assets/svg/DislikeOutlined'
+import DisLiked from '../assets/svg/DislikeFilled'
+import Share from '../assets/svg/Share'
+import Flag from '../assets/svg/FlagOutlined'
+
+
 import img1 from '../assets/imgs/(1).jpg'
 import img2 from '../assets/imgs/(2).jpg'
 import img3 from '../assets/imgs/(3).jpg'
@@ -25,6 +33,10 @@ const randomName = (): string => {
     ]
     return names[Math.floor(Math.random() * names.length)]
 }
+
+const ActionButton = styled(Flex)`
+    cursor: pointer;
+`
 
 const Related = styled.div`
     // flex: 30%;
@@ -87,6 +99,25 @@ const CurrentVideo = () => {
         React.useState<boolean>(false)
     const [channelNotification, setChannelNotification] =
         React.useState<boolean>(false)
+    const [isLiked, setIsLiked] = React.useState<boolean>(false)
+    const [isDisLiked, setIsDisLiked] = React.useState<boolean>(false)
+
+    const handleLike = () => {
+        // in backend set a field called
+        // `perception`: true(like) | false(dislike) | null(neither liked nor disliked.)
+        setIsLiked((s) => {
+            if (!s === isDisLiked && !s === true)
+                setIsDisLiked(s)
+            return !s
+        })
+    }
+    const handleDisLike = () => {
+        setIsDisLiked((s) => {
+            if (!s === isLiked && !s === true)
+                setIsLiked(s)
+            return !s
+        })
+    }
 
     React.useEffect(() => {
         // channel's subscription status changed.
@@ -113,13 +144,21 @@ const CurrentVideo = () => {
                     <span>1,234,325 views</span>
                     <span>Dec 4, 2022</span>
                 </div>
-                <div>
-                    <span>Like 97K</span>
-                    <span>Dislike 1.1K</span>
-                    <span>Share</span>
-                    <span>Add</span>
-                    <span>Flag</span>
-                </div>
+                <Flex justify='flex-start' gap='2rem'>
+                    <ActionButton onClick={handleLike}>
+                        {isLiked ? <Liked /> : <Like />}
+                        {"97K"}
+                    </ActionButton>
+                    <ActionButton onClick={handleDisLike}>
+                        {isDisLiked ? <DisLiked /> : <DisLike />}
+                        {"1.1K"}
+                    </ActionButton>
+                    <ActionButton >
+                        <Share />
+                        Share
+                    </ActionButton>
+                    
+                </Flex>
             </Flex>
             <hr />
             <Flex justify='space-between'>
