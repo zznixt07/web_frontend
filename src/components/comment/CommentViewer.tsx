@@ -1,159 +1,12 @@
+// @ts-nocheck
 import * as React from 'react'
-import Comment from './Comment'
-import { CommentForm } from './CommentForm'
-
-const sampleComments = [
-    {
-        id: '387324abc2214fff',
-        body: 'This is a comment. Video is lit',
-        author: {
-            name: 'Jefferey Bezos',
-            channelLink: 'http://127.0.0.1:8000/api/user/1/',
-            imageLink:
-                'http://127.0.0.1:8000/media/profiles/default_profile.png',
-        },
-        created_on: '2021-09-02T16:56:23.227201Z',
-        updated_on: '2021-09-02T16:56:23.227201Z',
-        reactions: [
-            { '😍': 2 },
-            { '👍': 3 },
-            { '👎': 0 },
-            { '😎': 1 },
-            { '🚀': 10 },
-        ],
-        children: [
-            {
-                id: '387324abc22914fff',
-                body: 'This is a deep comment. Video is lit',
-                author: {
-                    name: 'Jefferey Bezos Son',
-                    channelLink: 'http://127.0.0.1:8000/api/user/2/',
-                    imageLink:
-                        'http://127.0.0.1:8000/media/profiles/default_profile.png',
-                },
-                created_on: '2021-09-02T16:56:23.227201Z',
-                updated_on: '2021-09-02T16:56:23.227201Z',
-                reactions: [
-                    { '😍': 0 },
-                    { '👍': 0 },
-                    { '👎': 0 },
-                    { '😎': 1 },
-                    { '🚀': 10 },
-                ],
-                children: [],
-            },
-            {
-                id: '387324abc245214fff',
-                body: 'This is a deeper comment. Video is lit',
-                author: {
-                    name: 'Jefferey Bezos grandson',
-                    channelLink: 'http://127.0.0.1:8000/api/user/3/',
-                    imageLink:
-                        'http://127.0.0.1:8000/media/profiles/default_profile.png',
-                },
-                created_on: '2021-09-02T16:56:23.227201Z',
-                updated_on: '2021-09-02T16:56:23.227201Z',
-                reactions: [
-                    { '😍': 0 },
-                    { '👍': 0 },
-                    { '👎': 0 },
-                    { '😎': 0 },
-                    { '🚀': 0 },
-                ],
-                children: [
-                    {
-                        id: '387324abc2214fff43',
-                        body: 'This is more deeper comment. Video is lit',
-                        author: {
-                            name: 'Jefferey Bezos GenZ',
-                            channelLink: 'http://127.0.0.1:8000/api/user/5/',
-                            imageLink:
-                                'http://127.0.0.1:8000/media/profiles/default_profile.png',
-                        },
-                        created_on: '2021-09-02T16:56:23.227201Z',
-                        updated_on: '2021-09-02T16:56:23.227201Z',
-                        reactions: [
-                            { '😍': 2 },
-                            { '👍': 3 },
-                            { '👎': 0 },
-                            { '😎': 1 },
-                            { '🚀': 10 },
-                        ],
-                        children: [
-                            {
-                                id: '387324abchth2214fff',
-                                body: 'This is the deepest comment 1. Video is lit',
-                                author: {
-                                    name: 'Jefferey Bezoszzz',
-                                    channelLink:
-                                        'http://127.0.0.1:8000/api/user/7/',
-                                    imageLink:
-                                        'http://127.0.0.1:8000/media/profiles/default_profile.png',
-                                },
-                                created_on: '2021-09-02T16:56:23.227201Z',
-                                updated_on: '2021-09-02T16:56:23.227201Z',
-                                reactions: [
-                                    { '😍': 2 },
-                                    { '👍': 3 },
-                                    { '👎': 0 },
-                                    { '😎': 1 },
-                                    { '🚀': 10 },
-                                ],
-                                children: [],
-                            },
-                            {
-                                id: '387324abc3241114fff',
-                                body: 'This is a deepest comment 2. Video is lit',
-                                author: {
-                                    name: 'Jefferey Bezos',
-                                    channelLink:
-                                        'http://127.0.0.1:8000/api/user/1/',
-                                    imageLink:
-                                        'http://127.0.0.1:8000/media/profiles/default_profile.png',
-                                },
-                                created_on: '2021-09-02T16:56:23.227201Z',
-                                updated_on: '2021-09-02T16:56:23.227201Z',
-                                reactions: [
-                                    { '😍': 2 },
-                                    { '👍': 3 },
-                                    { '👎': 0 },
-                                    { '😎': 1 },
-                                    { '🚀': 10 },
-                                ],
-                                children: [],
-                            },
-                        ],
-                    },
-                ],
-            },
-        ],
-    },
-    {
-        id: '387324abc212393214fff',
-        body: 'This is a human comment. Video is fire.',
-        author: {
-            name: 'Zucc',
-            channelLink: 'http://127.0.0.1:8000/api/user/10/',
-            imageLink:
-                'http://127.0.0.1:8000/media/profiles/default_profile.png',
-        },
-        created_on: '2021-09-02T16:56:23.227201Z',
-        updated_on: '2021-09-02T16:56:23.227201Z',
-        reactions: [
-            { '😍': 2 },
-            { '👍': 3 },
-            { '👎': 0 },
-            { '😎': 1 },
-            { '🚀': 10 },
-        ],
-        children: [],
-    },
-]
+import SingleComment from './SingleComment'
+import CommentBox from './CommentBox'
 
 export const createComment = async (
     content,
     userUrl,
-    blogUrl,
+    pageUrl,
     parentCommentUrl = null,
 ) => {
     const data = await ajax('/api/comment/', {
@@ -161,7 +14,7 @@ export const createComment = async (
         body: JSON.stringify({
             body: content,
             user: userUrl,
-            blog: blogUrl,
+            blog: pageUrl,
             parent: parentCommentUrl,
         }),
     })
@@ -222,6 +75,11 @@ type Author = {
 }
 
 type Reaction = Record<string, number>
+type ReactionProp = {
+    id: string
+    count: number
+    reacted: boolean
+}
 
 type Comment = {
     id: string
@@ -239,7 +97,6 @@ type IndentedComment = Comment & { indent: number }
 type FlatComment = Omit<IndentedComment, 'children'>
 
 const insertIndentAndflatten = (comms: Comment[]): FlatComment[] => {
-
     const flattened: FlatComment[] = []
     const nextSiblingsLeft: Comment[] = []
     let arr = [...comms]
@@ -283,10 +140,10 @@ const insertIndentAndflatten = (comms: Comment[]): FlatComment[] => {
 }
 
 const AllComments = ({
-    blogUrl,
+    pageUrl,
     comments,
 }: {
-    blogUrl: string
+    pageUrl: string
     comments: Comment[]
 }) => {
     // const [nestedComments, setNestedComments] = useState([...comments]) // cannot use props directly in state
@@ -297,25 +154,26 @@ const AllComments = ({
     return (
         <>
             {flatComments.map((comment: FlatComment, index) => {
-                const reactions = Object.entries(comment.reactions).map(
-                    ([k, v]) => ({
-                        id: k,
-                        count: v,
-                        reacted: comment.authUserReaction.includes('k')
-                    }),
-                )
+
+                const reactions: ReactionProp = comment.reactions.map((o) => ({
+                    id: Object.keys(o)[0],
+                    count: Object.values(o)[0],
+                    reacted: comment.authUserReaction.includes('k'),
+                }))
 
                 return (
                     <React.Fragment key={comment.id}>
-                        <Comment
+                        <SingleComment
                             // TODO remove unrequired kwargs
                             id={comment.id}
                             reactionUpdateEndpoint={''}
                             author={comment.author}
                             content={comment.body}
                             datetime={comment.updatedOn}
-                            wasEdited={!(comment.updatedOn === comment.createdOn)}
-                            nestLevel={2 * comment.indent}                            
+                            wasEdited={
+                                !(comment.updatedOn === comment.createdOn)
+                            }
+                            nestLevel={2 * comment.indent}
                             replyIdSetter={setReplyId}
                             reactionsArr={reactions}
                             onReactAsync={async (
@@ -343,12 +201,12 @@ const AllComments = ({
                             }}
                         />
                         {comment.id === replyId ? (
-                            <CommentForm
+                            <CommentBox
                                 onComment={async (content: any) => {
                                     const data = await createComment(
                                         content,
                                         'CURR_USER',
-                                        blogUrl,
+                                        pageUrl,
                                         'comment.url',
                                     )
                                     // nested reply is at top. should be at bottom

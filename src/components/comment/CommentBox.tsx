@@ -1,6 +1,23 @@
+// @ts-nocheck
+
 import { Formik, useField, Form } from 'formik'
 import * as yup from 'yup'
+import styled from 'styled-components'
 
+const TextArea = styled.textarea`
+    display: block;
+    width: 100%;
+    margin: 1rem 0;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    box-shadow: 1px 1px 1px var(--surface3);
+`
+
+const CommentForm = styled.form`
+    margin: 2rem auto;
+    width: 95vw;
+
+`
 
 const validationSchema = yup.object({
     content: yup
@@ -9,11 +26,11 @@ const validationSchema = yup.object({
         .required('Comment should not be Empty.'),
 })
 
-const ValidatingComment = ({ ...props }) => {
+const ValidatingComment = ({ ...props }: any) => {
     const [field, meta] = useField(props)
     const errorText = meta.error && meta.touched ? meta.error : ''
     return (
-        <TextField
+        <TextArea
             {...field}
             {...props}
             helperText={errorText}
@@ -22,7 +39,7 @@ const ValidatingComment = ({ ...props }) => {
     )
 }
 
-export const CommentForm = ({onComment}) => {
+const CommentBox = ({onComment}: any) => {
     return (
         <div>
             <Formik
@@ -49,30 +66,28 @@ export const CommentForm = ({onComment}) => {
                     // handleBlur,
                     // handleSubmit,
                 }) => (
-                    <Form>
+                    <CommentForm>
                         <ValidatingComment
-                            variant='outlined'
+                            // variant='outlined'
                             name='content'
                             placeholder='Write a Comment'
                             multiline={true}
                             rows={7}
                             rowsmax={10}
-                            fullWidth={true}
+                            required
                             value={values.content}
                         />
-                        <div style={{ marginTop: '0.8rem' }}>
-                            <Button
-                                variant='outlined'
-                                disabled={isSubmitting}
-                                type='submit'
-                                style={{ backgroundColor: '#C47D1E' }}
-                            >
-                                Post Comment
-                            </Button>
-                        </div>
-                    </Form>
+                        <button
+                            disabled={isSubmitting}
+                            type='submit'
+                        >
+                            Post Comment
+                        </button>
+                    </CommentForm>
                 )}
             </Formik>
         </div>
     )
 }
+
+export default CommentBox

@@ -1,11 +1,11 @@
 import * as React from 'react'
 import styled, { css } from 'styled-components'
 import {Flex} from '../Structure'
-import { CommentForm } from './CommentForm'
 
 const FlexWrapAlign = styled(Flex)`
     flex-wrap: wrap;
     gap: 0.5rem;
+    justify-content: flex-start;
 `
 
 const GeneralCommentContainer = styled.div`
@@ -37,8 +37,6 @@ const Author = styled(FlexWrapAlign)`
 const Options = styled.div``
 
 const AuthorImage = styled.img`
-    width: 2rem;
-    height: 2rem;
     object-fit: cover;
     border-radius: 50%;
 `
@@ -96,6 +94,7 @@ type ReactionItemProp = {
 }
 
 const ReactionItem = ({ emoji, count, reacted, onClick }: ReactionItemProp) => {
+    console.log(emoji, count)
     return (
         <ReactionList
             as='li'
@@ -163,7 +162,7 @@ type Comment = {
     reacted: boolean
 }
 
-const Comment = ({
+const SingleComment = ({
     id,
     reactionUpdateEndpoint,
     author,
@@ -234,8 +233,8 @@ const Comment = ({
         <CommentContainer indent={nestLevel} data-id={id} id={id}>
             <CommentHead>
                 <Author>
-                    <AuthorImage src={author.imageLink} />
-                    <a href={author.channelLink}>{author.name}</a>
+                    <AuthorImage src={author.imageLink} width="32" height="32" />
+                    {<a href={author.channelLink}>{author.name}</a>}
                     <span className='date'>
                         {new Date(datetime).toLocaleString()}
                     </span>
@@ -289,4 +288,4 @@ const Comment = ({
     )
 }
 
-export default Comment
+export default SingleComment
