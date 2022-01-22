@@ -47,6 +47,7 @@ const SubscribeButton = ({
                     </UnSubscribe>
                     <Bell
                         isNotificationOn={isNotificationOn}
+                        style={{cursor: 'pointer'}}
                         onClick={() => onNotificationChange((s) => !s)}
                     />
                 </>
