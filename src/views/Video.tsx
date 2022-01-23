@@ -14,6 +14,7 @@ import Liked from '../assets/svg/LikeFilled'
 import DisLike from '../assets/svg/DislikeOutlined'
 import DisLiked from '../assets/svg/DislikeFilled'
 import Share from '../assets/svg/Share'
+import AddToPlaylist from '../assets/svg/PlaylistAdd'
 import Flag from '../assets/svg/FlagOutlined'
 
 
@@ -144,7 +145,7 @@ const CurrentVideo = () => {
                     <span>1,234,325 views</span>
                     <span>Dec 4, 2022</span>
                 </div>
-                <Flex justify='flex-start' gap='2rem'>
+                <Flex justify='flex-start' gap='1rem'>
                     <ActionButton onClick={handleLike}>
                         {isLiked ? <Liked /> : <Like />}
                         {"97K"}
@@ -157,13 +158,21 @@ const CurrentVideo = () => {
                         <Share />
                         Share
                     </ActionButton>
+                    <ActionButton >
+                        <AddToPlaylist />
+                        Add
+                    </ActionButton>
+                    <ActionButton >
+                        <Flag />
+                        Flag
+                    </ActionButton>
                     
                 </Flex>
             </Flex>
             <hr />
             <Flex justify='space-between'>
                 <Flex justify='flex-start'>
-                    <img src={img1} width='20' height='20' />
+                    <img src={img1} width='20' height='20' className='rounded' />
                     <span>Very long channel name and this name is long.</span>
                 </Flex>
                 <SubscribeButton
@@ -182,7 +191,7 @@ const CurrentVideo = () => {
 const RelatedVideos = () => {
     return (
         <Related>
-            <Grid maxColumns={1} itemBaseWidth='350px' gap='0.2rem'>
+            <Grid maxColumns={1} itemBaseWidth='350px' gap='1rem'>
                 {thumbs.map((i, j) => (
                     <VideoCard
                         key={j}

@@ -4,9 +4,6 @@ import IcBaselinePeopleAlt from '../assets/svg/IcBaselinePeopleAlt'
 import MiOptionsVertical from '../assets/svg/MiOptionsVertical'
 import { Flex } from './Structure'
 
-type Props = {
-    children: React.ReactNode
-}
 
 const MyCard = styled(Flex)`
     padding: 0.3rem;
@@ -159,6 +156,7 @@ const VideoCard = ({ video, cardFlow = 'column' }: any) => {
                             src={video.thumbSrc}
                             width='20'
                             height='20'
+                            className='rounded'
                         />
                         {/* to make inner links clickable without setting z-index, make position: relative*/}
                         <a
