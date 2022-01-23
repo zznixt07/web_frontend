@@ -8,7 +8,7 @@ import horiz from '../assets/vids/horizontal.mp4'
 import vert from '../assets/vids/vertical.mp4'
 import SubscribeButton from '../components/SubscribeButton'
 import AllComments from '../components/comment/CommentViewer'
-
+import NavBar from '../components/NavBar'
 import Like from '../assets/svg/LikeOutlined'
 import Liked from '../assets/svg/LikeFilled'
 import DisLike from '../assets/svg/DislikeOutlined'
@@ -361,15 +361,18 @@ const sampleComments = [
 
 const Video = () => {
     return (
-        <div>
-            <div style={{ display: 'grid', gridTemplateColumns: '70% 30%' }}>
-                <CurrentVideo />
-                <RelatedVideos />
+        <>
+            <NavBar />
+            <div>
+                <div style={{ display: 'grid', gridTemplateColumns: '70% 30%' }}>
+                    <CurrentVideo />
+                    <RelatedVideos />
+                </div>
+                <section style={{margin: '0.5rem'}}>
+                    <AllComments pageUrl='' comments={sampleComments} />
+                </section>
             </div>
-            <section style={{margin: '0.5rem'}}>
-                <AllComments pageUrl='' comments={sampleComments} />
-            </section>
-        </div>
+        </>
     )
 }
 
