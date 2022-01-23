@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import IcBaselinePeopleAlt from '../assets/svg/IcBaselinePeopleAlt'
 import MiOptionsVertical from '../assets/svg/MiOptionsVertical'
 import { Flex } from './Structure'
-
+import AspectRatioImg from './AspectRatioImg'
 
 const MyCard = styled(Flex)`
     padding: 0.3rem;
@@ -12,6 +12,7 @@ const MyCard = styled(Flex)`
     &:hover {
         box-shadow: 0 0 0.5rem 0 var(--surface4);
     }
+    
 `
 
 // this anchor tag covers whole card. Which means the text inside the card are
@@ -41,9 +42,7 @@ const Thumb = styled.div`
     }
 `
 
-const ThumbImage = styled.img`
-    aspect-ratio: 7/4;
-    object-fit: cover;
+const ThumbImage = styled(AspectRatioImg)`
 `
 
 const Info = styled.div`
@@ -94,7 +93,7 @@ const Thumbnail = ({
 }: ThumbProp): JSX.Element => {
     return (
         <Thumb>
-            <ThumbImage loading='lazy' src={src} />
+            <ThumbImage loading='lazy' src={src} width="350" height="200" />
             <LenIndicator>
                 {isLive ? (
                     <>
@@ -132,6 +131,7 @@ const VideoCard = ({ video, cardFlow = 'column' }: any) => {
             justify='flex-start'
             $wrap='wrap'
         >    
+            {/* If content jumps set aspect-ratio on videocard*/}
             <CardLink
                 href='/vid'
                 style={{flex: '1 1 40px'}}
@@ -151,7 +151,7 @@ const VideoCard = ({ video, cardFlow = 'column' }: any) => {
                 </Flex>
                 <Info>
                     <ChannelInfo>
-                        <img
+                        <AspectRatioImg
                             loading='lazy'
                             src={video.thumbSrc}
                             width='20'
