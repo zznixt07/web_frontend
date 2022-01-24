@@ -9,7 +9,8 @@ import vert from '../assets/vids/vertical.mp4'
 import SubscribeButton from '../components/SubscribeButton'
 import AllComments from '../components/comment/CommentViewer'
 import NavBar from '../components/NavBar'
-import PopupModel, {PopupModelContainer} from '../components/PopupModel'
+import PopupModel, { PopupModelContainer } from '../components/PopupModel'
+import {AddToPaylistDialog} from 'components/AddToPlaylist'
 
 import Like from '../assets/svg/LikeOutlined'
 import Liked from '../assets/svg/LikeFilled'
@@ -19,7 +20,6 @@ import Share from '../assets/svg/Share'
 import AddToPlaylist from '../assets/svg/PlaylistAdd'
 import Flag from '../assets/svg/FlagOutlined'
 
-
 import img1 from '../assets/imgs/(1).jpg'
 import img2 from '../assets/imgs/(2).jpg'
 import img3 from '../assets/imgs/(3).jpg'
@@ -28,7 +28,7 @@ import img5 from '../assets/imgs/(5).jpg'
 import img6 from '../assets/imgs/(6).jpg'
 import img7 from '../assets/imgs/(7).jpg'
 import img8 from '../assets/imgs/(8).jpg'
-import {provide} from '../components/Provider'
+import { provide } from '../components/Provider'
 
 const thumbs = [img1, img2, img3, img4, img5, img6, img7, img8]
 const randomName = (): string => {
@@ -79,6 +79,28 @@ const MoreLessBtn = styled.span`
 const sampledesc =
     'This is the greatest description of all time. Lorem ipsum dolor sit amet consectetur adipisicing, elit. Ducimus, saepe incidunt fugiat consequuntur sequi error a debitis cupiditate distinctio harum at magnam reprehenderit id omnis ipsa nam quisquam nisi nihil. Lorem ipsum dolor sit amet consectetur adipisicing, elit. Ducimus, saepe incidunt fugiat consequuntur sequi error a debitis cupiditate distinctio harum at magnam reprehenderit id omnis ipsa nam quisquam nisi nihil. Lorem ipsum dolor sit amet consectetur adipisicing, elit. Ducimus, saepe incidunt fugiat consequuntur sequi error a debitis cupiditate distinctio harum at magnam reprehenderit id omnis ipsa nam quisquam nisi nihil. Lorem ipsum dolor sit amet consectetur adipisicing, elit. Ducimus, saepe incidunt fugiat consequuntur sequi error a debitis cupiditate distinctio harum at magnam reprehenderit id omnis ipsa nam quisquam nisi nihil. Lorem ipsum dolor sit amet consectetur adipisicing, elit. Ducimus, saepe incidunt fugiat consequuntur sequi error a debitis cupiditate distinctio harum at magnam reprehenderit id omnis ipsa nam quisquam nisi nihil.Lorem ipsum dolor sit amet consectetur adipisicing, elit. Ducimus, saepe incidunt fugiat consequuntur sequi error a debitis cupiditate distinctio harum at magnam reprehenderit id omnis ipsa nam quisquam nisi nihil.Lorem ipsum dolor sit amet consectetur adipisicing, elit. Ducimus, saepe incidunt fugiat consequuntur sequi error a debitis cupiditate distinctio harum at magnam reprehenderit id omnis ipsa nam quisquam nisi nihil.Lorem ipsum dolor sit amet consectetur adipisicing, elit. Ducimus, saepe incidunt fugiat consequuntur sequi error a debitis cupiditate distinctio harum at magnam reprehenderit id omnis ipsa nam quisquam nisi nihil.Lorem ipsum dolor sit amet consectetur adipisicing, elit. Ducimus, saepe incidunt fugiat consequuntur sequi error a debitis cupiditate distinctio harum at magnam reprehenderit id omnis ipsa nam quisquam nisi nihil.Lorem ipsum dolor sit amet consectetur adipisicing, elit. Ducimus, saepe incidunt fugiat consequuntur sequi error a debitis cupiditate distinctio harum at magnam reprehenderit id omnis ipsa nam quisquam nisi nihil.Lorem ipsum dolor sit amet consectetur adipisicing, elit. Ducimus, saepe incidunt fugiat consequuntur sequi error a debitis cupiditate distinctio harum at magnam reprehenderit id omnis ipsa nam quisquam nisi nihil.Lorem ipsum dolor sit amet consectetur adipisicing, elit. Ducimus, saepe incidunt fugiat consequuntur sequi error a debitis cupiditate distinctio harum at magnam reprehenderit id omnis ipsa nam quisquam nisi nihil.Lorem ipsum dolor sit amet consectetur adipisicing, elit. Ducimus, saepe incidunt fugiat consequuntur sequi error a debitis cupiditate distinctio harum at magnam reprehenderit id omnis ipsa nam quisquam nisi nihil.'
 
+const playlists = [
+    {
+        id: '235423432facd',
+        name: 'Songs',
+        privacy: 'public',
+        hasCurrentVideo: false,
+    },
+    {
+        id: '235423432facdwe',
+        name: 'Favourites',
+        privacy: 'private',
+        hasCurrentVideo: true,
+    },
+    {
+        id: '2354234234abbc',
+        name: 'Study Materials',
+        privacy: 'unlisted',
+        hasCurrentVideo: false,
+    },
+    
+]
+
 const Description = (props: { children?: React.ReactNode }) => {
     const [isExpanded, setIsExpanded] = React.useState<boolean>(false)
     const expandOrContract = (event: any) => {
@@ -106,39 +128,42 @@ const CurrentVideo = () => {
         React.useState<boolean>(false)
     const [isLiked, setIsLiked] = React.useState<boolean>(false)
     const [isDisLiked, setIsDisLiked] = React.useState<boolean>(false)
-    const [isPlaylistClicked, setIsPlaylistClicked] = React.useState<boolean>(false)
+    const [isPlaylistClicked, setIsPlaylistClicked] =
+        React.useState<boolean>(false)
 
     const handleLike = () => {
         // in backend set a field called
         // `perception`: true(like) | false(dislike) | null(neither liked nor disliked.)
         setIsLiked((s) => {
-            if (!s === isDisLiked && !s === true)
-                setIsDisLiked(s)
+            if (!s === isDisLiked && !s === true) setIsDisLiked(s)
             return !s
         })
     }
     const handleDisLike = () => {
         setIsDisLiked((s) => {
-            if (!s === isLiked && !s === true)
-                setIsLiked(s)
+            if (!s === isLiked && !s === true) setIsLiked(s)
             return !s
         })
     }
 
     const handlePlaylist = () => {
         console.log('addtoplaylist button clicked')
-        provide(<PopupModel />)
+        provide(
+            <PopupModel>
+                <AddToPaylistDialog playlists={playlists}/>
+            </PopupModel>,
+        )
         setIsPlaylistClicked((s) => !s)
     }
 
     React.useEffect(() => {
         // channel's subscription status changed.
-        console.log('subscribed to curr videos channel', channelSubscription)
+        // console.log('subscribed to curr videos channel', channelSubscription)
     }, [channelSubscription])
 
     React.useEffect(() => {
         // channel's notification status changed.
-        console.log('notif to curr videos channel', channelNotification)
+        // console.log('notif to curr videos channel', channelNotification)
     }, [channelNotification])
 
     return (
@@ -160,31 +185,35 @@ const CurrentVideo = () => {
                 <Flex justify='flex-start' gap='1rem'>
                     <ActionButton onClick={handleLike}>
                         {isLiked ? <Liked /> : <Like />}
-                        {"97K"}
+                        {'97K'}
                     </ActionButton>
                     <ActionButton onClick={handleDisLike}>
                         {isDisLiked ? <DisLiked /> : <DisLike />}
-                        {"1.1K"}
+                        {'1.1K'}
                     </ActionButton>
-                    <ActionButton >
+                    <ActionButton>
                         <Share />
                         Share
                     </ActionButton>
-                    <ActionButton onClick={handlePlaylist} >
+                    <ActionButton onClick={handlePlaylist}>
                         <AddToPlaylist />
                         Add
                     </ActionButton>
-                    <ActionButton >
+                    <ActionButton>
                         <Flag />
                         Flag
                     </ActionButton>
-                    
                 </Flex>
             </Flex>
             <hr />
             <Flex justify='space-between'>
                 <Flex justify='flex-start'>
-                    <img src={img1} width='20' height='20' className='rounded' />
+                    <img
+                        src={img1}
+                        width='20'
+                        height='20'
+                        className='rounded'
+                    />
                     <span>Very long channel name and this name is long.</span>
                 </Flex>
                 <SubscribeButton
@@ -376,11 +405,13 @@ const Video = () => {
         <>
             <NavBar />
             <div>
-                <div style={{ display: 'grid', gridTemplateColumns: '70% 30%' }}>
+                <div
+                    style={{ display: 'grid', gridTemplateColumns: '70% 30%' }}
+                >
                     <CurrentVideo />
                     <RelatedVideos />
                 </div>
-                <section style={{margin: '0.5rem'}}>
+                <section style={{ margin: '0.5rem' }}>
                     <AllComments pageUrl='' comments={sampleComments} />
                 </section>
             </div>
