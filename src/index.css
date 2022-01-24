@@ -150,7 +150,7 @@ html {
 }
 
 [color-scheme='dim'] {
-    color-scheme: dark;
+    color-scheme: dim;
 
     --brand: var(--brand-dim);
     --text1: var(--text1-dim);

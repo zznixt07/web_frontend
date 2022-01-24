@@ -8,6 +8,7 @@ import img5 from '../assets/imgs/(5).jpg'
 import img6 from '../assets/imgs/(6).jpg'
 import img7 from '../assets/imgs/(7).jpg'
 import img8 from '../assets/imgs/(8).jpg'
+// import {provide} from '../components/Provider'
 
 const thumbs = [img1, img2, img3, img4, img5, img6, img7, img8]
 // const thumbs = [img7, img7, img7, img7, img7, img7, img7]
@@ -22,6 +23,7 @@ const randomName = (): string => {
 }
 
 const Browse = ({cardFlow = 'column'}: any) => {
+
     return (
         <Grid maxColumns={10} itemBaseWidth='350px' gap='0.2rem'>
             {thumbs.map((i,j) => (

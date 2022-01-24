@@ -9,6 +9,8 @@ import vert from '../assets/vids/vertical.mp4'
 import SubscribeButton from '../components/SubscribeButton'
 import AllComments from '../components/comment/CommentViewer'
 import NavBar from '../components/NavBar'
+import PopupModel, {PopupModelContainer} from '../components/PopupModel'
+
 import Like from '../assets/svg/LikeOutlined'
 import Liked from '../assets/svg/LikeFilled'
 import DisLike from '../assets/svg/DislikeOutlined'
@@ -26,6 +28,8 @@ import img5 from '../assets/imgs/(5).jpg'
 import img6 from '../assets/imgs/(6).jpg'
 import img7 from '../assets/imgs/(7).jpg'
 import img8 from '../assets/imgs/(8).jpg'
+import {provide} from '../components/Provider'
+
 const thumbs = [img1, img2, img3, img4, img5, img6, img7, img8]
 const randomName = (): string => {
     const names = [
@@ -102,8 +106,10 @@ const CurrentVideo = () => {
         React.useState<boolean>(false)
     const [isLiked, setIsLiked] = React.useState<boolean>(false)
     const [isDisLiked, setIsDisLiked] = React.useState<boolean>(false)
+    const [isPlaylistClicked, setIsPlaylistClicked] = React.useState<boolean>(false)
 
     const handleLike = () => {
+        provide(<PopupModel open={true}/>)
         // in backend set a field called
         // `perception`: true(like) | false(dislike) | null(neither liked nor disliked.)
         setIsLiked((s) => {
@@ -120,6 +126,11 @@ const CurrentVideo = () => {
         })
     }
 
+    const handlePlaylist = () => {
+        console.log('addtoplaylist button clicked')
+        setIsPlaylistClicked((s) => !s)
+    }
+
     React.useEffect(() => {
         // channel's subscription status changed.
         console.log('subscribed to curr videos channel', channelSubscription)
@@ -132,9 +143,10 @@ const CurrentVideo = () => {
 
     return (
         <div style={{}}>
+            <PopupModelContainer />
             <video
                 src={vert}
-                controls
+                controls={true}
                 width='1200'
                 height='600'
                 style={{}}
@@ -158,7 +170,7 @@ const CurrentVideo = () => {
                         <Share />
                         Share
                     </ActionButton>
-                    <ActionButton >
+                    <ActionButton onClick={handlePlaylist} >
                         <AddToPlaylist />
                         Add
                     </ActionButton>

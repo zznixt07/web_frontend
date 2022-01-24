@@ -94,7 +94,6 @@ type ReactionItemProp = {
 }
 
 const ReactionItem = ({ emoji, count, reacted, onClick }: ReactionItemProp) => {
-    console.log(emoji, count)
     return (
         <ReactionList
             as='li'

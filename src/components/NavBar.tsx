@@ -5,6 +5,7 @@ import logo from '../logo.svg'
 import FeatherMenu from '../assets/svg/FeatherMenu'
 import FeatherBell from '../assets/svg/FeatherBell'
 
+
 const Profile = (): JSX.Element => {
     return (
         <span>
