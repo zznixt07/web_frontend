@@ -4,19 +4,6 @@ import { Flex } from './Structure'
 
 import { useStore } from './Store'
 
-const PopupModelContainer = () => {
-    const popup = useStore()
-    const popupRef = React.useRef(null)
-    return (
-        <div>
-            <div ref={popupRef}>{popup}</div>
-        </div>
-    )
-}
-
-type PopupModelProps = {
-    open: boolean
-}
 
 const Dialog = styled.dialog`
     position: fixed;
@@ -30,14 +17,33 @@ const Dialog = styled.dialog`
     }
 `
 
-const PopupModel = ({ open }: PopupModelProps) => {
-    const [isOpen, setIsOpen] = React.useState<boolean>(true)
+const PopupModelContainer = () => {
+    const popup = useStore()
+    const popupRef = React.useRef(null)
+    return (
+        <div>
+            {popup}
+        </div>
+    )
+}
+
+const PopupModel = (props: any) => {
+    // on next render the useState does not use props.style. instead it uses
+    const [isOpen, setIsOpen] = React.useState<boolean>(true);
+
+    React.useEffect(() => {
+        setIsOpen(s => !s)
+    }, [props])
+
+    const handleClose = () => {
+        setIsOpen(false)
+   }
     return (
         <Dialog
             open={isOpen}
-            onClick={() => setIsOpen(s => !s)}
+            onClick={handleClose}
         >
-            {/*{children}*/}
+            {/*{props.children}*/}
             <h1>Heading</h1>
         </Dialog>
     )

@@ -15,6 +15,5 @@ export const useStore = (): JSX.Element | null => {
 
 export const dispatch = (elem: JSX.Element) => {
     memory = elem
-    // console.log(memory)
     listener(memory)
 }

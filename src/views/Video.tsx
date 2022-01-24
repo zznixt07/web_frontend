@@ -109,7 +109,6 @@ const CurrentVideo = () => {
     const [isPlaylistClicked, setIsPlaylistClicked] = React.useState<boolean>(false)
 
     const handleLike = () => {
-        provide(<PopupModel open={true}/>)
         // in backend set a field called
         // `perception`: true(like) | false(dislike) | null(neither liked nor disliked.)
         setIsLiked((s) => {
@@ -128,6 +127,7 @@ const CurrentVideo = () => {
 
     const handlePlaylist = () => {
         console.log('addtoplaylist button clicked')
+        provide(<PopupModel />)
         setIsPlaylistClicked((s) => !s)
     }
 
