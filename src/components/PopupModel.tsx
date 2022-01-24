@@ -6,12 +6,13 @@ import { useStore } from './Store'
 import Close from 'assets/svg/MdiClose'
 import {ReactProp} from 'types/ReactProp'
 
-const CloseButton = styled.span`
-    padding: 1rem;
+const CloseButton = styled.button`
+    border-width: 0;
+    padding: 0.6rem;
     cursor: pointer;
     position: absolute;
-    top: 1rem;
-    right: 1rem;
+    top: 0.3rem;
+    right: 0.3rem;
     background-color: var(--surface1);
 
     &:hover {
@@ -31,7 +32,10 @@ const Dialog = styled.dialog`
 `
 
 const Container = styled.div`
-    // position: relative;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 `
 
 const PopupModelContainer = () => {
@@ -47,20 +51,23 @@ const PopupModel = (props: ReactProp) => {
         setIsOpen(true)
     }, [props])
 
-    const handleClose = (e: React.MouseEvent<HTMLDialogElement>) => {
-        // only close form if its directly clicked.
+    const handleClose = (e: React.MouseEvent) => {
+        // only close dialog if its directly clicked in the backdrop or the cross button
         if (e.target === e.currentTarget) {
             setIsOpen(false)
+            console.log('closed dialog')
        }
     }
+
     return (
         <Dialog open={isOpen} onClick={handleClose}>
             <Container >
                 {props.children}
+                <CloseButton className="rounded" onClick={handleClose}>
+                    {/*pointer-events so that the SVG will not pick up clicks*/}
+                    <Close style={{pointerEvents: 'none'}} />
+                </CloseButton>
             </Container>
-            <CloseButton onClick={handleClose}>
-                <Close />
-            </CloseButton>
         </Dialog>
     )
 }

@@ -14,10 +14,6 @@ type AddToPaylistDialogProps = {
 }
 
 const Playlists = styled(Flex)`
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
     background-color: var(--surface1);
     padding: 1rem;
     border-radius: 1rem;
@@ -35,7 +31,7 @@ const PlaylistSelector = ({
     }
     return (
         <div>
-            <label>
+            <Flex as='label' justify='flex-start'>
                 <input
                     type='checkbox'
                     checked={isChecked}
@@ -43,7 +39,7 @@ const PlaylistSelector = ({
                 />
                 <span>{name}</span>
                 <span>{privacy}</span>
-            </label>
+            </Flex >
         </div>
     )
 }
