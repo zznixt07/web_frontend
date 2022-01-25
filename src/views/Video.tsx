@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 import * as React from 'react'
 import { Flex, Grid } from '../components/Structure'
 import VideoCard from '../components/VideoCard'
@@ -7,10 +5,10 @@ import styled from 'styled-components'
 import horiz from '../assets/vids/horizontal.mp4'
 import vert from '../assets/vids/vertical.mp4'
 import SubscribeButton from '../components/SubscribeButton'
-import AllComments from '../components/comment/CommentViewer'
+import AllComments, {CommentProps} from '../components/comment/CommentViewer'
 import NavBar from '../components/NavBar'
 import PopupModel, { PopupModelContainer } from '../components/PopupModel'
-import {AddToPaylistDialog} from 'components/AddToPlaylist'
+import {PlaylistProps, AddToPaylistDialog} from 'components/AddToPlaylist'
 
 import Like from '../assets/svg/LikeOutlined'
 import Liked from '../assets/svg/LikeFilled'
@@ -79,7 +77,7 @@ const MoreLessBtn = styled.span`
 const sampledesc =
     'This is the greatest description of all time. Lorem ipsum dolor sit amet consectetur adipisicing, elit. Ducimus, saepe incidunt fugiat consequuntur sequi error a debitis cupiditate distinctio harum at magnam reprehenderit id omnis ipsa nam quisquam nisi nihil. Lorem ipsum dolor sit amet consectetur adipisicing, elit. Ducimus, saepe incidunt fugiat consequuntur sequi error a debitis cupiditate distinctio harum at magnam reprehenderit id omnis ipsa nam quisquam nisi nihil. Lorem ipsum dolor sit amet consectetur adipisicing, elit. Ducimus, saepe incidunt fugiat consequuntur sequi error a debitis cupiditate distinctio harum at magnam reprehenderit id omnis ipsa nam quisquam nisi nihil. Lorem ipsum dolor sit amet consectetur adipisicing, elit. Ducimus, saepe incidunt fugiat consequuntur sequi error a debitis cupiditate distinctio harum at magnam reprehenderit id omnis ipsa nam quisquam nisi nihil. Lorem ipsum dolor sit amet consectetur adipisicing, elit. Ducimus, saepe incidunt fugiat consequuntur sequi error a debitis cupiditate distinctio harum at magnam reprehenderit id omnis ipsa nam quisquam nisi nihil.Lorem ipsum dolor sit amet consectetur adipisicing, elit. Ducimus, saepe incidunt fugiat consequuntur sequi error a debitis cupiditate distinctio harum at magnam reprehenderit id omnis ipsa nam quisquam nisi nihil.Lorem ipsum dolor sit amet consectetur adipisicing, elit. Ducimus, saepe incidunt fugiat consequuntur sequi error a debitis cupiditate distinctio harum at magnam reprehenderit id omnis ipsa nam quisquam nisi nihil.Lorem ipsum dolor sit amet consectetur adipisicing, elit. Ducimus, saepe incidunt fugiat consequuntur sequi error a debitis cupiditate distinctio harum at magnam reprehenderit id omnis ipsa nam quisquam nisi nihil.Lorem ipsum dolor sit amet consectetur adipisicing, elit. Ducimus, saepe incidunt fugiat consequuntur sequi error a debitis cupiditate distinctio harum at magnam reprehenderit id omnis ipsa nam quisquam nisi nihil.Lorem ipsum dolor sit amet consectetur adipisicing, elit. Ducimus, saepe incidunt fugiat consequuntur sequi error a debitis cupiditate distinctio harum at magnam reprehenderit id omnis ipsa nam quisquam nisi nihil.Lorem ipsum dolor sit amet consectetur adipisicing, elit. Ducimus, saepe incidunt fugiat consequuntur sequi error a debitis cupiditate distinctio harum at magnam reprehenderit id omnis ipsa nam quisquam nisi nihil.Lorem ipsum dolor sit amet consectetur adipisicing, elit. Ducimus, saepe incidunt fugiat consequuntur sequi error a debitis cupiditate distinctio harum at magnam reprehenderit id omnis ipsa nam quisquam nisi nihil.Lorem ipsum dolor sit amet consectetur adipisicing, elit. Ducimus, saepe incidunt fugiat consequuntur sequi error a debitis cupiditate distinctio harum at magnam reprehenderit id omnis ipsa nam quisquam nisi nihil.'
 
-const playlists = [
+const playlists: PlaylistProps[] = [
     {
         id: '235423432facd',
         name: 'Songs',
@@ -252,7 +250,7 @@ const RelatedVideos = () => {
     )
 }
 
-const sampleComments = [
+const sampleComments: CommentProps[] = [
     {
         id: '387324abc2214fff',
         body: 'This is a comment. Video is lit',

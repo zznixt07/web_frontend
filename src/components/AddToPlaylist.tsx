@@ -1,8 +1,11 @@
 import * as React from 'react'
 import styled from 'styled-components'
 import { Flex } from 'components/Structure'
+import Globe from 'assets/svg/IcBaselinePublic'
+import LinkChain from 'assets/svg/AkarIconsLinkChain'
+import Private from 'assets/svg/IcBaselinePrivateConnectivity'
 
-type PlaylistProps = {
+export type PlaylistProps = {
     id: string
     name: string
     privacy: 'public' | 'private' | 'unlisted'
@@ -19,6 +22,19 @@ const Playlists = styled(Flex)`
     border-radius: 1rem;
 `
 
+const Playlist = styled.div`
+    max-height: 80vh;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding-right: 1rem;
+`
+
+const LABELSVG: Record<string, JSX.Element> = {
+    'public': <Globe />,
+    'unlisted': <LinkChain />,
+    'private': <Private />
+}
+
 const PlaylistSelector = ({
     id,
     name,
@@ -30,17 +46,15 @@ const PlaylistSelector = ({
         setIsChecked((s) => !s)
     }
     return (
-        <div>
-            <Flex as='label' justify='flex-start'>
+            <Flex as='label' justify='flex-start' gap="1.5rem">
                 <input
                     type='checkbox'
                     checked={isChecked}
                     onChange={handleChange}
                 />
-                <span>{name}</span>
-                <span>{privacy}</span>
+                <span style={{width: '15ch'}}>{name}</span>
+                <span title={privacy}>{LABELSVG[privacy]}</span>
             </Flex >
-        </div>
     )
 }
 
@@ -48,11 +62,11 @@ const AddToPaylistDialog = ({ playlists }: AddToPaylistDialogProps) => {
     return (
         <Playlists $direction='column' align='flex-start' gap='0.5rem'>
             <span>Add to...</span>
-            <div>
+            <Playlist>
                 {playlists.map((playlist) => {
                     return <PlaylistSelector key={playlist.id} {...playlist} />
                 })}
-            </div>
+            </Playlist>
         </Playlists>
     )
 }

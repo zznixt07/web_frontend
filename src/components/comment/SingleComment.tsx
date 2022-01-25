@@ -86,27 +86,6 @@ const ReactionList = styled(FlexWrapAlign)<{reacted?: boolean}>`
         `}
 `
 
-type ReactionItemProp = {
-    emoji: string
-    count: number
-    reacted: boolean
-    onClick: () => void
-}
-
-const ReactionItem = ({ emoji, count, reacted, onClick }: ReactionItemProp) => {
-    return (
-        <ReactionList
-            as='li'
-            reacted={reacted}
-            onClick={onClick}
-            data-id={emoji}
-        >
-            <div>{emoji}</div>
-            <div>{count}</div>
-        </ReactionList>
-    )
-}
-
 const EmojiChooser = styled.div`
     display: none;
     font-size: 1.2rem;
@@ -138,6 +117,13 @@ const PopupEmoji = styled.span`
     }
 `
 
+type ReactionItemProp = {
+    emoji: string
+    count: number
+    reacted: boolean
+    onClick: () => void
+}
+
 type CommentProp = {
     id: string
     author: {
@@ -155,10 +141,24 @@ type CommentProp = {
     onReactAsync: any
 }
 
-type Comment = {
+type ReactionProp = {
     id: string
     count: number
     reacted: boolean
+}
+
+const ReactionItem = ({ emoji, count, reacted, onClick }: ReactionItemProp) => {
+    return (
+        <ReactionList
+            as='li'
+            reacted={reacted}
+            onClick={onClick}
+            data-id={emoji}
+        >
+            <div>{emoji}</div>
+            <div>{count}</div>
+        </ReactionList>
+    )
 }
 
 const SingleComment = ({
@@ -288,3 +288,4 @@ const SingleComment = ({
 }
 
 export default SingleComment
+export { ReactionProp }

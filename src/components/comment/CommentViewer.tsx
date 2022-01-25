@@ -1,7 +1,8 @@
 // @ts-nocheck
 import * as React from 'react'
-import SingleComment from './SingleComment'
+import SingleComment, {ReactionProp} from './SingleComment'
 import CommentBox from './CommentBox'
+
 
 export const createComment = async (
     content,
@@ -68,37 +69,32 @@ const onReact = async (
     return [data, data.url]
 }
 
-type Author = {
+type AuthorProps = {
     name: string
     channelLink: string
     imageLink: string
 }
 
-type Reaction = Record<string, number>
-type ReactionProp = {
-    id: string
-    count: number
-    reacted: boolean
-}
+type ReactionProps = Record<string, number>
 
-type Comment = {
+type CommentProps = {
     id: string
     body: string
-    author: Author
+    author: AuthorProps
     createdOn: string
     updatedOn: string
-    reactions: Reaction[]
-    children: Comment[]
+    reactions: ReactionProps[]
+    children: CommentProps[]
     authUserReaction: string[]
 }
 
-type ProbabilyIndentedComment = Comment & { indent?: number }
-type IndentedComment = Comment & { indent: number }
+type ProbabilyIndentedComment = CommentProps & { indent?: number }
+type IndentedComment = CommentProps & { indent: number }
 type FlatComment = Omit<IndentedComment, 'children'>
 
-const insertIndentAndflatten = (comms: Comment[]): FlatComment[] => {
+const insertIndentAndflatten = (comms: CommentProps[]): FlatComment[] => {
     const flattened: FlatComment[] = []
-    const nextSiblingsLeft: Comment[] = []
+    const nextSiblingsLeft: CommentProps[] = []
     let arr = [...comms]
     let indent: number = 0
     while (true) {
@@ -131,7 +127,7 @@ const insertIndentAndflatten = (comms: Comment[]): FlatComment[] => {
         }
         if (!broken) {
             indent--
-            const lastItem: Comment | undefined = nextSiblingsLeft.pop()
+            const lastItem: CommentProps | undefined = nextSiblingsLeft.pop()
             if (lastItem === undefined) break
             arr = [lastItem]
         }
@@ -144,11 +140,11 @@ const AllComments = ({
     comments,
 }: {
     pageUrl: string
-    comments: Comment[]
+    comments: CommentProps[]
 }) => {
     // const [nestedComments, setNestedComments] = useState([...comments]) // cannot use props directly in state
     const [nestedComments, setNestedComments] =
-        React.useState<Comment[]>(comments)
+        React.useState<CommentProps[]>(comments)
     const flatComments: FlatComment[] = insertIndentAndflatten(nestedComments)
     const [replyId, setReplyId] = React.useState(null)
     return (
@@ -188,12 +184,12 @@ const AllComments = ({
                                     reactionId,
                                     reactionRemoved,
                                 )
-                                setNestedComments((cs: Comment[]) =>
-                                    cs.map((c: Comment, i) => {
+                                setNestedComments((cs: CommentProps[]) =>
+                                    cs.map((c: CommentProps, i) => {
                                         if (i === index)
                                             c.authUserReaction = data[1]
                                         // no need to add reaction count cuz
-                                        // the count is internally managed in Comment
+                                        // the count is internally managed in CommentProps
                                         return c
                                     }),
                                 )
@@ -228,3 +224,4 @@ const AllComments = ({
 }
 
 export default AllComments
+export {CommentProps, ReactionProps}
