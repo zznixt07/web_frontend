@@ -1,10 +1,10 @@
 import * as React from 'react'
+import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import { Flex } from './Structure'
 import logo from '../logo.svg'
 import FeatherMenu from '../assets/svg/FeatherMenu'
 import FeatherBell from '../assets/svg/FeatherBell'
-
 
 const Profile = (): JSX.Element => {
     return (
@@ -25,26 +25,27 @@ const Search = (): JSX.Element => {
     )
 }
 
-
 const NavBar = () => {
     return (
-        <Flex as='nav' justify='space-between'>
-            <Flex as='a' href="/">
+        <Flex as='nav' justify='space-between' style={{margin: '0 1rem'}}>
+            <Flex>
                 <FeatherMenu />
-                <img
-                    src={logo}
-                    className='App-logo'
-                    alt='logo'
-                    width='50'
-                    height='50'
-                />
-                <h1>FramaMotion</h1>
+                <Flex as='a' href='/'>
+                    <img
+                        src={logo}
+                        className='App-logo'
+                        alt='logo'
+                        width='50'
+                        height='50'
+                    />
+                    <h2>FramaMotion</h2>
+                </Flex>
             </Flex>
             <section>
                 <Search />
             </section>
             <Flex as='section'>
-                <span>Upload</span>
+                <Link to='/upload'>Upload</Link>
                 <FeatherBell />
                 <Profile />
             </Flex>
