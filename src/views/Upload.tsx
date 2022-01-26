@@ -12,23 +12,31 @@ const FileChooserBtn = styled.div`
 `
 
 const Upload = () => {
+    const fileInput = React.useRef<HTMLInputElement>(null)
+    const handleSelectedFile = (e: any) => {
+        if (fileInput.current) {
+            console.log(fileInput.current.files)
+        }
+    }
+
     return (
         <Flex style={{ height: '100vh' }} $direction='column' gap='0.4rem'>
             <UploadSVG width='100' height='100' />
             <h1>Drag and drop files to upload.</h1>
             <span style={{color: 'var(--text2)'}}>Or Select Files by clicking below button.</span>
-            <form method='POST' encType='multipart/form-data' action='#'>
-                <label>
-                    <FileChooserBtn>Choose files</FileChooserBtn>
-                    <input
-                        type='file'
-                        name='staticvideo'
-                        accept='video/*'
-                        capture='user'
-                        style={{ opacity: 0, width: 0 }}
-                    />
-                </label>
-            </form>
+            <label>
+                <FileChooserBtn>Choose files</FileChooserBtn>
+                <input
+                    type='file'
+                    name='staticvideo'
+                    accept='video/*'
+                    capture='user'
+                    style={{ opacity: 0, width: 0 }}
+                    ref={fileInput}
+                    onChange={handleSelectedFile}
+                />
+            </label>
+            
         </Flex>
     )
 }
