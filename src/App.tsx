@@ -10,7 +10,6 @@ const App = (): JSX.Element => {
     return (
         <div className='App'>
             <NavBar />
-
             <Flex align='flex-start'>
                 <SideBar />
                 <main style={{ flex: 1 }}>

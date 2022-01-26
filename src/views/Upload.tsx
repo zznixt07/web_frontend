@@ -8,12 +8,12 @@ import UploadSVG from 'assets/svg/UiwUpload'
 
 const Upload = () => {
     return (
-        <div>
-            <UploadSVG />
-            <h6>Drag and drop files to upload.</h6>
+        <Flex style={{height: '100vh'}} $direction='column' gap='0.4rem'>
+            <UploadSVG width="100" height="100" />
+            <h1>Drag and drop files to upload.</h1>
             <span>Or Select Files by clicking below button.</span>
             <button>Select video</button>
-        </div>
+        </Flex>
     )
 }
 

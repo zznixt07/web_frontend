@@ -4,6 +4,7 @@ import './index.css'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import App from './App'
 import Video from './views/Video'
+import Upload from './views/Upload'
 import reportWebVitals from './reportWebVitals'
 
 ReactDOM.render(
@@ -13,6 +14,7 @@ ReactDOM.render(
               <Route path="/" >
                 <Route index element={<App />}></Route>
                 <Route path="vid" element={<Video />}></Route>
+                <Route path="upload" element={<Upload />}></Route>
                 
               </Route>
             </Routes>
