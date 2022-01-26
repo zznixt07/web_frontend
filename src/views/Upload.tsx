@@ -12,7 +12,9 @@ const Upload = () => {
             <UploadSVG width="100" height="100" />
             <h1>Drag and drop files to upload.</h1>
             <span>Or Select Files by clicking below button.</span>
-            <button>Select video</button>
+            <form method="POST" enctype="multipart/form-data" action="#">
+                <input type="file" name="staticvideo" accept="video/*" capture="user"/>
+            </form>
         </Flex>
     )
 }
