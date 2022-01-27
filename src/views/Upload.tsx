@@ -11,6 +11,25 @@ const FileChooserBtn = styled.div`
     color: var(--surface1);
 `
 
+const VideoDetails = styled.div`
+    flex: 1 1 600px;
+`
+
+const UploadedVideo = styled.div`
+    flex: 1 1 400px;
+`
+
+
+
+const DraftVideo = () => {
+    return (
+        <Flex>
+            <VideoDetails></VideoDetails>
+            <UploadedVideo></UploadedVideo>
+        </Flex>
+    )
+}
+
 const Upload = () => {
     const fileInput = React.useRef<HTMLInputElement>(null)
     const handleSelectedFile = (e: any) => {
