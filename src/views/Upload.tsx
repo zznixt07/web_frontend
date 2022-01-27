@@ -1,5 +1,5 @@
 import * as React from 'react'
-import {Link} from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { Flex, Grid } from '../components/Structure'
 import styled from 'styled-components'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
@@ -20,6 +20,30 @@ const VideoDetails = styled.div`
 
 const UploadedVideo = styled.div`
     flex: 1 1 400px;
+`
+const Label = styled.label`
+    padding: 0.4rem;
+    width: 100%;
+    border: 1px solid var(--surface4);
+    border-radius: 0.4rem;
+`
+
+const LabelText = styled.span`
+    display: block;
+`
+
+const CommonField = styled(Field)`
+    width: inherit;
+    border: none;
+    border-radius: inherit;
+    padding: 0.4rem;
+`
+
+const TitleField = styled(CommonField)`
+`
+const DescriptionField = styled(CommonField)`
+    resize: vertical;
+    min-height: 10rem;
 `
 
 const validator = Yup.object({
@@ -47,15 +71,27 @@ const DraftVideo = () => {
                     onSubmit={onSubmit}
                 >
                     {({ isSubmitting }) => (
-                        <Form>
-                            <Field type='text' name='title' />
-                            <ErrorMessage name='title' component='div' />
-                            <Field type='text' name='description' />
-                            <ErrorMessage name='description' component='div' />
+                        <Flex as={Form} $direction='column'>
+                            <Label>
+                                <LabelText>Title</LabelText>
+                                <TitleField type='text' name='title' />
+                                <ErrorMessage name='title' component='div' />
+                            </Label>
+                            <Label>
+                                <LabelText>Description</LabelText>
+                                <DescriptionField
+                                    as="textarea"
+                                    name='description'
+                                />
+                                <ErrorMessage
+                                    name='description'
+                                    component='div'
+                                />
+                            </Label>
                             <button type='submit' disabled={isSubmitting}>
                                 Submit
                             </button>
-                        </Form>
+                        </Flex>
                     )}
                 </Formik>
             </VideoDetails>
@@ -98,4 +134,4 @@ const Upload = () => {
 }
 
 export default Upload
-export {DraftVideo}
+export { DraftVideo }
