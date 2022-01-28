@@ -1,14 +1,18 @@
 import * as React from 'react'
+import ReactDOMServer from 'react-dom/server'
 import { Link } from 'react-router-dom'
 import { Flex, Grid } from 'components/Structure'
-import AspectRatioImg from 'components/AspectRatioImg'
+import AspectRatioImg, {ResponsiveImg} from 'components/AspectRatioImg'
 import styled from 'styled-components'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
+import horiz from 'assets/vids/horizontal.mp4'
+import AddImageRawSVG from 'assets/svg/BxBxsImageAdd.svg'
+
 import UploadSVG from 'assets/svg/UiwUpload'
-import img1 from '../assets/imgs/(1).jpg'
-import img2 from '../assets/imgs/(2).jpg'
-import img3 from '../assets/imgs/(3).jpg'
+import img1 from 'assets/imgs/(5).jpg'
+import img2 from 'assets/imgs/(6).jpg'
+import img3 from 'assets/imgs/(7).jpg'
 
 const FileChooserBtn = styled.div`
     margin: 1rem;
@@ -22,9 +26,16 @@ const VideoDetails = styled.div`
     flex: 1 1 600px;
 `
 
-const UploadedVideo = styled.div`
-    flex: 1 1 400px;
-`
+const UploadedVideo = () => {
+    return (
+        <div style={{flex: '1 1 400px'}}>
+            <video src={horiz} controls={true}></video>
+        </div>
+    )
+}
+
+
+
 const Label = styled.label`
     padding: 0.4rem;
     width: 100%;
@@ -54,17 +65,52 @@ const DescriptionField = styled(CommonField)`
     min-height: 10rem;
 `
 
+const SimpleGrid = styled(Grid)`
+    min-height: 100px;
+`
+
+    // background-image: url("${AddImageSVG.src}");
+const BgImg = styled.div`
+    background-image: url("${AddImageRawSVG}");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    background-color: var(--surface3);
+    position: relative;
+`
+
+const ThumbnailText = styled(Flex)`
+    height: 100%;
+    font-size: 0.8rem;
+`
+
+
+
+const UploadThumbnail = () => {
+    const uploadThumb = React.useRef(null)
+    return (
+        <>
+            <input ref={uploadThumb} type="file" />
+            <BgImg onClick={() => {}}>
+                <ThumbnailText>Choose custom thumbnail.</ThumbnailText>
+
+            </BgImg>
+        </>
+    )
+}
+
 const thumbImages: any = [img1, img2, img3]
 
 const Thumbnails = () => {
     return (
-        <Flex style={{maxHeight: '100px'}}>
+        <SimpleGrid maxColumns={4} itemBaseWidth="150px">
+            <UploadThumbnail />
             {thumbImages.map((thumb: any) => {
                 return (
-                    <AspectRatioImg src={thumb} key={thumb} width="100" height="80" />
+                    <ResponsiveImg src={thumb} key={thumb} />
                 )
             })}
-        </Flex>
+        </SimpleGrid>
     )
 }
 
