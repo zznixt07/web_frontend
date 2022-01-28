@@ -5,6 +5,7 @@ import styled from 'styled-components'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
 import UploadSVG from 'assets/svg/UiwUpload'
+import {usePopper} from 'react-popper'
 
 const FileChooserBtn = styled.div`
     margin: 1rem;
@@ -62,6 +63,7 @@ const DraftVideo = () => {
         title: 'Use the file name as title here.',
         description: 'Desc..',
     }
+
     return (
         <Flex>
             <VideoDetails>
@@ -74,8 +76,10 @@ const DraftVideo = () => {
                         <Flex as={Form} $direction='column'>
                             <Label>
                                 <LabelText>Title</LabelText>
-                                <TitleField type='text' name='title' />
-                                <ErrorMessage name='title' component='div' />
+                                <TitleField type='text' name='title' ref={popContainer} />
+                                <ErrorMessage name='title'>
+                                    {msg => <div>{msg}</div>}
+                                </ErrorMessage>
                             </Label>
                             <Label>
                                 <LabelText>Description</LabelText>
