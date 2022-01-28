@@ -1,11 +1,14 @@
 import * as React from 'react'
 import { Link } from 'react-router-dom'
-import { Flex, Grid } from '../components/Structure'
+import { Flex, Grid } from 'components/Structure'
+import AspectRatioImg from 'components/AspectRatioImg'
 import styled from 'styled-components'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
 import UploadSVG from 'assets/svg/UiwUpload'
-import {usePopper} from 'react-popper'
+import img1 from '../assets/imgs/(1).jpg'
+import img2 from '../assets/imgs/(2).jpg'
+import img3 from '../assets/imgs/(3).jpg'
 
 const FileChooserBtn = styled.div`
     margin: 1rem;
@@ -29,6 +32,10 @@ const Label = styled.label`
     border-radius: 0.4rem;
 `
 
+const ErrorContainer = styled.div`
+    color: #dd5145;
+`
+
 const LabelText = styled.span`
     display: block;
 `
@@ -46,6 +53,20 @@ const DescriptionField = styled(CommonField)`
     resize: vertical;
     min-height: 10rem;
 `
+
+const thumbImages: any = [img1, img2, img3]
+
+const Thumbnails = () => {
+    return (
+        <Flex style={{maxHeight: '100px'}}>
+            {thumbImages.map((thumb: any) => {
+                return (
+                    <AspectRatioImg src={thumb} key={thumb} width="100" height="80" />
+                )
+            })}
+        </Flex>
+    )
+}
 
 const validator = Yup.object({
     title: Yup.string()
@@ -76,9 +97,9 @@ const DraftVideo = () => {
                         <Flex as={Form} $direction='column'>
                             <Label>
                                 <LabelText>Title</LabelText>
-                                <TitleField type='text' name='title' ref={popContainer} />
+                                <TitleField type='text' name='title' />
                                 <ErrorMessage name='title'>
-                                    {msg => <div>{msg}</div>}
+                                    {msg => <ErrorContainer>{msg}</ErrorContainer>}
                                 </ErrorMessage>
                             </Label>
                             <Label>
@@ -89,8 +110,14 @@ const DraftVideo = () => {
                                 />
                                 <ErrorMessage
                                     name='description'
-                                    component='div'
-                                />
+                                >
+                                    {msg => <ErrorContainer>{msg}</ErrorContainer>}
+                                   </ErrorMessage>
+                            </Label>
+                            <Label>
+                                <LabelText>Thumbnail</LabelText>
+                                <Thumbnails />
+
                             </Label>
                             <button type='submit' disabled={isSubmitting}>
                                 Submit
