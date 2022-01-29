@@ -75,6 +75,11 @@ const ThumbnailText = styled(Flex)`
     font-size: 0.8rem;
 `
 
+const Draft = styled(Flex)`
+    margin: 2rem auto;
+    padding: 1% 10%;
+`
+
 const UploadThumbnail = () => {
     const uploadThumb = React.useRef(null)
     const handleSelectedFile = () => {}
@@ -101,7 +106,13 @@ const Thumbnails = () => {
         <SimpleGrid maxColumns={4} itemBaseWidth='150px'>
             <UploadThumbnail />
             {thumbImages.map((thumb: any) => {
-                return <ResponsiveImg src={thumb} key={thumb} style={{aspectRatio: '16/9'}} />
+                return (
+                    <ResponsiveImg
+                        src={thumb}
+                        key={thumb}
+                        style={{ aspectRatio: '16/9' }}
+                    />
+                )
             })}
         </SimpleGrid>
     )
@@ -156,7 +167,7 @@ const DraftVideo = () => {
     }
 
     return (
-        <Flex>
+        <Draft gap="1rem">
             <VideoDetails>
                 <Formik
                     initialValues={defaultValues}
@@ -208,7 +219,7 @@ const DraftVideo = () => {
                 </Formik>
             </VideoDetails>
             <UploadedVideo></UploadedVideo>
-        </Flex>
+        </Draft>
     )
 }
 
@@ -221,30 +232,27 @@ const Upload = () => {
     }
 
     return (
-        <>
-            <Flex style={{ height: '100vh' }} $direction='column' gap='0.4rem'>
-                <UploadSVG width='100' height='100' />
-                <h1>Drag and drop files to upload.</h1>
-                <span style={{ color: 'var(--text2)' }}>
-                    Or Select Files by clicking below button.
-                </span>
-                <label>
-                    <FileChooserBtn>Choose files</FileChooserBtn>
-                    <input
-                        type='file'
-                        name='staticvideo'
-                        accept='video/*'
-                        capture='user'
-                        className='sr-only'
-                        ref={fileInput}
-                        onChange={handleSelectedFile}
-                    />
-                </label>
-                {/*{fileInput.current?.files ? <Link to='/draft' /> : null}*/}
-                <Link to='/draft'>Next Page</Link>
-            </Flex>
-            <div style={{ position: 'sticky', top: '1rem' }}>Hello</div>
-        </>
+        <Flex style={{ height: '100vh' }} $direction='column' gap='0.4rem'>
+            <UploadSVG width='100' height='100' />
+            <h1>Drag and drop files to upload.</h1>
+            <span style={{ color: 'var(--text2)' }}>
+                Or Select Files by clicking below button.
+            </span>
+            <label>
+                <FileChooserBtn>Choose files</FileChooserBtn>
+                <input
+                    type='file'
+                    name='staticvideo'
+                    accept='video/*'
+                    capture='user'
+                    className='sr-only'
+                    ref={fileInput}
+                    onChange={handleSelectedFile}
+                />
+            </label>
+            {/*{fileInput.current?.files ? <Link to='/draft' /> : null}*/}
+            <Link to='/draft'>Next Page</Link>
+        </Flex>
     )
 }
 
