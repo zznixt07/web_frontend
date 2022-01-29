@@ -35,6 +35,7 @@ const Label = styled.label`
 
 const ErrorContainer = styled.div`
     color: #dd5145;
+    font-size: 0.8em;
 `
 
 const LabelText = styled.span`
