@@ -8,8 +8,7 @@ import styled from 'styled-components'
 
 export const ResponsiveImg = styled.img`
     max-width: 100%;
-    height: 100px;
-    aspect-ratio: 16/9;
+    height: auto;
     object-fit: cover;
 `
 
