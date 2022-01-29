@@ -28,9 +28,10 @@ const VideoDetails = styled.div`
 
 const Label = styled.label`
     padding: 0.4rem;
+    margin: 0.2rem;
     width: 100%;
-    border: 1px solid var(--surface4);
-    border-radius: 0.4rem;
+    outline: 1px solid var(--surface4);
+    border-radius: 0.2rem;
 `
 
 const ErrorContainer = styled.div`
@@ -40,6 +41,7 @@ const ErrorContainer = styled.div`
 
 const LabelText = styled.span`
     display: block;
+    margin-bottom: 0.3rem;
 `
 
 const CommonField = styled(Field)`
@@ -94,7 +96,7 @@ const UploadThumbnail = () => {
                 onChange={handleSelectedFile}
             />
             <BgImg tabIndex={0}>
-                <ThumbnailText>Choose custom thumbnail.</ThumbnailText>
+                <ThumbnailText align='flex-end'>Choose custom thumbnail</ThumbnailText>
             </BgImg>
         </label>
     )
