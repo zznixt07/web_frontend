@@ -163,7 +163,7 @@ const UploadedVideo = () => {
             }}
         >
             {/*<video src={horiz} controls={true}></video>*/}
-            <Plyr source={{type: 'video', title: 'Title', sources: [{src: horiz, type: 'video/mp4', size: 720}]}} options={{controls: ['play', 'progress', 'settings', 'fullscreen'], settings: ['captions', 'quality', 'loop'], disableContextMenu: true, resetOnEnd: true}} />
+            <Plyr source={{type: 'video', title: 'Title', sources: [{src: horiz, type: 'video/mp4', size: 720}]}} options={{controls: ['play', 'progress', 'settings', 'fullscreen'], settings: ['captions', 'quality', 'loop'], disableContextMenu: true, resetOnEnd: true, tooltips: {controls: true, seek: true}, quality: {default: 720, options: [1440, 1080, 720, 480, 360], }}} />
         </div>
     )
 }
