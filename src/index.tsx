@@ -17,6 +17,7 @@ ReactDOM.render(
                 <Route path="upload" element={<Upload />}></Route>
                 <Route path="draft" element={<DraftVideo />}></Route>
                 
+                
               </Route>
             </Routes>
         </BrowserRouter>

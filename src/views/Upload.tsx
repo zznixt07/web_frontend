@@ -1,13 +1,13 @@
-/* eslint-disable import/first */
 
 import * as React from 'react'
-import ReactDOMServer from 'react-dom/server'
 import { Link } from 'react-router-dom'
 import { Flex, Grid } from 'components/Structure'
 import AspectRatioImg, { ResponsiveImg } from 'components/AspectRatioImg'
 import styled from 'styled-components'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
+
+
 import horiz from 'assets/vids/horizontal.mp4'
 import AddImageRawSVG from 'assets/svg/BxBxsImageAdd.svg'
 
@@ -15,6 +15,7 @@ import UploadSVG from 'assets/svg/UiwUpload'
 import img1 from 'assets/imgs/(6).jpg'
 import img2 from 'assets/imgs/(7).jpg'
 import img3 from 'assets/imgs/(8).jpg'
+import Player from 'components/Player'
 
 const FileChooserBtn = styled.div`
     margin: 1rem;
@@ -60,7 +61,7 @@ const DescriptionField = styled(CommonField)`
 `
 
 const SimpleGrid = styled(Grid)`
-    min-height: 150px;
+    min-height: 120px;
     justify-items: stretch;
     align-items: stretch;
 `
@@ -148,8 +149,7 @@ const Categories = () => {
     )
 }
 
-import Plyr from 'plyr-react'
-import 'plyr-react/dist/plyr.css'
+
 const UploadedVideo = () => {
     return (
         // sticky wont work without alignSelf on flex-child see:
@@ -163,7 +163,8 @@ const UploadedVideo = () => {
             }}
         >
             {/*<video src={horiz} controls={true}></video>*/}
-            <Plyr source={{type: 'video', title: 'Title', sources: [{src: horiz, type: 'video/mp4', size: 720}]}} options={{controls: ['play', 'progress', 'settings', 'fullscreen'], settings: ['captions', 'quality', 'loop'], disableContextMenu: true, resetOnEnd: true, tooltips: {controls: true, seek: true}, quality: {default: 720, options: [1440, 1080, 720, 480, 360], }}} />
+            <Player src={horiz} />
+            
         </div>
     )
 }
