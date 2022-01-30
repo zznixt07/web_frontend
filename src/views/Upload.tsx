@@ -1,3 +1,5 @@
+/* eslint-disable import/first */
+
 import * as React from 'react'
 import ReactDOMServer from 'react-dom/server'
 import { Link } from 'react-router-dom'
@@ -104,6 +106,7 @@ const UploadThumbnail = () => {
 
 const thumbImages: any = [img1, img2, img3]
 
+
 const Thumbnails = () => {
     return (
         <SimpleGrid maxColumns={4} itemBaseWidth='150px'>
@@ -145,6 +148,8 @@ const Categories = () => {
     )
 }
 
+import Plyr from 'plyr-react'
+import 'plyr-react/dist/plyr.css'
 const UploadedVideo = () => {
     return (
         // sticky wont work without alignSelf on flex-child see:
@@ -157,7 +162,8 @@ const UploadedVideo = () => {
                 alignSelf: 'flex-start',
             }}
         >
-            <video src={horiz} controls={true}></video>
+            {/*<video src={horiz} controls={true}></video>*/}
+            <Plyr source={{type: 'video', title: 'Title', sources: [{src: horiz, type: 'video/mp4', size: 720}]}} options={{controls: ['play', 'progress', 'settings', 'fullscreen'], settings: ['captions', 'quality', 'loop'], disableContextMenu: true, resetOnEnd: true}} />
         </div>
     )
 }
