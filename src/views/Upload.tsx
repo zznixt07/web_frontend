@@ -152,21 +152,20 @@ const Categories = () => {
 
 const UploadedVideo = () => {
     return (
-        // sticky wont work without alignSelf on flex-child see:
-        // https://gist.github.com/brandonjp/478cf6e32d90ab9cb2cd8cbb0799c7a7
-        <div
-            style={{
-                flex: '1 1 200px',
-                position: 'sticky',
-                top: '30px',
-                alignSelf: 'flex-start',
-            }}
-        >
-            {/*<video src={horiz} controls={true}></video>*/}
-            <Player src={horiz} />
-            
-        </div>
-    )
+      // sticky wont work without alignSelf on flex-child see:
+      // https://gist.github.com/brandonjp/478cf6e32d90ab9cb2cd8cbb0799c7a7
+      <div
+        style={{
+          flex: "1 1 200px",
+          position: "sticky",
+          top: "30px",
+          alignSelf: "flex-start",
+        }}
+      >
+        {/*<video src={horiz} controls={true}></video>*/}
+        <Player src={horiz} />
+      </div>
+    );
 }
 
 const DraftVideo = () => {
