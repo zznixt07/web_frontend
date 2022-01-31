@@ -10,25 +10,25 @@ type PlayerProps = {
 };
 
 const OPTIONS = {
-  controls: [
-    "play",
-    "play-large",
-    "progress",
-    "settings",
-    "current-time",
-    "fullscreen",
-  ],
-  // settings: ["captions", "quality", "loop"],
-  disableContextMenu: true,
-  resetOnEnd: true,
-  tooltips: { controls: true, seek: true },
-  quality: { default: 720, options: [1440, 1080, 720, 480, 360] },
-  ratio: "16:9",
-  previewThumbnails: {
-    enabled: true,
-    src: `${process.env.CORS_URL}${process.env.BACKEND_ORIGIN}/static/720p.vtt`,
-  },
-};
+	controls: [
+		'play',
+		'play-large',
+		'progress',
+		'settings',
+		'current-time',
+		'fullscreen',
+	],
+	// settings: ["captions", "quality", "loop"],
+	disableContextMenu: true,
+	resetOnEnd: true,
+	tooltips: { controls: true, seek: true },
+	quality: { default: 720, options: [1440, 1080, 720, 480, 360] },
+	ratio: '16:9',
+	previewThumbnails: {
+		enabled: true,
+		src: `${process.env.REACT_APP_CORS_URL}${process.env.REACT_APP_BACKEND_ORIGIN}/static/qwerty/qwerty.vtt`,
+	},
+}
 
 const Player = ({ src }: PlayerProps) => {
   return (
