@@ -26,7 +26,7 @@ const OPTIONS = {
   ratio: "16:9",
   previewThumbnails: {
     enabled: true,
-    src: "https://portal-everywhere.herokuapp.com/proxy/https://zznixt07-web-backend-rx4p4wjvf59x7-8000.githubpreview.dev/static/720p.vtt",
+    src: `${process.env.CORS_URL}${process.env.BACKEND_ORIGIN}/static/720p.vtt`,
   },
 };
 
