@@ -162,7 +162,6 @@ const UploadedVideo = () => {
           alignSelf: "flex-start",
         }}
       >
-        {/*<video src={horiz} controls={true}></video>*/}
         <Player src={horiz} />
       </div>
     );
