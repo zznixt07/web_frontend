@@ -1,9 +1,8 @@
-
 import * as React from 'react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
 import styled from 'styled-components'
-import { Formik, Form, Field, ErrorMessage } from 'formik'
+import { Formik, Form, Field, ErrorMessage, FormikHelpers } from 'formik'
 import * as Yup from 'yup'
 import { Flex, Grid } from 'components/Structure'
 import AspectRatioImg, { ResponsiveImg } from 'components/AspectRatioImg'
@@ -29,6 +28,7 @@ const VideoDetails = styled.div`
 	flex: 1 1 600px;
 `
 
+// const Label = styled(Field)`
 const Label = styled.label`
 	padding: 0.4rem;
 	margin: 0.2rem;
@@ -86,22 +86,16 @@ const Draft = styled(Flex)`
 	padding: 1% 10%;
 `
 
-const UploadThumbnail = ({ onChangeThumbnail }: any) => {
-	const uploadThumb = React.useRef<HTMLInputElement>(null)
-	const handleSelectedFile = () => {
-		for (const file of uploadThumb.current?.files || []) {
+const UploadThumbnail = ({ onChangeThumbnail }: ThumbnailsProps) => {
+	const handleSelectedFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+		for (const file of e.currentTarget.files || []) {
 			onChangeThumbnail(file)
 			break
 		}
 	}
 	return (
 		<label>
-			<input
-				ref={uploadThumb}
-				type='file'
-				className='sr-only'
-				onChange={handleSelectedFile}
-			/>
+			<input type='file' className='sr-only' onChange={handleSelectedFile} />
 			<BgImg tabIndex={0}>
 				<ThumbnailText align='flex-end'>Choose custom thumbnail</ThumbnailText>
 			</BgImg>
@@ -111,7 +105,13 @@ const UploadThumbnail = ({ onChangeThumbnail }: any) => {
 
 const thumbImages: any = [img1, img2, img3]
 
-const Thumbnails = ({ onChangeThumbnail }: any) => {
+type FieldValueSetter = (file: File) => void
+
+type ThumbnailsProps = {
+	onChangeThumbnail: FieldValueSetter
+}
+
+const Thumbnails = ({ onChangeThumbnail }: ThumbnailsProps) => {
 	return (
 		<SimpleGrid maxColumns={4} itemBaseWidth='150px'>
 			<UploadThumbnail onChangeThumbnail={onChangeThumbnail} />
@@ -135,17 +135,28 @@ const validator = Yup.object({
 	description: Yup.string().max(1000, 'Title must be 1000 characters or less.'),
 })
 
-const Categories = () => {
+type Category = {
+	name: string
+	value: string
+	// selected: boolean
+}
+
+type CategoriesProps = {
+	name: string
+	categories: Category[]
+}
+
+const Categories = ({ name, categories }: CategoriesProps) => {
 	return (
-		<select name='category' id='category'>
-			<option value='people'>People and Blogs</option>
-			<option value='fun'>Fun</option>
-			<option value='beauty'>Beauty</option>
-			<option value='gaming'>Gaming</option>
-			<option value='music'>Songs and Music</option>
-			<option value='music'>Songs and Music</option>
-			<option value='music'>Songs and Music</option>
-		</select>
+		<Field as='select' name={name} id='category'>
+			{categories.map((category) => {
+				return (
+					<option key={category.value} value={category.value}>
+						{category.name}
+					</option>
+				)
+			})}
+		</Field>
 	)
 }
 
@@ -166,17 +177,55 @@ const UploadedVideo = () => {
 	)
 }
 
+type DraftFields = {
+	title: string
+	description: string
+	category: string
+	thumbnail: any
+	staticvideo: File
+}
+
 const DraftVideo = ({ file }: { file: File }) => {
-	const [thumbnail, setThumbnail] = React.useState<File | null>(null)
-	const onSubmit = async () => {
-		const formData = new FormData()
-		formData.append('staticvideo', file, file.name)
-		formData.append('thumbnail', thumbnail!, thumbnail!.name)
-		const response = await axios.post('/video')
+	const [categories, setCategories] = React.useState<Category[] | null>([
+		{ name: 'Fun', value: 'fun' },
+		{ name: 'Action', value: 'action' },
+		{ name: 'Comedy', value: 'comedy' },
+		{ name: 'Drama', value: 'drama' },
+		{ name: 'Gaming', value: 'gaming' },
+		{ name: 'Beauty', value: 'beauty' },
+		{ name: 'Sci-Fi', value: 'scifi' },
+	])
+	const onSubmit = async (
+		values: DraftFields,
+		{ setSubmitting }: FormikHelpers<DraftFields>
+	) => {
+		setSubmitting(true)
+		console.log(values)
+		// const formData = new FormData()
+		// formData.append('staticvideo', file, file.name)
+		// formData.append('thumbnail', thumbnail!, thumbnail!.name)
+		// const response = await axios.post('/video')
+		setSubmitting(false)
 	}
-	const defaultValues = {
-		title: 'Use the file name as title here.',
+	React.useEffect(() => {
+		// settings categories here wont take the default value in formik
+		// setCategories([
+		// 	{ name: 'Fun', value: 'fun' },
+		// 	{ name: 'Action', value: 'action' },
+		// 	{ name: 'Comedy', value: 'comedy' },
+		// 	{ name: 'Drama', value: 'drama' },
+		// 	{ name: 'Gaming', value: 'gaming' },
+		// 	{ name: 'Beauty', value: 'beauty' },
+		// 	{ name: 'Sci-Fi', value: 'scifi' },
+		// ])
+	}, [])
+
+	const defaultValues: DraftFields = {
+		title: 'Use file name',
 		description: 'Desc..',
+		category: categories?.[0]?.value || '',
+		thumbnail: null,
+		staticvideo: file,
 	}
 
 	return (
@@ -187,7 +236,7 @@ const DraftVideo = ({ file }: { file: File }) => {
 					validationSchema={validator}
 					onSubmit={onSubmit}
 				>
-					{({ isSubmitting }) => (
+					{({ isSubmitting, setFieldValue }) => (
 						<Flex as={Form} $direction='column'>
 							<Label>
 								<LabelText>Title</LabelText>
@@ -211,11 +260,20 @@ const DraftVideo = ({ file }: { file: File }) => {
                         which is not what we want. Hence, dont use label(as="div") */}
 							<Label as='div'>
 								<LabelText>Thumbnail</LabelText>
-								<Thumbnails onChangeThumbnail={setThumbnail} />
+								<Thumbnails
+									onChangeThumbnail={(file: File) =>
+										setFieldValue('thumbnail', file)
+									}
+								/>
 							</Label>
 							<Label>
 								<LabelText>Categories</LabelText>
-								<Categories />
+								<Categories name='category' categories={categories || []} />
+								{/* <Field as='select' name='category'>
+									<option value='comedy'>Comedy</option>
+									<option value='fun'>Fun</option>
+									<option value='action'>Action</option>
+								</Field> */}
 							</Label>
 							<button type='submit' disabled={isSubmitting}>
 								Submit
