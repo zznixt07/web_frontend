@@ -6,6 +6,10 @@ import App from './App'
 import Video from './views/Video'
 import Upload, { DraftVideo } from './views/Upload'
 import reportWebVitals from './reportWebVitals'
+import axios from 'axios'
+
+axios.defaults.baseURL = process.env.REACT_APP_BACKEND_ORIGIN
+axios.defaults.headers.common['Content-Type'] = 'application/json'
 
 ReactDOM.render(
 	<React.StrictMode>

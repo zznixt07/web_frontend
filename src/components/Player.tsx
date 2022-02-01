@@ -3,11 +3,12 @@ import Plyr from "plyr-react";
 import "plyr-react/dist/plyr.css";
 
 type PlayerProps = {
-    src: string;
-    // poster: string;
-    // title: string;
-    // description: string;
-};
+	src: string
+	// poster: string;
+	// title: string;
+	// description: string;
+	// vttUrl: string;
+}
 
 const OPTIONS = {
 	controls: [
