@@ -86,14 +86,18 @@ const Draft = styled(Flex)`
 	padding: 1% 10%;
 `
 
-const UploadThumbnail = () => {
-	const uploadThumb = React.useRef(null)
-	const handleSelectedFile = () => {}
+const UploadThumbnail = ({ onChangeThumbnail }: any) => {
+	const uploadThumb = React.useRef<HTMLInputElement>(null)
+	const handleSelectedFile = () => {
+		for (const file of uploadThumb.current?.files || []) {
+			onChangeThumbnail(file)
+			break
+		}
+	}
 	return (
 		<label>
 			<input
 				ref={uploadThumb}
-				name='thumbnail'
 				type='file'
 				className='sr-only'
 				onChange={handleSelectedFile}
@@ -107,10 +111,10 @@ const UploadThumbnail = () => {
 
 const thumbImages: any = [img1, img2, img3]
 
-const Thumbnails = () => {
+const Thumbnails = ({ onChangeThumbnail }: any) => {
 	return (
 		<SimpleGrid maxColumns={4} itemBaseWidth='150px'>
-			<UploadThumbnail />
+			<UploadThumbnail onChangeThumbnail={onChangeThumbnail} />
 			{thumbImages.map((thumb: any) => {
 				return (
 					<ResponsiveImg
@@ -162,8 +166,12 @@ const UploadedVideo = () => {
 	)
 }
 
-const DraftVideo = () => {
+const DraftVideo = ({ file }: { file: File }) => {
+	const [thumbnail, setThumbnail] = React.useState(null)
 	const onSubmit = async () => {
+		const formData = new FormData()
+		formData.append('staticvideo', file, file.name)
+		formData.append('thumbnail', thumbnail, thumbnail.name)
 		const response = await axios.post('/video')
 	}
 	const defaultValues = {
@@ -203,7 +211,7 @@ const DraftVideo = () => {
                         which is not what we want. Hence, dont use label(as="div") */}
 							<Label as='div'>
 								<LabelText>Thumbnail</LabelText>
-								<Thumbnails />
+								<Thumbnails onChangeThumbnail={setThumbnail} />
 							</Label>
 							<Label>
 								<LabelText>Categories</LabelText>
@@ -221,37 +229,48 @@ const DraftVideo = () => {
 	)
 }
 
-const Upload = () => {
-    const fileInput = React.useRef<HTMLInputElement>(null)
-    const handleSelectedFile = (e: any) => {
-        if (fileInput.current) {
-            console.log(fileInput.current.files)
-        }
-    }
+type SelectedVideoProps = {
+	name: string
+	mimeType: string
+	size: number
+}
 
-    return (
-        <Flex style={{ height: '100vh' }} $direction='column' gap='0.4rem'>
-            <UploadSVG width='100' height='100' />
-            <h1>Drag and drop files to upload.</h1>
-            <span style={{ color: 'var(--text2)' }}>
-                Or Select Files by clicking below button.
-            </span>
-            <label>
-                <FileChooserBtn>Choose files</FileChooserBtn>
-                <input
-                    type='file'
-                    name='staticvideo'
-                    accept='video/*'
-                    capture='user'
-                    className='sr-only'
-                    ref={fileInput}
-                    onChange={handleSelectedFile}
-                />
-            </label>
-            {/*{fileInput.current?.files ? <Link to='/draft' /> : null}*/}
-            <Link to='/draft'>Next Page</Link>
-        </Flex>
-    )
+const Upload = () => {
+	const [chosenVideo, setIsChosenVideo] = React.useState<File | null>(null)
+	const fileInput = React.useRef<HTMLInputElement>(null)
+	const handleSelectedFile = (e: any) => {
+		if (fileInput.current) {
+			const files: FileList | null = fileInput.current?.files
+			for (const file of files || []) {
+				setIsChosenVideo(file)
+				break
+			}
+		}
+	}
+	if (chosenVideo === null) {
+		return (
+			<Flex style={{ height: '100vh' }} $direction='column' gap='0.4rem'>
+				<UploadSVG width='100' height='100' />
+				<h1>Drag and drop files to upload.</h1>
+				<span style={{ color: 'var(--text2)' }}>
+					Or Select Files by clicking below button.
+				</span>
+				<label>
+					<FileChooserBtn>Choose files</FileChooserBtn>
+					<input
+						type='file'
+						accept='video/*'
+						capture='user'
+						className='sr-only'
+						ref={fileInput}
+						onChange={handleSelectedFile}
+					/>
+				</label>
+			</Flex>
+		)
+	}
+
+	return <DraftVideo file={chosenVideo} />
 }
 
 export default Upload
