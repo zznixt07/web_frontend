@@ -167,11 +167,11 @@ const UploadedVideo = () => {
 }
 
 const DraftVideo = ({ file }: { file: File }) => {
-	const [thumbnail, setThumbnail] = React.useState(null)
+	const [thumbnail, setThumbnail] = React.useState<File | null>(null)
 	const onSubmit = async () => {
 		const formData = new FormData()
 		formData.append('staticvideo', file, file.name)
-		formData.append('thumbnail', thumbnail, thumbnail.name)
+		formData.append('thumbnail', thumbnail!, thumbnail!.name)
 		const response = await axios.post('/video')
 	}
 	const defaultValues = {
