@@ -200,11 +200,14 @@ const DraftVideo = ({ file }: { file: File }) => {
 		{ setSubmitting }: FormikHelpers<DraftFields>
 	) => {
 		setSubmitting(true)
-		console.log(values)
-		// const formData = new FormData()
-		// formData.append('staticvideo', file, file.name)
-		// formData.append('thumbnail', thumbnail!, thumbnail!.name)
-		// const response = await axios.post('/video')
+		const formData = new FormData()
+		formData.append('title', values.title)
+		formData.append('description', values.description)
+		formData.append('category', values.category)
+		formData.append('thumbnail', values.thumbnail, values.thumbnail.name)
+		formData.append('staticvideo', values.staticvideo, values.staticvideo.name)
+		const response = await axios.post('/video', formData)
+		console.log(response)
 		setSubmitting(false)
 	}
 	React.useEffect(() => {
@@ -221,8 +224,8 @@ const DraftVideo = ({ file }: { file: File }) => {
 	}, [])
 
 	const defaultValues: DraftFields = {
-		title: 'Use file name',
-		description: 'Desc..',
+		title: file.name,
+		description: '',
 		category: categories?.[0]?.value || '',
 		thumbnail: null,
 		staticvideo: file,
@@ -247,7 +250,11 @@ const DraftVideo = ({ file }: { file: File }) => {
 							</Label>
 							<Label>
 								<LabelText>Description</LabelText>
-								<DescriptionField as='textarea' name='description' />
+								<DescriptionField
+									as='textarea'
+									name='description'
+									placeholder='Describe your video...'
+								/>
 								<ErrorMessage name='description'>
 									{(msg) => <ErrorContainer>{msg}</ErrorContainer>}
 								</ErrorMessage>
