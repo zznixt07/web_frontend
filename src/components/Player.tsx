@@ -30,21 +30,25 @@ const OPTIONS = {
 	// 	src: `${process.env.REACT_APP_BACKEND_ORIGIN}/static/qwerty/qwerty.vtt`,
 	// },
 }
- 
-const Player = ({ src }: PlayerProps) => {
-  return (
-    <Plyr
-      source={{
-        type: "video",
-        title: "Title",
-        sources: [
-          { src: src, type: "video/mp4", size: 720 },
-          { src: src, type: "video/mp4", size: 480 },
-        ],
-      }}
-      options={OPTIONS}
-    />
-  );
-};
+
+const Player = React.forwardRef<
+	HTMLVideoElement,
+	PlayerProps & React.VideoHTMLAttributes<HTMLVideoElement>
+>(({ src, ...fields }) => {
+	return (
+		<Plyr
+			source={{
+				type: 'video',
+				title: 'Title',
+				sources: [
+					{ src: src, type: 'video/mp4', size: 720 },
+					{ src: src, type: 'video/mp4', size: 480 },
+				],
+			}}
+			options={OPTIONS}
+			{...fields}
+		/>
+	)
+})
 
 export default Player;

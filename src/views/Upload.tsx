@@ -15,6 +15,7 @@ import img1 from 'assets/imgs/(6).jpg'
 import img2 from 'assets/imgs/(7).jpg'
 import img3 from 'assets/imgs/(8).jpg'
 import Player from 'components/Player'
+import getFramesData from 'utils/getFrames'
 
 const FileChooserBtn = styled.div`
 	margin: 1rem;
@@ -161,6 +162,20 @@ const Categories = ({ name, categories }: CategoriesProps) => {
 }
 
 const UploadedVideo = () => {
+	const canvasRef = React.useRef<HTMLCanvasElement>(null)
+	const videoRef = React.useRef<HTMLVideoElement>(null)
+	const [images, setImages] = React.useState<string[]>([])
+	const videoLoaded = async () => {
+		if (canvasRef.current === null || videoRef.current === null) {
+			return
+		}
+		const imagesData = await getFramesData(
+			videoRef.current,
+			canvasRef.current,
+			[5, 50, 80]
+		)
+		setImages(imagesData)
+	}
 	return (
 		// sticky wont work without alignSelf on flex-child see:
 		// https://gist.github.com/brandonjp/478cf6e32d90ab9cb2cd8cbb0799c7a7
@@ -172,7 +187,8 @@ const UploadedVideo = () => {
 				alignSelf: 'flex-start',
 			}}
 		>
-			<Player src={horiz} />
+			<canvas className='sr-only' ref={canvasRef} />
+			<Player src={horiz} onLoadedData={videoLoaded} ref={videoRef} />
 		</div>
 	)
 }
