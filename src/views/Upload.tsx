@@ -16,6 +16,7 @@ import img2 from 'assets/imgs/(7).jpg'
 import img3 from 'assets/imgs/(8).jpg'
 import Player from 'components/Player'
 import getFramesData from 'utils/getFrames'
+import { HTMLPlyrVideoElement } from 'plyr-react'
 
 const FileChooserBtn = styled.div`
 	margin: 1rem;
@@ -87,7 +88,11 @@ const Draft = styled(Flex)`
 	padding: 1% 10%;
 `
 
-const UploadThumbnail = ({ onChangeThumbnail }: ThumbnailsProps) => {
+const UploadThumbnail = ({
+	onChangeThumbnail,
+}: {
+	onChangeThumbnail: FieldValueSetter
+}) => {
 	const handleSelectedFile = (e: React.ChangeEvent<HTMLInputElement>) => {
 		for (const file of e.currentTarget.files || []) {
 			onChangeThumbnail(file)
@@ -104,23 +109,22 @@ const UploadThumbnail = ({ onChangeThumbnail }: ThumbnailsProps) => {
 	)
 }
 
-const thumbImages: any = [img1, img2, img3]
-
 type FieldValueSetter = (file: File) => void
 
 type ThumbnailsProps = {
+	images: { percent: number; image: string }[]
 	onChangeThumbnail: FieldValueSetter
 }
 
-const Thumbnails = ({ onChangeThumbnail }: ThumbnailsProps) => {
+const Thumbnails = ({ images, onChangeThumbnail }: ThumbnailsProps) => {
 	return (
 		<SimpleGrid maxColumns={4} itemBaseWidth='150px'>
 			<UploadThumbnail onChangeThumbnail={onChangeThumbnail} />
-			{thumbImages.map((thumb: any) => {
+			{images.map((thumb) => {
 				return (
 					<ResponsiveImg
-						src={thumb}
-						key={thumb}
+						key={thumb.percent}
+						src={thumb.image}
 						style={{ aspectRatio: '16/9' }}
 					/>
 				)
@@ -161,21 +165,45 @@ const Categories = ({ name, categories }: CategoriesProps) => {
 	)
 }
 
-const UploadedVideo = () => {
+type UploadedVideoProps = {
+	src: string
+	setImages: (images: { percent: number; image: string }[]) => void
+}
+
+const UploadedVideo = ({ src, setImages }: UploadedVideoProps) => {
 	const canvasRef = React.useRef<HTMLCanvasElement>(null)
-	const videoRef = React.useRef<HTMLVideoElement>(null)
-	const [images, setImages] = React.useState<string[]>([])
+	const videoRef = React.useRef<HTMLPlyrVideoElement>(null)
+	// const [images, setImages] = React.useState<string[]>([])
 	const videoLoaded = async () => {
 		if (canvasRef.current === null || videoRef.current === null) {
 			return
 		}
+		if (videoRef.current.plyr === undefined) {
+			return
+		}
+		videoRef.current.plyr.muted = true
 		const imagesData = await getFramesData(
-			videoRef.current,
+			videoRef.current.plyr,
 			canvasRef.current,
-			[5, 50, 80]
+			[5, 50, 80] // should be unique, will be used for key later. cuz 2 frames can be same
 		)
+		console.log({ imagesData })
 		setImages(imagesData)
 	}
+	// React.useEffect(() => {
+	// 	if (videoRef.current === null) {
+	// 		return
+	// 	}
+	// 	if (videoRef.current.plyr === undefined) {
+	// 		return
+	// 	}
+	// 	if (!videoRef.current.plyr.source) {
+	// 		return
+	// 	}
+
+	// 	videoRef.current.plyr.on('loadeddata', videoLoaded)
+	// 	return videoRef.current.plyr.off('loadeddata', videoLoaded)
+	// })
 	return (
 		// sticky wont work without alignSelf on flex-child see:
 		// https://gist.github.com/brandonjp/478cf6e32d90ab9cb2cd8cbb0799c7a7
@@ -188,7 +216,13 @@ const UploadedVideo = () => {
 			}}
 		>
 			<canvas className='sr-only' ref={canvasRef} />
-			<Player src={horiz} onLoadedData={videoLoaded} ref={videoRef} />
+			<Player
+				autoPlay={true}
+				src={src}
+				// onLoadedData={videoLoaded}
+				onCanPlay={videoLoaded}
+				ref={videoRef}
+			/>
 		</div>
 	)
 }
@@ -211,6 +245,10 @@ const DraftVideo = ({ file }: { file: File }) => {
 		{ name: 'Beauty', value: 'beauty' },
 		{ name: 'Sci-Fi', value: 'scifi' },
 	])
+	const [images, setImages] = React.useState<
+		{ percent: number; image: string }[]
+	>([])
+
 	const onSubmit = async (
 		values: DraftFields,
 		{ setSubmitting }: FormikHelpers<DraftFields>
@@ -284,6 +322,7 @@ const DraftVideo = ({ file }: { file: File }) => {
 							<Label as='div'>
 								<LabelText>Thumbnail</LabelText>
 								<Thumbnails
+									images={images}
 									onChangeThumbnail={(file: File) =>
 										setFieldValue('thumbnail', file)
 									}
@@ -305,7 +344,7 @@ const DraftVideo = ({ file }: { file: File }) => {
 					)}
 				</Formik>
 			</VideoDetails>
-			<UploadedVideo></UploadedVideo>
+			<UploadedVideo src={URL.createObjectURL(file)} setImages={setImages} />
 		</Draft>
 	)
 }

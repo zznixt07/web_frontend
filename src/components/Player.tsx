@@ -1,6 +1,6 @@
 import * as React from "react";
-import Plyr from "plyr-react";
-import "plyr-react/dist/plyr.css";
+import Plyr from 'plyr-react'
+import 'plyr-react/dist/plyr.css'
 
 type PlayerProps = {
 	src: string
@@ -32,21 +32,20 @@ const OPTIONS = {
 }
 
 const Player = React.forwardRef<
-	HTMLVideoElement,
+	any,
 	PlayerProps & React.VideoHTMLAttributes<HTMLVideoElement>
->(({ src, ...fields }) => {
+>((props, ref) => {
+	const { src, ...rest } = props
 	return (
 		<Plyr
 			source={{
 				type: 'video',
 				title: 'Title',
-				sources: [
-					{ src: src, type: 'video/mp4', size: 720 },
-					{ src: src, type: 'video/mp4', size: 480 },
-				],
+				sources: [{ src: src, type: 'video/mp4', size: 720 }],
 			}}
 			options={OPTIONS}
-			{...fields}
+			{...rest}
+			ref={ref}
 		/>
 	)
 })
