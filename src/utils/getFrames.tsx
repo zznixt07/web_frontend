@@ -1,21 +1,30 @@
 import Plyr from 'plyr-react'
 
-const waitForSeek = async (videoElem: any) => {
+const waitForSeek = async (videoElem: HTMLVideoElement) => {
 	return new Promise((resolve: any) => {
 		const handler = () => {
 			console.log('seeked')
 			videoElem.removeEventListener('seeked', handler)
-			// videoElem.off('seeked', handler)
 			resolve()
 		}
 		videoElem.addEventListener('seeked', handler)
-		// videoElem.on('seeked', handler)
+	})
+}
+
+const waitForSeekPlyr = async (videoElem: any) => {
+	return new Promise((resolve: any) => {
+		const handler = () => {
+			console.log('seeked')
+			videoElem.off('seeked', handler)
+			resolve()
+		}
+		videoElem.on('seeked', handler)
 	})
 }
 
 type ImageAtPercentages = {
-    percent: number
-    image: string
+	percent: number
+	image: string
 }
 
 const getFramesData = async (
@@ -28,19 +37,22 @@ const getFramesData = async (
 		throw new Error('Could not get canvas context')
 	}
 	const videoElem = video.media
+	// const videoElem = video.elements.original
 	canvas.width = videoElem.videoWidth
 	canvas.height = videoElem.videoHeight
 	const images: ImageAtPercentages[] = []
 	for (const i of stopPercentages) {
-		console.log(videoElem.currentTime)
+		console.log(video.currentTime)
 		// videoElem.currentTime = Math.floor(video.duration * (i / 100))
 		video.currentTime = Math.floor(video.duration * (i / 100))
-		console.log(videoElem.currentTime)
-		await waitForSeek(videoElem)
+		console.log(video.currentTime)
+
+		// await waitForSeek(videoElem)
+		await waitForSeekPlyr(video)
 
 		context.drawImage(videoElem, 0, 0, canvas.width, canvas.height)
 		const base64Image = canvas.toDataURL('image/png', 0.2)
-		images.push({percent: i, image: base64Image})
+		images.push({ percent: i, image: base64Image })
 	}
 	return images
 }

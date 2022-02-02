@@ -172,7 +172,8 @@ type UploadedVideoProps = {
 
 const UploadedVideo = ({ src, setImages }: UploadedVideoProps) => {
 	const canvasRef = React.useRef<HTMLCanvasElement>(null)
-	const videoRef = React.useRef<HTMLPlyrVideoElement>(null)
+	const videoRef = React.useRef<any>(null)
+	console.log('rendering uploaded video')
 	// const [images, setImages] = React.useState<string[]>([])
 	const videoLoaded = async () => {
 		if (canvasRef.current === null || videoRef.current === null) {
@@ -181,7 +182,10 @@ const UploadedVideo = ({ src, setImages }: UploadedVideoProps) => {
 		if (videoRef.current.plyr === undefined) {
 			return
 		}
+		console.log('video loaded')
 		videoRef.current.plyr.muted = true
+		videoRef.current.plyr.volume = 0
+		videoRef.current.plyr.pause()
 		const imagesData = await getFramesData(
 			videoRef.current.plyr,
 			canvasRef.current,
@@ -217,12 +221,14 @@ const UploadedVideo = ({ src, setImages }: UploadedVideoProps) => {
 		>
 			<canvas className='sr-only' ref={canvasRef} />
 			<Player
-				autoPlay={true}
+				autoPlay={false}
+				muted={true}
 				src={src}
-				// onLoadedData={videoLoaded}
-				onCanPlay={videoLoaded}
+				crossOrigin='anonymous'
+				onLoadedData={videoLoaded}
 				ref={videoRef}
 			/>
+			<button onClick={videoLoaded}>Generate Thumbnail</button>
 		</div>
 	)
 }
@@ -245,9 +251,11 @@ const DraftVideo = ({ file }: { file: File }) => {
 		{ name: 'Beauty', value: 'beauty' },
 		{ name: 'Sci-Fi', value: 'scifi' },
 	])
+	console.log('drafting video')
 	const [images, setImages] = React.useState<
 		{ percent: number; image: string }[]
 	>([])
+	const [videoUrl, _] = React.useState<string>(URL.createObjectURL(file))
 
 	const onSubmit = async (
 		values: DraftFields,
@@ -344,7 +352,7 @@ const DraftVideo = ({ file }: { file: File }) => {
 					)}
 				</Formik>
 			</VideoDetails>
-			<UploadedVideo src={URL.createObjectURL(file)} setImages={setImages} />
+			<UploadedVideo src={videoUrl} setImages={setImages} />
 		</Draft>
 	)
 }

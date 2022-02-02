@@ -21,7 +21,7 @@ const OPTIONS = {
 	],
 	// settings: ["captions", "quality", "loop"],
 	disableContextMenu: true,
-	resetOnEnd: true,
+	// resetOnEnd: true,
 	tooltips: { controls: true, seek: true },
 	quality: { default: 720, options: [1440, 1080, 720, 480, 360] },
 	ratio: '16:9',
@@ -35,6 +35,7 @@ const Player = React.forwardRef<
 	any,
 	PlayerProps & React.VideoHTMLAttributes<HTMLVideoElement>
 >((props, ref) => {
+	console.log(ref)
 	const { src, ...rest } = props
 	return (
 		<Plyr
@@ -47,6 +48,7 @@ const Player = React.forwardRef<
 			{...rest}
 			ref={ref}
 		/>
+		// <video src={src} {...rest} ref={ref} />
 	)
 })
 
