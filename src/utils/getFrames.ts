@@ -1,5 +1,3 @@
-import Plyr from 'plyr-react'
-
 const waitForSeek = async (videoElem: HTMLVideoElement) => {
 	return new Promise((resolve: any) => {
 		const handler = () => {
@@ -47,8 +45,8 @@ const getFramesData = async (
 		video.currentTime = Math.floor(video.duration * (i / 100))
 		console.log(video.currentTime)
 
-		// await waitForSeek(videoElem)
-		await waitForSeekPlyr(video)
+		await waitForSeek(videoElem)
+		// await waitForSeekPlyr(video)
 
 		context.drawImage(videoElem, 0, 0, canvas.width, canvas.height)
 		const base64Image = canvas.toDataURL('image/png', 0.2)

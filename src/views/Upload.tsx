@@ -17,6 +17,7 @@ import img3 from 'assets/imgs/(8).jpg'
 import Player from 'components/Player'
 import getFramesData from 'utils/getFrames'
 import { HTMLPlyrVideoElement } from 'plyr-react'
+import imgToFile from 'utils/imgToFile'
 
 const FileChooserBtn = styled.div`
 	margin: 1rem;
@@ -65,7 +66,15 @@ const DescriptionField = styled(CommonField)`
 const SimpleGrid = styled(Grid)`
 	min-height: 120px;
 	justify-items: stretch;
+	// justify-items: center;
 	align-items: stretch;
+	& > * {
+		outline: 1px solid var(--surface3);
+		cursor: pointer;
+	}
+	& > *:hover {
+		outline: 1px solid var(--text1);
+	}
 `
 
 const BgImg = styled.div`
@@ -109,6 +118,12 @@ const UploadThumbnail = ({
 	)
 }
 
+const ThumbImage = styled(ResponsiveImg)<{ selected?: boolean }>`
+	objectfit: contain;
+	aspectratio: 16/9;
+	${(props) => props.selected && `outline: 1px solid var(--brand);`}
+`
+
 type FieldValueSetter = (file: File) => void
 
 type ThumbnailsProps = {
@@ -117,15 +132,24 @@ type ThumbnailsProps = {
 }
 
 const Thumbnails = ({ images, onChangeThumbnail }: ThumbnailsProps) => {
+	const [clickedId, setClickedId] = React.useState<number | null>(null)
+	const handleClick = async (thumb: { percent: number; image: any }) => {
+		console.log('clicked on image')
+		setClickedId(thumb.percent)
+		const file = await imgToFile(thumb.image, `${thumb.percent}.png`)
+		onChangeThumbnail(file)
+	}
 	return (
 		<SimpleGrid maxColumns={4} itemBaseWidth='150px'>
 			<UploadThumbnail onChangeThumbnail={onChangeThumbnail} />
 			{images.map((thumb) => {
+				
 				return (
-					<ResponsiveImg
+					<ThumbImage
 						key={thumb.percent}
+						selected={thumb.percent === clickedId}
 						src={thumb.image}
-						style={{ aspectRatio: '16/9' }}
+						onClick={() => handleClick(thumb)}
 					/>
 				)
 			})}
