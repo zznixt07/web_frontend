@@ -11,17 +11,6 @@ const waitForSeek = async (videoElem: HTMLVideoElement) => {
 	})
 }
 
-const waitForSeekPlyr = async (videoElem: any) => {
-	return new Promise((resolve: any) => {
-		const handler = () => {
-			console.log('seeked')
-			videoElem.off('seeked', handler)
-			resolve()
-		}
-		videoElem.on('seeked', handler)
-	})
-}
-
 const getFramesData = async (
 	video: any,
 	canvas: HTMLCanvasElement,
