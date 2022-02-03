@@ -18,6 +18,8 @@ import Player from 'components/Player'
 import getFramesData from 'utils/getFrames'
 import { HTMLPlyrVideoElement } from 'plyr-react'
 import imgToFile from 'utils/imgToFile'
+import { ImageAtPercentages } from 'types/frames'
+import { randomInt } from 'utils/utils'
 
 const FileChooserBtn = styled.div`
 	margin: 1rem;
@@ -110,7 +112,12 @@ const UploadThumbnail = ({
 	}
 	return (
 		<label>
-			<input type='file' className='sr-only' onChange={handleSelectedFile} />
+			<input
+				type='file'
+				accept='image/*'
+				className='sr-only'
+				onChange={handleSelectedFile}
+			/>
 			<BgImg tabIndex={0}>
 				<ThumbnailText align='flex-end'>Choose custom thumbnail</ThumbnailText>
 			</BgImg>
@@ -119,9 +126,9 @@ const UploadThumbnail = ({
 }
 
 const ThumbImage = styled(ResponsiveImg)<{ selected?: boolean }>`
-	objectfit: contain;
-	aspectratio: 16/9;
-	${(props) => props.selected && `outline: 1px solid var(--brand);`}
+	object-fit: contain;
+	aspect-ratio: 16/9;
+	${(props) => props.selected && `outline: 3px solid var(--brand);`}
 `
 
 type FieldValueSetter = (file: File) => void
@@ -129,11 +136,17 @@ type FieldValueSetter = (file: File) => void
 type ThumbnailsProps = {
 	images: { percent: number; image: string }[]
 	onChangeThumbnail: FieldValueSetter
+	setImages: ImageSetter
 }
 
-const Thumbnails = ({ images, onChangeThumbnail }: ThumbnailsProps) => {
-	const [clickedId, setClickedId] = React.useState<number | null>(null)
-	const handleClick = async (thumb: { percent: number; image: any }) => {
+const Thumbnails = ({
+	images,
+	setImages,
+	onChangeThumbnail,
+}: ThumbnailsProps) => {
+	const [clickedId, setClickedId] = React.useState<number>(0)
+	const [uploadedImage, setUploadedImage] = React.useState<string>('')
+	const handleClick = async (thumb: { percent: number; image: string }) => {
 		console.log('clicked on image')
 		setClickedId(thumb.percent)
 		const file = await imgToFile(thumb.image, `${thumb.percent}.png`)
@@ -141,9 +154,18 @@ const Thumbnails = ({ images, onChangeThumbnail }: ThumbnailsProps) => {
 	}
 	return (
 		<SimpleGrid maxColumns={4} itemBaseWidth='150px'>
-			<UploadThumbnail onChangeThumbnail={onChangeThumbnail} />
+			<UploadThumbnail
+				onChangeThumbnail={(file) => {
+					// setImages((p: ImageAtPercentages[]) => [
+					// 	...p,
+					// 	{ percent: 0, image: URL.createObjectURL(file) },
+					// ])
+					setUploadedImage(URL.createObjectURL(file))
+					setClickedId(0)
+					onChangeThumbnail(file)
+				}}
+			/>
 			{images.map((thumb) => {
-				
 				return (
 					<ThumbImage
 						key={thumb.percent}
@@ -153,15 +175,24 @@ const Thumbnails = ({ images, onChangeThumbnail }: ThumbnailsProps) => {
 					/>
 				)
 			})}
+			{uploadedImage !== '' ? (
+				<ThumbImage
+					selected={0 === clickedId}
+					src={uploadedImage}
+					onClick={() => handleClick({ percent: 0, image: uploadedImage })}
+				/>
+			) : null}
 		</SimpleGrid>
 	)
 }
 
 const validator = Yup.object({
 	title: Yup.string()
-		.max(30, 'Title must be 30 characters or less.')
+		.max(50, 'Title must be 50 characters or less.')
 		.required('Required'),
 	description: Yup.string().max(1000, 'Title must be 1000 characters or less.'),
+	thumbnail: Yup.mixed().required('Choose aThumbnail'),
+	category: Yup.string().required('Choose category'),
 })
 
 type Category = {
@@ -189,9 +220,11 @@ const Categories = ({ name, categories }: CategoriesProps) => {
 	)
 }
 
+type ImageSetter = React.Dispatch<React.SetStateAction<ImageAtPercentages[]>>
+
 type UploadedVideoProps = {
 	src: string
-	setImages: (images: { percent: number; image: string }[]) => void
+	setImages: ImageSetter
 	setDuration: (duration: number) => void
 }
 
@@ -207,7 +240,6 @@ const UploadedVideo = ({ src, setImages, setDuration }: UploadedVideoProps) => {
 		if (videoRef.current.plyr === undefined) {
 			return
 		}
-		console.log('video loaded')
 
 		videoRef.current.plyr.muted = true
 		videoRef.current.plyr.volume = 0
@@ -215,12 +247,11 @@ const UploadedVideo = ({ src, setImages, setDuration }: UploadedVideoProps) => {
 		const imagesData = await getFramesData(
 			videoRef.current.plyr,
 			canvasRef.current,
-			[5, 50, 80] // should be unique, will be used for key later. cuz 2 frames can be same
+			[randomInt(2, 6), randomInt(40, 60), randomInt(80, 95)] // should be unique, will be used for key later. cuz 2 frames can be same
 		)
-		console.log({ imagesData })
 		setImages(imagesData)
 		console.log('duration', videoRef.current.plyr.duration)
-		setDuration(videoRef.current.plyr.duration)
+		setDuration(Math.floor(videoRef.current.plyr.duration))
 	}
 	return (
 		// sticky wont work without alignSelf on flex-child see:
@@ -269,9 +300,7 @@ const DraftVideo = ({ file }: { file: File }) => {
 		{ name: 'Beauty', value: 'beauty' },
 		{ name: 'Sci-Fi', value: 'scifi' },
 	])
-	const [images, setImages] = React.useState<
-		{ percent: number; image: string }[]
-	>([])
+	const [images, setImages] = React.useState<ImageAtPercentages[]>([])
 	const videoUrl = React.useState<string>(URL.createObjectURL(file))[0]
 	const [duration, setDuration] = React.useState<number>(0)
 
@@ -297,19 +326,10 @@ const DraftVideo = ({ file }: { file: File }) => {
 	}
 	React.useEffect(() => {
 		// settings categories here wont take the default value in formik
-		// setCategories([
-		// 	{ name: 'Fun', value: 'fun' },
-		// 	{ name: 'Action', value: 'action' },
-		// 	{ name: 'Comedy', value: 'comedy' },
-		// 	{ name: 'Drama', value: 'drama' },
-		// 	{ name: 'Gaming', value: 'gaming' },
-		// 	{ name: 'Beauty', value: 'beauty' },
-		// 	{ name: 'Sci-Fi', value: 'scifi' },
-		// ])
 	}, [])
 
 	const defaultValues: DraftFields = {
-		title: file.name,
+		title: file.name.split('.')[0], // remove extension more thoroughly
 		description: '',
 		category: categories?.[0]?.value || '',
 		thumbnail: null,
@@ -354,19 +374,21 @@ const DraftVideo = ({ file }: { file: File }) => {
 								<LabelText>Thumbnail</LabelText>
 								<Thumbnails
 									images={images}
+									setImages={setImages}
 									onChangeThumbnail={(file: File) =>
 										setFieldValue('thumbnail', file)
 									}
 								/>
+								<ErrorMessage name='thumbnail'>
+									{(msg) => <ErrorContainer>{msg}</ErrorContainer>}
+								</ErrorMessage>
 							</Label>
 							<Label>
 								<LabelText>Categories</LabelText>
 								<Categories name='category' categories={categories || []} />
-								{/* <Field as='select' name='category'>
-									<option value='comedy'>Comedy</option>
-									<option value='fun'>Fun</option>
-									<option value='action'>Action</option>
-								</Field> */}
+								<ErrorMessage name='category'>
+									{(msg) => <ErrorContainer>{msg}</ErrorContainer>}
+								</ErrorMessage>
 							</Label>
 							<button type='submit' disabled={isSubmitting}>
 								Submit

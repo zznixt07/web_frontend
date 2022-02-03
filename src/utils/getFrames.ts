@@ -1,3 +1,5 @@
+import { ImageAtPercentages } from 'types/frames'
+
 const waitForSeek = async (videoElem: HTMLVideoElement) => {
 	return new Promise((resolve: any) => {
 		const handler = () => {
@@ -20,11 +22,6 @@ const waitForSeekPlyr = async (videoElem: any) => {
 	})
 }
 
-type ImageAtPercentages = {
-	percent: number
-	image: string
-}
-
 const getFramesData = async (
 	video: any,
 	canvas: HTMLCanvasElement,
@@ -40,10 +37,8 @@ const getFramesData = async (
 	canvas.height = videoElem.videoHeight
 	const images: ImageAtPercentages[] = []
 	for (const i of stopPercentages) {
-		console.log(video.currentTime)
 		// videoElem.currentTime = Math.floor(video.duration * (i / 100))
 		video.currentTime = Math.floor(video.duration * (i / 100))
-		console.log(video.currentTime)
 
 		await waitForSeek(videoElem)
 		// await waitForSeekPlyr(video)
