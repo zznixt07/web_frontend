@@ -192,9 +192,10 @@ const Categories = ({ name, categories }: CategoriesProps) => {
 type UploadedVideoProps = {
 	src: string
 	setImages: (images: { percent: number; image: string }[]) => void
+	setDuration: (duration: number) => void
 }
 
-const UploadedVideo = ({ src, setImages }: UploadedVideoProps) => {
+const UploadedVideo = ({ src, setImages, setDuration }: UploadedVideoProps) => {
 	const canvasRef = React.useRef<HTMLCanvasElement>(null)
 	const videoRef = React.useRef<any>(null)
 	console.log('rendering uploaded video')
@@ -207,6 +208,7 @@ const UploadedVideo = ({ src, setImages }: UploadedVideoProps) => {
 			return
 		}
 		console.log('video loaded')
+
 		videoRef.current.plyr.muted = true
 		videoRef.current.plyr.volume = 0
 		videoRef.current.plyr.pause()
@@ -217,21 +219,9 @@ const UploadedVideo = ({ src, setImages }: UploadedVideoProps) => {
 		)
 		console.log({ imagesData })
 		setImages(imagesData)
+		console.log('duration', videoRef.current.plyr.duration)
+		setDuration(videoRef.current.plyr.duration)
 	}
-	// React.useEffect(() => {
-	// 	if (videoRef.current === null) {
-	// 		return
-	// 	}
-	// 	if (videoRef.current.plyr === undefined) {
-	// 		return
-	// 	}
-	// 	if (!videoRef.current.plyr.source) {
-	// 		return
-	// 	}
-
-	// 	videoRef.current.plyr.on('loadeddata', videoLoaded)
-	// 	return videoRef.current.plyr.off('loadeddata', videoLoaded)
-	// })
 	return (
 		// sticky wont work without alignSelf on flex-child see:
 		// https://gist.github.com/brandonjp/478cf6e32d90ab9cb2cd8cbb0799c7a7
@@ -262,10 +252,14 @@ type DraftFields = {
 	description: string
 	category: string
 	thumbnail: any
-	staticvideo: File
+	staticvideo: {
+		video: File
+		duration: number
+	}
 }
 
 const DraftVideo = ({ file }: { file: File }) => {
+	console.log('drafting video')
 	const [categories, setCategories] = React.useState<Category[] | null>([
 		{ name: 'Fun', value: 'fun' },
 		{ name: 'Action', value: 'action' },
@@ -275,11 +269,11 @@ const DraftVideo = ({ file }: { file: File }) => {
 		{ name: 'Beauty', value: 'beauty' },
 		{ name: 'Sci-Fi', value: 'scifi' },
 	])
-	console.log('drafting video')
 	const [images, setImages] = React.useState<
 		{ percent: number; image: string }[]
 	>([])
-	const [videoUrl, _] = React.useState<string>(URL.createObjectURL(file))
+	const videoUrl = React.useState<string>(URL.createObjectURL(file))[0]
+	const [duration, setDuration] = React.useState<number>(0)
 
 	const onSubmit = async (
 		values: DraftFields,
@@ -291,7 +285,12 @@ const DraftVideo = ({ file }: { file: File }) => {
 		formData.append('description', values.description)
 		formData.append('category', values.category)
 		formData.append('thumbnail', values.thumbnail, values.thumbnail.name)
-		formData.append('staticvideo', values.staticvideo, values.staticvideo.name)
+		formData.append(
+			'staticvideo',
+			values.staticvideo.video,
+			values.staticvideo.video.name
+		)
+		formData.append('duration', `${values.staticvideo.duration}`)
 		const response = await axios.post('/video', formData)
 		console.log(response)
 		setSubmitting(false)
@@ -314,7 +313,7 @@ const DraftVideo = ({ file }: { file: File }) => {
 		description: '',
 		category: categories?.[0]?.value || '',
 		thumbnail: null,
-		staticvideo: file,
+		staticvideo: { video: file, duration: duration },
 	}
 
 	return (
@@ -376,15 +375,13 @@ const DraftVideo = ({ file }: { file: File }) => {
 					)}
 				</Formik>
 			</VideoDetails>
-			<UploadedVideo src={videoUrl} setImages={setImages} />
+			<UploadedVideo
+				src={videoUrl}
+				setImages={setImages}
+				setDuration={setDuration}
+			/>
 		</Draft>
 	)
-}
-
-type SelectedVideoProps = {
-	name: string
-	mimeType: string
-	size: number
 }
 
 const Upload = () => {
