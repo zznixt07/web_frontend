@@ -26,11 +26,12 @@ const getFramesData = async (
 	canvas.height = videoElem.videoHeight
 	const images: ImageAtPercentages[] = []
 	for (const i of stopPercentages) {
+		const calcTime = Math.floor(video.duration * (i / 100))
 		// videoElem.currentTime = Math.floor(video.duration * (i / 100))
-		video.currentTime = Math.floor(video.duration * (i / 100))
-
+		video.currentTime = calcTime
 		await waitForSeek(videoElem)
 		// await waitForSeekPlyr(video)
+		console.log(calcTime)
 
 		context.drawImage(videoElem, 0, 0, canvas.width, canvas.height)
 		const base64Image = canvas.toDataURL('image/png', 0.2)

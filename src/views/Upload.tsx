@@ -232,60 +232,75 @@ type UploadedVideoProps = {
 	setDuration: (duration: number) => void
 }
 
-const UploadedVideo = ({ src, setImages, setDuration }: UploadedVideoProps) => {
-	const canvasRef = React.useRef<HTMLCanvasElement>(null)
-	const videoRef = React.useRef<any>(null)
-	console.log('rendering uploaded video')
-	// const [images, setImages] = React.useState<string[]>([])
-	const videoLoaded = async () => {
-		if (canvasRef.current === null || videoRef.current === null) {
-			return
-		}
-		if (videoRef.current.plyr === undefined) {
-			return
+const UploadedVideo = React.memo(
+	({ src, setImages, setDuration }: UploadedVideoProps) => {
+		const canvasRef = React.useRef<HTMLCanvasElement>(null)
+		const videoRef = React.useRef<any>(null)
+		console.log('rendering uploaded video')
+		// const [images, setImages] = React.useState<string[]>([])
+		const videoLoaded = async () => {
+			if (canvasRef.current === null || videoRef.current === null) {
+				return
+			}
+			if (videoRef.current.plyr === undefined) {
+				return
+			}
+
+			videoRef.current.plyr.muted = true
+			videoRef.current.plyr.volume = 0
+			videoRef.current.plyr.pause()
+			const imagesData = await getFramesData(
+				videoRef.current.plyr,
+				canvasRef.current,
+				[randomInt(2, 6), randomInt(40, 60), randomInt(80, 95)] // should be unique, will be used for key later. cuz 2 frames can be same
+			)
+			console.log(imagesData)
+			setImages(imagesData)
+			console.log('duration', videoRef.current.plyr.duration)
+			console.log('duration', videoRef.current.plyr.media.duration)
+			setDuration(Math.ceil(videoRef.current.plyr.duration))
 		}
 
-		videoRef.current.plyr.muted = true
-		videoRef.current.plyr.volume = 0
-		videoRef.current.plyr.pause()
-		const imagesData = await getFramesData(
-			videoRef.current.plyr,
-			canvasRef.current,
-			[randomInt(2, 6), randomInt(40, 60), randomInt(80, 95)] // should be unique, will be used for key later. cuz 2 frames can be same
+		// const MemoizedPlayer = () => (
+		// const MemoizedPlayer = React.memo(({ videoRef, src }: any) => (
+		const MemoizedPlayer = React.memo(() => (
+			<Player
+				autoPlay={false}
+				muted={true}
+				src={src}
+				crossOrigin='anonymous'
+				// onLoadedData={videoLoaded}
+				ref={videoRef}
+			/>
+		))
+		// )
+		// console.log()
+		return (
+			// sticky wont work without alignSelf on flex-child see:
+			// https://gist.github.com/brandonjp/478cf6e32d90ab9cb2cd8cbb0799c7a7
+			<div
+				style={{
+					flex: '1 1 200px',
+					position: 'sticky',
+					top: '30px',
+					alignSelf: 'flex-start',
+				}}
+			>
+				<canvas className='sr-only' ref={canvasRef} />
+				{/* <MemoizedPlayer /> */}
+				<Player
+					autoPlay={false}
+					muted={true}
+					src={src}
+					crossOrigin='anonymous'
+					// onLoadedData={videoLoaded}
+					ref={videoRef}
+				/>
+				<button onClick={videoLoaded}>Generate Thumbnail</button>
+			</div>
 		)
-		// setImages(imagesData)
-		console.log('duration', videoRef.current.plyr.duration)
-		console.log('duration', videoRef.current.plyr.media.duration)
-		// setDuration(Math.ceil(videoRef.current.plyr.duration))
 	}
-	const MemoizedPlayer = React.memo(({videoRef, src}: any) => (
-		<Player
-			autoPlay={false}
-			muted={true}
-			src={src}
-			crossOrigin='anonymous'
-			// onLoadedData={videoLoaded}
-			ref={videoRef}
-		/>
-	))
-
-	return (
-		// sticky wont work without alignSelf on flex-child see:
-		// https://gist.github.com/brandonjp/478cf6e32d90ab9cb2cd8cbb0799c7a7
-		<div
-			style={{
-				flex: '1 1 200px',
-				position: 'sticky',
-				top: '30px',
-				alignSelf: 'flex-start',
-			}}
-		>
-			<canvas className='sr-only' ref={canvasRef} />
-			<MemoizedPlayer videoRef={videoRef} src={src} />
-			<button onClick={videoLoaded}>Generate Thumbnail</button>
-		</div>
-	)
-}
+)
 
 type DraftFields = {
 	title: string
@@ -345,9 +360,9 @@ const DraftVideo = ({ file }: { file: File }) => {
 		console.log(response)
 		setSubmitting(false)
 	}
-	React.useEffect(() => {
-		// settings categories here wont take the default value in formik
-	}, [])
+	// React.useEffect(() => {
+	// 	// settings categories here wont take the default value in formik
+	// }, [])
 	console.log(src)
 
 	const defaultValues: DraftFields = {
