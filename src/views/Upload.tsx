@@ -20,12 +20,8 @@ import { HTMLPlyrVideoElement } from 'plyr-react'
 import imgToFile from 'utils/imgToFile'
 import { ImageAtPercentages } from 'types/frames'
 import { randomInt } from 'utils/utils'
-import {
-	ProgressBar,
-	ProgressBarComponent,
-	useProgress,
-} from 'components/ProgressViewer'
-
+import { ProgressBarComponent, useProgress } from 'components/ProgressViewer'
+import ProgressBar from '@ramonak/react-progress-bar'
 const FileChooserBtn = styled.div`
 	margin: 1rem;
 	padding: 0.8rem;
@@ -401,7 +397,6 @@ const DraftVideo = ({ file }: { file: File }) => {
 									{(msg) => <ErrorContainer>{msg}</ErrorContainer>}
 								</ErrorMessage>
 							</Label>
-
 							{/*Whenever anything inside a label is clicked, its corresponding
                         input element is selected. Since below thumnail consists of
                         a input file element as well as other elments, clicking on the other
@@ -430,7 +425,10 @@ const DraftVideo = ({ file }: { file: File }) => {
 							<button type='submit' disabled={isSubmitting}>
 								Submit
 							</button>
-							<ProgressBarComponent progressPercent={progressPercent} />
+							{/* <ProgressBarComponent progressPercent={progressPercent} /> */}
+							<div style={{ width: '100%' }}>
+								<ProgressBar completed={progressPercent} />
+							</div>
 						</Flex>
 					)}
 				</Formik>
