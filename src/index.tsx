@@ -17,7 +17,7 @@ ReactDOM.render(
 			<Routes>
 				<Route path='/'>
 					<Route index element={<App />}></Route>
-					<Route path='vid' element={<Video />}></Route>
+					<Route path='videos/:id' element={<Video />}></Route>
 					<Route path='upload' element={<Upload />}></Route>
 				</Route>
 			</Routes>
@@ -30,3 +30,4 @@ ReactDOM.render(
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals()
+																																																																																																																																			 																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																		

@@ -27,22 +27,26 @@ import img6 from '../assets/imgs/(6).jpg'
 import img7 from '../assets/imgs/(7).jpg'
 import img8 from '../assets/imgs/(8).jpg'
 import { provide } from '../components/Provider'
+import { Link, useParams } from 'react-router-dom'
+import axios from 'axios'
+import { VideoDetailResponse } from 'types/video'
+import Player from 'components/Player'
 
 const thumbs = [img1, img2, img3, img4, img5, img6, img7, img8]
 const randomName = (): string => {
-    const names = [
-        '10 hour meme song loop',
-        'Amogus night 3am SUS challenge. OMG!!! Pranking ghost in the after life. Family vlogs video insert text 1 inster line five.',
-    ]
-    return names[Math.floor(Math.random() * names.length)]
+	const names = [
+		'10 hour meme song loop',
+		'Amogus night 3am SUS challenge. OMG!!! Pranking ghost in the after life. Family vlogs video insert text 1 inster line five.',
+	]
+	return names[Math.floor(Math.random() * names.length)]
 }
 
 const ActionButton = styled(Flex)`
-    cursor: pointer;
+	cursor: pointer;
 `
 
 const Related = styled.div`
-    // flex: 30%;
+	// flex: 30%;
 `
 
 // const countLines = (contents: string): number => contents.split('\n').length
@@ -69,352 +73,365 @@ const Desc = styled.div<{ isExpanded: boolean }>`
 `
 
 const MoreLessBtn = styled.span`
-    display: block;
-    cursor: pointer;
-    margin: 0.5rem 0;
+	display: block;
+	cursor: pointer;
+	margin: 0.5rem 0;
 `
 
 const sampledesc =
-    'This is the greatest description of all time. Lorem ipsum dolor sit amet consectetur adipisicing, elit. Ducimus, saepe incidunt fugiat consequuntur sequi error a debitis cupiditate distinctio harum at magnam reprehenderit id omnis ipsa nam quisquam nisi nihil. Lorem ipsum dolor sit amet consectetur adipisicing, elit. Ducimus, saepe incidunt fugiat consequuntur sequi error a debitis cupiditate distinctio harum at magnam reprehenderit id omnis ipsa nam quisquam nisi nihil. Lorem ipsum dolor sit amet consectetur adipisicing, elit. Ducimus, saepe incidunt fugiat consequuntur sequi error a debitis cupiditate distinctio harum at magnam reprehenderit id omnis ipsa nam quisquam nisi nihil. Lorem ipsum dolor sit amet consectetur adipisicing, elit. Ducimus, saepe incidunt fugiat consequuntur sequi error a debitis cupiditate distinctio harum at magnam reprehenderit id omnis ipsa nam quisquam nisi nihil. Lorem ipsum dolor sit amet consectetur adipisicing, elit. Ducimus, saepe incidunt fugiat consequuntur sequi error a debitis cupiditate distinctio harum at magnam reprehenderit id omnis ipsa nam quisquam nisi nihil.Lorem ipsum dolor sit amet consectetur adipisicing, elit. Ducimus, saepe incidunt fugiat consequuntur sequi error a debitis cupiditate distinctio harum at magnam reprehenderit id omnis ipsa nam quisquam nisi nihil.Lorem ipsum dolor sit amet consectetur adipisicing, elit. Ducimus, saepe incidunt fugiat consequuntur sequi error a debitis cupiditate distinctio harum at magnam reprehenderit id omnis ipsa nam quisquam nisi nihil.Lorem ipsum dolor sit amet consectetur adipisicing, elit. Ducimus, saepe incidunt fugiat consequuntur sequi error a debitis cupiditate distinctio harum at magnam reprehenderit id omnis ipsa nam quisquam nisi nihil.Lorem ipsum dolor sit amet consectetur adipisicing, elit. Ducimus, saepe incidunt fugiat consequuntur sequi error a debitis cupiditate distinctio harum at magnam reprehenderit id omnis ipsa nam quisquam nisi nihil.Lorem ipsum dolor sit amet consectetur adipisicing, elit. Ducimus, saepe incidunt fugiat consequuntur sequi error a debitis cupiditate distinctio harum at magnam reprehenderit id omnis ipsa nam quisquam nisi nihil.Lorem ipsum dolor sit amet consectetur adipisicing, elit. Ducimus, saepe incidunt fugiat consequuntur sequi error a debitis cupiditate distinctio harum at magnam reprehenderit id omnis ipsa nam quisquam nisi nihil.Lorem ipsum dolor sit amet consectetur adipisicing, elit. Ducimus, saepe incidunt fugiat consequuntur sequi error a debitis cupiditate distinctio harum at magnam reprehenderit id omnis ipsa nam quisquam nisi nihil.Lorem ipsum dolor sit amet consectetur adipisicing, elit. Ducimus, saepe incidunt fugiat consequuntur sequi error a debitis cupiditate distinctio harum at magnam reprehenderit id omnis ipsa nam quisquam nisi nihil.'
+	'This is the greatest description of all time. Lorem ipsum dolor sit amet consectetur adipisicing, elit. Ducimus, saepe incidunt fugiat consequuntur sequi error a debitis cupiditate distinctio harum at magnam reprehenderit id omnis ipsa nam quisquam nisi nihil. Lorem ipsum dolor sit amet consectetur adipisicing, elit. Ducimus, saepe incidunt fugiat consequuntur sequi error a debitis cupiditate distinctio harum at magnam reprehenderit id omnis ipsa nam quisquam nisi nihil. Lorem ipsum dolor sit amet consectetur adipisicing, elit. Ducimus, saepe incidunt fugiat consequuntur sequi error a debitis cupiditate distinctio harum at magnam reprehenderit id omnis ipsa nam quisquam nisi nihil. Lorem ipsum dolor sit amet consectetur adipisicing, elit. Ducimus, saepe incidunt fugiat consequuntur sequi error a debitis cupiditate distinctio harum at magnam reprehenderit id omnis ipsa nam quisquam nisi nihil. Lorem ipsum dolor sit amet consectetur adipisicing, elit. Ducimus, saepe incidunt fugiat consequuntur sequi error a debitis cupiditate distinctio harum at magnam reprehenderit id omnis ipsa nam quisquam nisi nihil.Lorem ipsum dolor sit amet consectetur adipisicing, elit. Ducimus, saepe incidunt fugiat consequuntur sequi error a debitis cupiditate distinctio harum at magnam reprehenderit id omnis ipsa nam quisquam nisi nihil.Lorem ipsum dolor sit amet consectetur adipisicing, elit. Ducimus, saepe incidunt fugiat consequuntur sequi error a debitis cupiditate distinctio harum at magnam reprehenderit id omnis ipsa nam quisquam nisi nihil.Lorem ipsum dolor sit amet consectetur adipisicing, elit. Ducimus, saepe incidunt fugiat consequuntur sequi error a debitis cupiditate distinctio harum at magnam reprehenderit id omnis ipsa nam quisquam nisi nihil.Lorem ipsum dolor sit amet consectetur adipisicing, elit. Ducimus, saepe incidunt fugiat consequuntur sequi error a debitis cupiditate distinctio harum at magnam reprehenderit id omnis ipsa nam quisquam nisi nihil.Lorem ipsum dolor sit amet consectetur adipisicing, elit. Ducimus, saepe incidunt fugiat consequuntur sequi error a debitis cupiditate distinctio harum at magnam reprehenderit id omnis ipsa nam quisquam nisi nihil.Lorem ipsum dolor sit amet consectetur adipisicing, elit. Ducimus, saepe incidunt fugiat consequuntur sequi error a debitis cupiditate distinctio harum at magnam reprehenderit id omnis ipsa nam quisquam nisi nihil.Lorem ipsum dolor sit amet consectetur adipisicing, elit. Ducimus, saepe incidunt fugiat consequuntur sequi error a debitis cupiditate distinctio harum at magnam reprehenderit id omnis ipsa nam quisquam nisi nihil.Lorem ipsum dolor sit amet consectetur adipisicing, elit. Ducimus, saepe incidunt fugiat consequuntur sequi error a debitis cupiditate distinctio harum at magnam reprehenderit id omnis ipsa nam quisquam nisi nihil.'
 
 const playlists: PlaylistProps[] = [
-    {
-        id: '235423432facd',
-        name: 'Songs',
-        privacy: 'public',
-        hasCurrentVideo: false,
-    },
-    {
-        id: '235423432facdwe',
-        name: 'Favourites',
-        privacy: 'private',
-        hasCurrentVideo: true,
-    },
-    {
-        id: '2354234234abbc',
-        name: 'Study Materials',
-        privacy: 'unlisted',
-        hasCurrentVideo: false,
-    },
-    
+	{
+		id: '235423432facd',
+		name: 'Songs',
+		privacy: 'public',
+		hasCurrentVideo: false,
+	},
+	{
+		id: '235423432facdwe',
+		name: 'Favourites',
+		privacy: 'private',
+		hasCurrentVideo: true,
+	},
+	{
+		id: '2354234234abbc',
+		name: 'Study Materials',
+		privacy: 'unlisted',
+		hasCurrentVideo: false,
+	},
 ]
 
 const Description = (props: { children?: React.ReactNode }) => {
-    const [isExpanded, setIsExpanded] = React.useState<boolean>(false)
-    const expandOrContract = (event: any) => {
-        if (isExpanded) {
-            // currently expanded. contract it.
-            setIsExpanded(false)
-        } else {
-            setIsExpanded(true)
-        }
-    }
-    return (
-        <div style={{ margin: '1rem 3vw' }}>
-            <Desc isExpanded={isExpanded}>{props.children}</Desc>
-            <MoreLessBtn onClick={expandOrContract}>
-                {isExpanded ? 'Show Less' : 'Show More'}
-            </MoreLessBtn>
-        </div>
-    )
+	const [isExpanded, setIsExpanded] = React.useState<boolean>(false)
+	const expandOrContract = (event: any) => {
+		if (isExpanded) {
+			// currently expanded. contract it.
+			setIsExpanded(false)
+		} else {
+			setIsExpanded(true)
+		}
+	}
+	return (
+		<div style={{ margin: '1rem 3vw' }}>
+			<Desc isExpanded={isExpanded}>{props.children}</Desc>
+			<MoreLessBtn onClick={expandOrContract}>
+				{isExpanded ? 'Show Less' : 'Show More'}
+			</MoreLessBtn>
+		</div>
+	)
 }
 
-const CurrentVideo = () => {
-    const [channelSubscription, setChannelSubscription] =
-        React.useState<boolean>(false)
-    const [channelNotification, setChannelNotification] =
-        React.useState<boolean>(false)
-    const [isLiked, setIsLiked] = React.useState<boolean>(false)
-    const [isDisLiked, setIsDisLiked] = React.useState<boolean>(false)
-    const [isPlaylistClicked, setIsPlaylistClicked] =
-        React.useState<boolean>(false)
+type CurrentVideoProps = {
+	videoId: string
+}
 
-    const handleLike = () => {
-        // in backend set a field called
-        // `perception`: true(like) | false(dislike) | null(neither liked nor disliked.)
-        setIsLiked((s) => {
-            if (!s === isDisLiked && !s === true) setIsDisLiked(s)
-            return !s
-        })
-    }
-    const handleDisLike = () => {
-        setIsDisLiked((s) => {
-            if (!s === isLiked && !s === true) setIsLiked(s)
-            return !s
-        })
-    }
+const CurrentVideo = ({ videoId }: CurrentVideoProps) => {
+	const [channelSubscription, setChannelSubscription] =
+		React.useState<boolean>(false)
+	const [channelNotification, setChannelNotification] =
+		React.useState<boolean>(false)
+	const [isLiked, setIsLiked] = React.useState<boolean>(false)
+	const [isDisLiked, setIsDisLiked] = React.useState<boolean>(false)
+	const [isPlaylistClicked, setIsPlaylistClicked] =
+		React.useState<boolean>(false)
+	const [videoInfo, setVideoInfo] = React.useState<VideoDetailResponse | null>(
+		null
+	)
 
-    const handlePlaylist = () => {
-        console.log('addtoplaylist button clicked')
-        provide(
-            <PopupModel>
-                <AddToPaylistDialog playlists={playlists}/>
-            </PopupModel>,
-        )
-        setIsPlaylistClicked((s) => !s)
-    }
+	React.useEffect(() => {
+		const fetchVideoInfo = async () => {
+			const fetchdeVideoInfo: VideoDetailResponse = await axios.get(
+				'/videos/' + videoId
+			)
+			setVideoInfo(fetchdeVideoInfo)
+		}
+		fetchVideoInfo()
+	}, [videoId])
 
-    React.useEffect(() => {
-        // channel's subscription status changed.
-        // console.log('subscribed to curr videos channel', channelSubscription)
-    }, [channelSubscription])
+	const handleLike = () => {
+		// in backend set a field called
+		// `perception`: true(like) | false(dislike) | null(neither liked nor disliked.)
+		setIsLiked((s) => {
+			if (!s === isDisLiked && !s === true) setIsDisLiked(s)
+			return !s
+		})
+	}
+	const handleDisLike = () => {
+		setIsDisLiked((s) => {
+			if (!s === isLiked && !s === true) setIsLiked(s)
+			return !s
+		})
+	}
 
-    React.useEffect(() => {
-        // channel's notification status changed.
-        // console.log('notif to curr videos channel', channelNotification)
-    }, [channelNotification])
+	const handlePlaylist = () => {
+		console.log('addtoplaylist button clicked')
+		provide(
+			<PopupModel>
+				<AddToPaylistDialog playlists={playlists} />
+			</PopupModel>
+		)
+		setIsPlaylistClicked((s) => !s)
+	}
 
-    return (
-        <div style={{}}>
-            <PopupModelContainer />
-            <video
-                src={vert}
-                controls={true}
-                width='1200'
-                height='600'
-                style={{}}
-            ></video>
-            <h3>Raw Run</h3>
-            <Flex justify='space-between'>
-                <div>
-                    <span>1,234,325 views</span>
-                    <span>Dec 4, 2022</span>
-                </div>
-                <Flex justify='flex-start' gap='1rem'>
-                    <ActionButton onClick={handleLike}>
-                        {isLiked ? <Liked /> : <Like />}
-                        {'97K'}
-                    </ActionButton>
-                    <ActionButton onClick={handleDisLike}>
-                        {isDisLiked ? <DisLiked /> : <DisLike />}
-                        {'1.1K'}
-                    </ActionButton>
-                    <ActionButton>
-                        <Share />
-                        Share
-                    </ActionButton>
-                    <ActionButton onClick={handlePlaylist}>
-                        <AddToPlaylist />
-                        Add
-                    </ActionButton>
-                    <ActionButton>
-                        <Flag />
-                        Flag
-                    </ActionButton>
-                </Flex>
-            </Flex>
-            <hr />
-            <Flex justify='space-between'>
-                <Flex justify='flex-start'>
-                    <img
-                        src={img1}
-                        width='20'
-                        height='20'
-                        className='rounded'
-                    />
-                    <span>Very long channel name and this name is long.</span>
-                </Flex>
-                <SubscribeButton
-                    isSubscribed={channelSubscription}
-                    isNotificationOn={channelNotification}
-                    onSubscriptionChange={setChannelSubscription}
-                    onNotificationChange={setChannelNotification}
-                />
-            </Flex>
-            <Description>{sampledesc}</Description>
-            <hr />
-        </div>
-    )
+	React.useEffect(() => {
+		// channel's subscription status changed.
+		// console.log('subscribed to curr videos channel', channelSubscription)
+	}, [channelSubscription])
+
+	React.useEffect(() => {
+		// channel's notification status changed.
+		// console.log('notif to curr videos channel', channelNotification)
+	}, [channelNotification])
+	if (!videoInfo) {
+		return <div>Loading...</div>
+	}
+	return (
+		<div>
+			<PopupModelContainer />
+			<Player src={videoInfo.video.path} width='1200' height='600' />
+			<h3>{videoInfo.video.title}</h3>
+			<Flex justify='space-between'>
+				<div>
+					<span>{videoInfo.video.viewCount} views</span>
+					<span>{new Date(videoInfo.video.published!).toLocaleString()}</span>
+				</div>
+				<Flex justify='flex-start' gap='1rem'>
+					<ActionButton onClick={handleLike}>
+						{isLiked ? <Liked /> : <Like />}
+						{videoInfo.video.likes}
+					</ActionButton>
+					<ActionButton onClick={handleDisLike}>
+						{isDisLiked ? <DisLiked /> : <DisLike />}
+						{videoInfo.video.dislikes}
+					</ActionButton>
+					<ActionButton>
+						<Share />
+						Share
+					</ActionButton>
+					<ActionButton onClick={handlePlaylist}>
+						<AddToPlaylist />
+						Add
+					</ActionButton>
+					<ActionButton>
+						<Flag />
+						Flag
+					</ActionButton>
+				</Flex>
+			</Flex>
+			<hr />
+			<Flex justify='space-between'>
+				<Flex justify='flex-start'>
+					<img
+						src={videoInfo.channel.pp}
+						width='20'
+						height='20'
+						className='rounded'
+						alt='channel profile pic'
+					/>
+					<Link to={`/users/${videoInfo.channel.id}`}>
+						<span>{videoInfo.channel.name}</span>
+					</Link>
+				</Flex>
+				<SubscribeButton
+					isSubscribed={channelSubscription}
+					isNotificationOn={channelNotification}
+					onSubscriptionChange={setChannelSubscription}
+					onNotificationChange={setChannelNotification}
+				/>
+			</Flex>
+			<Description>{sampledesc}</Description>
+			<hr />
+		</div>
+	)
 }
 
 const RelatedVideos = () => {
-    return (
-        <Related>
-            <Grid maxColumns={1} itemBaseWidth='350px' gap='1rem'>
-                {thumbs.map((i, j) => (
-                    <VideoCard
-                        key={j}
-                        video={{
-                            thumbSrc: i,
-                            title: randomName(),
-                            views: '1.2M',
-                            channel: randomName(),
-                            durationSecs: 101,
-                            isLive: false,
-                        }}
-                        cardFlow='row'
-                    />
-                ))}
-            </Grid>
-        </Related>
-    )
+	return (
+		<Related>
+			<Grid maxColumns={1} itemBaseWidth='350px' gap='1rem'>
+				{thumbs.map((i, j) => (
+					<VideoCard
+						key={j}
+						video={{
+							thumbSrc: i,
+							title: randomName(),
+							views: '1.2M',
+							channel: randomName(),
+							durationSecs: 101,
+							isLive: false,
+						}}
+						cardFlow='row'
+					/>
+				))}
+			</Grid>
+		</Related>
+	)
 }
 
 const sampleComments: CommentProps[] = [
-    {
-        id: '387324abc2214fff',
-        body: 'This is a comment. Video is lit',
-        author: {
-            name: 'Jefferey Bezos',
-            channelLink: 'http://127.0.0.1:8000/api/user/1/',
-            imageLink: img3,
-        },
-        createdOn: '2021-09-02T16:56:23.227201Z',
-        updatedOn: '2021-09-02T16:56:23.227201Z',
-        authUserReaction: [],
-        reactions: [
-            { '😍': 2 },
-            { '👍': 3 },
-            { '👎': 0 },
-            { '😎': 1 },
-            { '🚀': 10 },
-        ],
-        children: [
-            {
-                id: '387324abc22914fff',
-                body: 'This is a deep comment. Video is lit',
-                author: {
-                    name: 'Jefferey Bezos Son',
-                    channelLink: 'http://127.0.0.1:8000/api/user/2/',
-                    imageLink: img3,
-                },
-                createdOn: '2021-09-02T16:56:23.227201Z',
-                updatedOn: '2021-09-02T16:56:23.227201Z',
-                authUserReaction: [],
-                reactions: [
-                    { '😍': 0 },
-                    { '👍': 0 },
-                    { '👎': 0 },
-                    { '😎': 1 },
-                    { '🚀': 10 },
-                ],
-                children: [],
-            },
-            {
-                id: '387324abc245214fff',
-                body: 'This is a deeper comment. Video is lit',
-                author: {
-                    name: 'Jefferey Bezos grandson',
-                    channelLink: 'http://127.0.0.1:8000/api/user/3/',
-                    imageLink: img3,
-                },
-                createdOn: '2021-09-02T16:56:23.227201Z',
-                updatedOn: '2021-09-02T16:56:23.227201Z',
-                authUserReaction: [],
-                reactions: [
-                    { '😍': 0 },
-                    { '👍': 0 },
-                    { '👎': 0 },
-                    { '😎': 0 },
-                    { '🚀': 0 },
-                ],
-                children: [
-                    {
-                        id: '387324abc2214fff43',
-                        body: 'This is more deeper comment. Video is lit',
-                        author: {
-                            name: 'Jefferey Bezos GenZ',
-                            channelLink: 'http://127.0.0.1:8000/api/user/5/',
-                            imageLink: img3,
-                        },
-                        createdOn: '2021-09-02T16:56:23.227201Z',
-                        updatedOn: '2021-09-02T16:56:23.227201Z',
-                        authUserReaction: [],
-                        reactions: [
-                            { '😍': 2 },
-                            { '👍': 3 },
-                            { '👎': 0 },
-                            { '😎': 1 },
-                            { '🚀': 10 },
-                        ],
-                        children: [
-                            {
-                                id: '387324abchth2214fff',
-                                body: 'This is the deepest comment 1. Video is lit',
-                                author: {
-                                    name: 'Jefferey Bezoszzz',
-                                    channelLink:
-                                        'http://127.0.0.1:8000/api/user/7/',
-                                    imageLink: img3,
-                                },
-                                createdOn: '2021-09-02T16:56:23.227201Z',
-                                updatedOn: '2021-09-02T16:56:23.227201Z',
-                                authUserReaction: [],
-                                reactions: [
-                                    { '😍': 2 },
-                                    { '👍': 3 },
-                                    { '👎': 0 },
-                                    { '😎': 1 },
-                                    { '🚀': 10 },
-                                ],
-                                children: [],
-                            },
-                            {
-                                id: '387324abc3241114fff',
-                                body: 'This is a deepest comment 2. Video is lit',
-                                author: {
-                                    name: 'Jefferey Bezos',
-                                    channelLink:
-                                        'http://127.0.0.1:8000/api/user/1/',
-                                    imageLink: img3,
-                                },
-                                createdOn: '2021-09-02T16:56:23.227201Z',
-                                updatedOn: '2021-09-02T16:56:23.227201Z',
-                                authUserReaction: [],
-                                reactions: [
-                                    { '😍': 2 },
-                                    { '👍': 3 },
-                                    { '👎': 0 },
-                                    { '😎': 1 },
-                                    { '🚀': 10 },
-                                ],
-                                children: [],
-                            },
-                        ],
-                    },
-                ],
-            },
-        ],
-    },
-    {
-        id: '387324abc212393214fff',
-        body: 'This is a human comment. Video is fire.',
-        author: {
-            name: 'Zucc',
-            channelLink: 'http://127.0.0.1:8000/api/user/10/',
-            imageLink: img3,
-        },
-        createdOn: '2021-09-02T16:56:23.227201Z',
-        updatedOn: '2021-09-02T16:56:23.227201Z',
-        authUserReaction: [],
-        reactions: [
-            { '😍': 2 },
-            { '👍': 3 },
-            { '👎': 0 },
-            { '😎': 1 },
-            { '🚀': 10 },
-        ],
-        children: [],
-    },
+	{
+		id: '387324abc2214fff',
+		body: 'This is a comment. Video is lit',
+		author: {
+			name: 'Jefferey Bezos',
+			channelLink: 'http://127.0.0.1:8000/api/user/1/',
+			imageLink: img3,
+		},
+		createdOn: '2021-09-02T16:56:23.227201Z',
+		updatedOn: '2021-09-02T16:56:23.227201Z',
+		authUserReaction: [],
+		reactions: [
+			{ '😍': 2 },
+			{ '👍': 3 },
+			{ '👎': 0 },
+			{ '😎': 1 },
+			{ '🚀': 10 },
+		],
+		children: [
+			{
+				id: '387324abc22914fff',
+				body: 'This is a deep comment. Video is lit',
+				author: {
+					name: 'Jefferey Bezos Son',
+					channelLink: 'http://127.0.0.1:8000/api/user/2/',
+					imageLink: img3,
+				},
+				createdOn: '2021-09-02T16:56:23.227201Z',
+				updatedOn: '2021-09-02T16:56:23.227201Z',
+				authUserReaction: [],
+				reactions: [
+					{ '😍': 0 },
+					{ '👍': 0 },
+					{ '👎': 0 },
+					{ '😎': 1 },
+					{ '🚀': 10 },
+				],
+				children: [],
+			},
+			{
+				id: '387324abc245214fff',
+				body: 'This is a deeper comment. Video is lit',
+				author: {
+					name: 'Jefferey Bezos grandson',
+					channelLink: 'http://127.0.0.1:8000/api/user/3/',
+					imageLink: img3,
+				},
+				createdOn: '2021-09-02T16:56:23.227201Z',
+				updatedOn: '2021-09-02T16:56:23.227201Z',
+				authUserReaction: [],
+				reactions: [
+					{ '😍': 0 },
+					{ '👍': 0 },
+					{ '👎': 0 },
+					{ '😎': 0 },
+					{ '🚀': 0 },
+				],
+				children: [
+					{
+						id: '387324abc2214fff43',
+						body: 'This is more deeper comment. Video is lit',
+						author: {
+							name: 'Jefferey Bezos GenZ',
+							channelLink: 'http://127.0.0.1:8000/api/user/5/',
+							imageLink: img3,
+						},
+						createdOn: '2021-09-02T16:56:23.227201Z',
+						updatedOn: '2021-09-02T16:56:23.227201Z',
+						authUserReaction: [],
+						reactions: [
+							{ '😍': 2 },
+							{ '👍': 3 },
+							{ '👎': 0 },
+							{ '😎': 1 },
+							{ '🚀': 10 },
+						],
+						children: [
+							{
+								id: '387324abchth2214fff',
+								body: 'This is the deepest comment 1. Video is lit',
+								author: {
+									name: 'Jefferey Bezoszzz',
+									channelLink: 'http://127.0.0.1:8000/api/user/7/',
+									imageLink: img3,
+								},
+								createdOn: '2021-09-02T16:56:23.227201Z',
+								updatedOn: '2021-09-02T16:56:23.227201Z',
+								authUserReaction: [],
+								reactions: [
+									{ '😍': 2 },
+									{ '👍': 3 },
+									{ '👎': 0 },
+									{ '😎': 1 },
+									{ '🚀': 10 },
+								],
+								children: [],
+							},
+							{
+								id: '387324abc3241114fff',
+								body: 'This is a deepest comment 2. Video is lit',
+								author: {
+									name: 'Jefferey Bezos',
+									channelLink: 'http://127.0.0.1:8000/api/user/1/',
+									imageLink: img3,
+								},
+								createdOn: '2021-09-02T16:56:23.227201Z',
+								updatedOn: '2021-09-02T16:56:23.227201Z',
+								authUserReaction: [],
+								reactions: [
+									{ '😍': 2 },
+									{ '👍': 3 },
+									{ '👎': 0 },
+									{ '😎': 1 },
+									{ '🚀': 10 },
+								],
+								children: [],
+							},
+						],
+					},
+				],
+			},
+		],
+	},
+	{
+		id: '387324abc212393214fff',
+		body: 'This is a human comment. Video is fire.',
+		author: {
+			name: 'Zucc',
+			channelLink: 'http://127.0.0.1:8000/api/user/10/',
+			imageLink: img3,
+		},
+		createdOn: '2021-09-02T16:56:23.227201Z',
+		updatedOn: '2021-09-02T16:56:23.227201Z',
+		authUserReaction: [],
+		reactions: [
+			{ '😍': 2 },
+			{ '👍': 3 },
+			{ '👎': 0 },
+			{ '😎': 1 },
+			{ '🚀': 10 },
+		],
+		children: [],
+	},
 ]
 
 const Video = () => {
-    return (
-        <>
-            <NavBar />
-            <div>
-                <div
-                    style={{ display: 'grid', gridTemplateColumns: '70% 30%' }}
-                >
-                    <CurrentVideo />
-                    <RelatedVideos />
-                </div>
-                <section style={{ margin: '0.5rem' }}>
-                    <AllComments pageUrl='' comments={sampleComments} />
-                </section>
-            </div>
-        </>
-    )
+	const params = useParams<{ id: string }>()
+	console.log(params)
+	return (
+		<>
+			<NavBar />
+			<div>
+				<div style={{ display: 'grid', gridTemplateColumns: '70% 30%' }}>
+					<CurrentVideo videoId={params.id!} />
+					<RelatedVideos />
+				</div>
+				<section style={{ margin: '0.5rem' }}>
+					<AllComments pageUrl='' comments={sampleComments} />
+				</section>
+			</div>
+		</>
+	)
 }
 
 export default Video

@@ -303,10 +303,7 @@ type DraftFields = {
 	description: string
 	category: string
 	thumbnail: any
-	staticvideo: {
-		video: File
-		duration: number
-	}
+	staticvideo: File
 }
 
 const DraftVideo = ({ file }: { file: File }) => {
@@ -326,7 +323,7 @@ const DraftVideo = ({ file }: { file: File }) => {
 	const [images, setImages] = React.useState<ImageAtPercentages[]>([])
 	const src = React.useState<string>(URL.createObjectURL(file))[0]
 	const [duration, setDuration] = React.useState<number>(0)
-
+	console.log(duration)
 	const onSubmit = async (
 		values: DraftFields,
 		{ setSubmitting }: FormikHelpers<DraftFields>
@@ -337,12 +334,10 @@ const DraftVideo = ({ file }: { file: File }) => {
 		formData.append('description', values.description)
 		formData.append('category', values.category)
 		formData.append('thumbnail', values.thumbnail, values.thumbnail.name)
-		formData.append(
-			'staticvideo',
-			values.staticvideo.video,
-			values.staticvideo.video.name
-		)
-		formData.append('duration', `${values.staticvideo.duration}`)
+		formData.append('staticvideo', values.staticvideo, values.staticvideo.name)
+		formData.append('duration', `${duration}`)
+		console.log(duration)
+
 		const response = await axios.post('/video', formData, {
 			onUploadProgress: (progressEvent) => {
 				const percentCompleted = Math.round(
@@ -353,7 +348,9 @@ const DraftVideo = ({ file }: { file: File }) => {
 				setProgressPercent(percentCompleted)
 			},
 		})
-		console.log(response)
+		if (!response.data.error) {
+			window.location.href = '/'
+		}
 		setSubmitting(false)
 	}
 	// React.useEffect(() => {
@@ -366,7 +363,7 @@ const DraftVideo = ({ file }: { file: File }) => {
 		description: '',
 		category: categories?.[0]?.value || '',
 		thumbnail: null,
-		staticvideo: { video: file, duration: duration },
+		staticvideo: file,
 	}
 	return (
 		<Draft gap='1rem'>
