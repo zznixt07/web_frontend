@@ -20,6 +20,11 @@ import { HTMLPlyrVideoElement } from 'plyr-react'
 import imgToFile from 'utils/imgToFile'
 import { ImageAtPercentages } from 'types/frames'
 import { randomInt } from 'utils/utils'
+import {
+	ProgressBar,
+	ProgressBarComponent,
+	useProgress,
+} from 'components/ProgressViewer'
 
 const FileChooserBtn = styled.div`
 	margin: 1rem;
@@ -62,7 +67,6 @@ const CommonField = styled(Field)`
 const TitleField = styled(CommonField)``
 const DescriptionField = styled(CommonField)`
 	resize: vertical;
-	min-height: 10rem;
 `
 
 const SimpleGrid = styled(Grid)`
@@ -249,10 +253,22 @@ const UploadedVideo = ({ src, setImages, setDuration }: UploadedVideoProps) => {
 			canvasRef.current,
 			[randomInt(2, 6), randomInt(40, 60), randomInt(80, 95)] // should be unique, will be used for key later. cuz 2 frames can be same
 		)
-		setImages(imagesData)
+		// setImages(imagesData)
 		console.log('duration', videoRef.current.plyr.duration)
-		setDuration(Math.floor(videoRef.current.plyr.duration))
+		console.log('duration', videoRef.current.plyr.media.duration)
+		// setDuration(Math.ceil(videoRef.current.plyr.duration))
 	}
+	const MemoizedPlayer = React.memo(({videoRef, src}: any) => (
+		<Player
+			autoPlay={false}
+			muted={true}
+			src={src}
+			crossOrigin='anonymous'
+			// onLoadedData={videoLoaded}
+			ref={videoRef}
+		/>
+	))
+
 	return (
 		// sticky wont work without alignSelf on flex-child see:
 		// https://gist.github.com/brandonjp/478cf6e32d90ab9cb2cd8cbb0799c7a7
@@ -265,14 +281,7 @@ const UploadedVideo = ({ src, setImages, setDuration }: UploadedVideoProps) => {
 			}}
 		>
 			<canvas className='sr-only' ref={canvasRef} />
-			<Player
-				autoPlay={false}
-				muted={true}
-				src={src}
-				crossOrigin='anonymous'
-				onLoadedData={videoLoaded}
-				ref={videoRef}
-			/>
+			<MemoizedPlayer videoRef={videoRef} src={src} />
 			<button onClick={videoLoaded}>Generate Thumbnail</button>
 		</div>
 	)
@@ -300,8 +309,11 @@ const DraftVideo = ({ file }: { file: File }) => {
 		{ name: 'Beauty', value: 'beauty' },
 		{ name: 'Sci-Fi', value: 'scifi' },
 	])
+	// const setProgress = useProgress()
+	// console.log({ setProgress })
+	const [progressPercent, setProgressPercent] = React.useState(0)
 	const [images, setImages] = React.useState<ImageAtPercentages[]>([])
-	const videoUrl = React.useState<string>(URL.createObjectURL(file))[0]
+	const src = React.useState<string>(URL.createObjectURL(file))[0]
 	const [duration, setDuration] = React.useState<number>(0)
 
 	const onSubmit = async (
@@ -320,13 +332,23 @@ const DraftVideo = ({ file }: { file: File }) => {
 			values.staticvideo.video.name
 		)
 		formData.append('duration', `${values.staticvideo.duration}`)
-		const response = await axios.post('/video', formData)
+		const response = await axios.post('/video', formData, {
+			onUploadProgress: (progressEvent) => {
+				const percentCompleted = Math.round(
+					(progressEvent.loaded * 100) / progressEvent.total
+				)
+				console.log('percentCompleted', percentCompleted)
+				// if (setProgress) setProgress(percentCompleted)
+				setProgressPercent(percentCompleted)
+			},
+		})
 		console.log(response)
 		setSubmitting(false)
 	}
 	React.useEffect(() => {
 		// settings categories here wont take the default value in formik
 	}, [])
+	console.log(src)
 
 	const defaultValues: DraftFields = {
 		title: file.name.split('.')[0], // remove extension more thoroughly
@@ -335,7 +357,6 @@ const DraftVideo = ({ file }: { file: File }) => {
 		thumbnail: null,
 		staticvideo: { video: file, duration: duration },
 	}
-
 	return (
 		<Draft gap='1rem'>
 			<VideoDetails>
@@ -356,7 +377,8 @@ const DraftVideo = ({ file }: { file: File }) => {
 							<Label>
 								<LabelText>Description</LabelText>
 								<DescriptionField
-									as='textarea'
+									component='textarea'
+									rows={9}
 									name='description'
 									placeholder='Describe your video...'
 								/>
@@ -393,12 +415,13 @@ const DraftVideo = ({ file }: { file: File }) => {
 							<button type='submit' disabled={isSubmitting}>
 								Submit
 							</button>
+							<ProgressBarComponent progressPercent={progressPercent} />
 						</Flex>
 					)}
 				</Formik>
 			</VideoDetails>
 			<UploadedVideo
-				src={videoUrl}
+				src={src}
 				setImages={setImages}
 				setDuration={setDuration}
 			/>
@@ -424,7 +447,7 @@ const Upload = () => {
 				<UploadSVG width='100' height='100' />
 				<h1>Drag and drop files to upload.</h1>
 				<span style={{ color: 'var(--text2)' }}>
-					Or Select Files by clicking below button.
+					Or Select Files by clicking below button
 				</span>
 				<label>
 					<FileChooserBtn>Choose files</FileChooserBtn>
