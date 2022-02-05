@@ -244,7 +244,7 @@ const CurrentVideo = ({ videoId }: CurrentVideoProps) => {
 					onNotificationChange={setChannelNotification}
 				/>
 			</Flex>
-			<Description>{sampledesc}</Description>
+			<Description>{videoInfo.video.description}</Description>
 			<hr />
 		</div>
 	)
@@ -294,7 +294,7 @@ const Video = () => {
 					<RelatedVideos />
 				</div>
 				<section style={{ margin: '0.5rem' }}>
-					<AllComments pageUrl='' comments={sampleComments} />
+					<AllComments pageUrl={videoId} comments={sampleComments} />
 				</section>
 			</div>
 		</>

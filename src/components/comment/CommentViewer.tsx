@@ -2,23 +2,27 @@
 import * as React from 'react'
 import SingleComment, { ReactionProp } from './SingleComment'
 import CommentBox from './CommentBox'
+import axios from 'axios'
+
+type CommentRequest = {
+	videoId: string
+	body: string
+	parent: string | null
+}
 
 export const createComment = async (
 	content,
-	userUrl,
 	pageUrl,
 	parentCommentUrl = null
 ) => {
-	const data = await ajax('/api/comment/', {
-		method: 'POST',
-		body: JSON.stringify({
-			body: content,
-			user: userUrl,
-			blog: pageUrl,
-			parent: parentCommentUrl,
-		}),
-	})
-	return data
+	const body: CommentRequest = {
+		videoId: pageUrl,
+		body: content,
+		parent: parentCommentUrl,
+	}
+	console.log('posting comment', body)
+	const resp = await axios.post(`/comments/${pageUrl}`, body)
+	return resp
 }
 
 const createReactions = async (createEndpoint, payload) => {
@@ -167,10 +171,29 @@ const AllComments = ({
 	const [nestedComments, setNestedComments] =
 		React.useState<CommentProps[]>(comments)
 	// const flatComments: FlatComment[] = insertIndentAndflatten(nestedComments)
-	const flatComments: FlatComment[] = insertIndents(nestedComments, 'id', 'parent')
+	const flatComments: FlatComment[] = insertIndents(
+		nestedComments,
+		'id',
+		'parent'
+	)
+	console.log('flatComments', flatComments)
 	const [replyId, setReplyId] = React.useState(null)
 	return (
 		<>
+			<CommentBox
+				onComment={async (content: any) => {
+					console.log('posting parent comment')
+					const resp = await createComment(content, pageUrl, null)
+					// nested reply is at top. should be at bottom
+					// because comment follows cronological order.
+					// but its-not-a-bug-its-a-feature
+					setNestedComments((comms) => {
+						const updatedComms = [...comms]
+						updatedComms.splice(index + 1, 0, resp.data)
+						return updatedComms
+					})
+				}}
+			/>
 			{flatComments.map((comment: FlatComment, index) => {
 				const reactions: ReactionProp = comment.reactions.map((o) => ({
 					id: Object.keys(o)[0],
@@ -217,18 +240,13 @@ const AllComments = ({
 						{comment.id === replyId ? (
 							<CommentBox
 								onComment={async (content: any) => {
-									const data = await createComment(
-										content,
-										'CURR_USER',
-										pageUrl,
-										'comment.url'
-									)
+									const resp = await createComment(content, pageUrl, replyId)
 									// nested reply is at top. should be at bottom
 									// because comment follows cronological order.
 									// but its-not-a-bug-its-a-feature
 									setNestedComments((comms) => {
 										const updatedComms = [...comms]
-										updatedComms.splice(index + 1, 0, data)
+										updatedComms.splice(index + 1, 0, resp.data)
 										return updatedComms
 									})
 								}}
