@@ -122,6 +122,10 @@ const Description = (props: { children?: React.ReactNode }) => {
 	)
 }
 
+const MemoizedPlayer = React.memo(({ src }: any) => (
+	<Player src={src} width='1200' height='600' />
+))
+
 type CurrentVideoProps = {
 	videoId: string
 }
@@ -141,11 +145,10 @@ const CurrentVideo = ({ videoId }: CurrentVideoProps) => {
 
 	React.useEffect(() => {
 		const fetchVideoInfo = async () => {
-			const fetchdeVideoInfo: VideoDetailResponse = await axios.get(
-				'/videos/' + videoId
-			)
-			setVideoInfo(fetchdeVideoInfo)
+			const fetchedVideoInfo = await axios.get('/videos/' + videoId)
+			setVideoInfo(fetchedVideoInfo.data as VideoDetailResponse)
 		}
+		console.log('fetching video info')
 		fetchVideoInfo()
 	}, [videoId])
 
@@ -186,10 +189,11 @@ const CurrentVideo = ({ videoId }: CurrentVideoProps) => {
 	if (!videoInfo) {
 		return <div>Loading...</div>
 	}
+
 	return (
 		<div>
 			<PopupModelContainer />
-			<Player src={videoInfo.video.path} width='1200' height='600' />
+			<MemoizedPlayer src={videoInfo.video.path} />
 			<h3>{videoInfo.video.title}</h3>
 			<Flex justify='space-between'>
 				<div>
@@ -270,149 +274,7 @@ const RelatedVideos = () => {
 }
 
 const sampleComments: CommentProps[] = [
-	{
-		id: '387324abc2214fff',
-		body: 'This is a comment. Video is lit',
-		author: {
-			name: 'Jefferey Bezos',
-			channelLink: 'http://127.0.0.1:8000/api/user/1/',
-			imageLink: img3,
-		},
-		createdOn: '2021-09-02T16:56:23.227201Z',
-		updatedOn: '2021-09-02T16:56:23.227201Z',
-		authUserReaction: [],
-		reactions: [
-			{ '😍': 2 },
-			{ '👍': 3 },
-			{ '👎': 0 },
-			{ '😎': 1 },
-			{ '🚀': 10 },
-		],
-		children: [
-			{
-				id: '387324abc22914fff',
-				body: 'This is a deep comment. Video is lit',
-				author: {
-					name: 'Jefferey Bezos Son',
-					channelLink: 'http://127.0.0.1:8000/api/user/2/',
-					imageLink: img3,
-				},
-				createdOn: '2021-09-02T16:56:23.227201Z',
-				updatedOn: '2021-09-02T16:56:23.227201Z',
-				authUserReaction: [],
-				reactions: [
-					{ '😍': 0 },
-					{ '👍': 0 },
-					{ '👎': 0 },
-					{ '😎': 1 },
-					{ '🚀': 10 },
-				],
-				children: [],
-			},
-			{
-				id: '387324abc245214fff',
-				body: 'This is a deeper comment. Video is lit',
-				author: {
-					name: 'Jefferey Bezos grandson',
-					channelLink: 'http://127.0.0.1:8000/api/user/3/',
-					imageLink: img3,
-				},
-				createdOn: '2021-09-02T16:56:23.227201Z',
-				updatedOn: '2021-09-02T16:56:23.227201Z',
-				authUserReaction: [],
-				reactions: [
-					{ '😍': 0 },
-					{ '👍': 0 },
-					{ '👎': 0 },
-					{ '😎': 0 },
-					{ '🚀': 0 },
-				],
-				children: [
-					{
-						id: '387324abc2214fff43',
-						body: 'This is more deeper comment. Video is lit',
-						author: {
-							name: 'Jefferey Bezos GenZ',
-							channelLink: 'http://127.0.0.1:8000/api/user/5/',
-							imageLink: img3,
-						},
-						createdOn: '2021-09-02T16:56:23.227201Z',
-						updatedOn: '2021-09-02T16:56:23.227201Z',
-						authUserReaction: [],
-						reactions: [
-							{ '😍': 2 },
-							{ '👍': 3 },
-							{ '👎': 0 },
-							{ '😎': 1 },
-							{ '🚀': 10 },
-						],
-						children: [
-							{
-								id: '387324abchth2214fff',
-								body: 'This is the deepest comment 1. Video is lit',
-								author: {
-									name: 'Jefferey Bezoszzz',
-									channelLink: 'http://127.0.0.1:8000/api/user/7/',
-									imageLink: img3,
-								},
-								createdOn: '2021-09-02T16:56:23.227201Z',
-								updatedOn: '2021-09-02T16:56:23.227201Z',
-								authUserReaction: [],
-								reactions: [
-									{ '😍': 2 },
-									{ '👍': 3 },
-									{ '👎': 0 },
-									{ '😎': 1 },
-									{ '🚀': 10 },
-								],
-								children: [],
-							},
-							{
-								id: '387324abc3241114fff',
-								body: 'This is a deepest comment 2. Video is lit',
-								author: {
-									name: 'Jefferey Bezos',
-									channelLink: 'http://127.0.0.1:8000/api/user/1/',
-									imageLink: img3,
-								},
-								createdOn: '2021-09-02T16:56:23.227201Z',
-								updatedOn: '2021-09-02T16:56:23.227201Z',
-								authUserReaction: [],
-								reactions: [
-									{ '😍': 2 },
-									{ '👍': 3 },
-									{ '👎': 0 },
-									{ '😎': 1 },
-									{ '🚀': 10 },
-								],
-								children: [],
-							},
-						],
-					},
-				],
-			},
-		],
-	},
-	{
-		id: '387324abc212393214fff',
-		body: 'This is a human comment. Video is fire.',
-		author: {
-			name: 'Zucc',
-			channelLink: 'http://127.0.0.1:8000/api/user/10/',
-			imageLink: img3,
-		},
-		createdOn: '2021-09-02T16:56:23.227201Z',
-		updatedOn: '2021-09-02T16:56:23.227201Z',
-		authUserReaction: [],
-		reactions: [
-			{ '😍': 2 },
-			{ '👍': 3 },
-			{ '👎': 0 },
-			{ '😎': 1 },
-			{ '🚀': 10 },
-		],
-		children: [],
-	},
+	
 ]
 
 const Video = () => {

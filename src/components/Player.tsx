@@ -35,7 +35,6 @@ const Player = React.forwardRef<
 	any,
 	PlayerProps & React.VideoHTMLAttributes<HTMLVideoElement>
 >((props, ref) => {
-	console.log(ref)
 	const { src, ...rest } = props
 	return (
 		<Plyr
