@@ -273,10 +273,6 @@ const RelatedVideos = () => {
 	)
 }
 
-const sampleComments: CommentProps[] = [
-	
-]
-
 const Video = () => {
 	const params = useParams<{ id: string }>()
 	console.log(params)

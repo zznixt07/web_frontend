@@ -152,10 +152,10 @@ const AllComments = ({
             {flatComments.map((comment: FlatComment, index) => {
 
                 const reactions: ReactionProp = comment.reactions.map((o) => ({
-                    id: Object.keys(o)[0],
-                    count: Object.values(o)[0],
-                    reacted: comment.authUserReaction.includes('k'),
-                }))
+									id: Object.keys(o)[0],
+									count: Object.values(o)[0],
+									reacted: comment.authUserReaction.includes(Object.keys(o)[0]),
+								}))
 
                 return (
                     <React.Fragment key={comment.id}>
