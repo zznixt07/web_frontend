@@ -3,7 +3,8 @@ export const randomInt = (min: number, max: number) => {
 }
 
 export const prettyDate = (time: string) => {
-	const date = new Date((time || '').replace(/-/g, '/').replace(/[TZ]/g, ' ')),
+	// const date = new Date((time || '').replace(/-/g, '/').replace(/[TZ]/g, ' ')),
+	const date = new Date(time || ''),
 		diff = (new Date().getTime() - date.getTime()) / 1000,
 		day_diff = Math.floor(diff / 86400)
 	const year = date.getFullYear(),

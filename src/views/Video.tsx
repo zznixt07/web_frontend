@@ -275,13 +275,22 @@ const RelatedVideos = () => {
 
 const Video = () => {
 	const params = useParams<{ id: string }>()
+	const videoId = params.id!
 	console.log(params)
+	const [sampleComments, setSampleComments] = React.useState<CommentProps[]>([])
+	React.useEffect(() => {
+		const fetchComments = async () => {
+			const fetchedComments = await axios.get('/comments/' + videoId)
+			setSampleComments(fetchedComments.data.comments)
+		}
+		fetchComments()
+	}, [videoId])
 	return (
 		<>
 			<NavBar />
 			<div>
 				<div style={{ display: 'grid', gridTemplateColumns: '70% 30%' }}>
-					<CurrentVideo videoId={params.id!} />
+					<CurrentVideo videoId={videoId} />
 					<RelatedVideos />
 				</div>
 				<section style={{ margin: '0.5rem' }}>
