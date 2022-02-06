@@ -1,19 +1,18 @@
-import { Formik, Field, ErrorMessage, FormikHelpers } from 'formik'
+import { Formik, Form, Field, ErrorMessage, FormikHelpers } from 'formik'
 import * as yup from 'yup'
 import styled from 'styled-components'
 
-const TextArea = styled.textarea`
+const TextAreaField = styled(Field)`
 	display: block;
 	width: 100%;
-	margin: 1rem 0;
 	padding: 0.5rem;
 	border-radius: 0.5rem;
 	box-shadow: 1px 1px 1px var(--surface3);
 `
 
-const CommentForm = styled.form`
+const CommentForm = styled(Form)`
 	margin: 2rem auto;
-	width: 95vw;
+	width: 100%;
 `
 
 const validationSchema = yup.object({
@@ -39,28 +38,28 @@ const CommentBox = ({ onComment }: any) => {
 		resetForm()
 	}
 	return (
-		<div>
-			<Formik
-				initialValues={defaultValues}
-				validationSchema={validationSchema}
-				onSubmit={onSubmit}
-			>
-				{({ isSubmitting }) => (
-					<CommentForm>
-						<Field
-							component={TextArea}
-							name='content'
-							placeholder='Write a Comment'
-							rows={7}
-						/>
-						<ErrorMessage name='content'></ErrorMessage>
-						<button disabled={isSubmitting} type='submit'>
-							Post Comment
-						</button>
-					</CommentForm>
-				)}
-			</Formik>
-		</div>
+		<Formik
+			initialValues={defaultValues}
+			validationSchema={validationSchema}
+			onSubmit={onSubmit}
+		>
+			{({ isSubmitting }) => (
+				<CommentForm>
+					<TextAreaField
+						component='textarea'
+						name='content'
+						placeholder='Write a Comment'
+						rows={7}
+					/>
+					<ErrorMessage name='content'>
+						{(msg) => <div>{msg}</div>}
+					</ErrorMessage>
+					<button disabled={isSubmitting} type='submit'>
+						Post Comment
+					</button>
+				</CommentForm>
+			)}
+		</Formik>
 	)
 }
 

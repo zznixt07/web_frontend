@@ -5,10 +5,10 @@ import styled from 'styled-components'
 import horiz from '../assets/vids/horizontal.mp4'
 import vert from '../assets/vids/vertical.mp4'
 import SubscribeButton from '../components/SubscribeButton'
-import AllComments, {CommentProps} from '../components/comment/CommentViewer'
+import AllComments, { CommentProps } from '../components/comment/CommentViewer'
 import NavBar from '../components/NavBar'
 import PopupModel, { PopupModelContainer } from '../components/PopupModel'
-import {PlaylistProps, AddToPaylistDialog} from 'components/AddToPlaylist'
+import { PlaylistProps, AddToPaylistDialog } from 'components/AddToPlaylist'
 
 import Like from '../assets/svg/LikeOutlined'
 import Liked from '../assets/svg/LikeFilled'
@@ -294,7 +294,9 @@ const Video = () => {
 					<RelatedVideos />
 				</div>
 				<section style={{ margin: '0.5rem' }}>
-					<AllComments pageUrl={videoId} comments={sampleComments} />
+					{sampleComments.length > 0 ? (
+						<AllComments pageUrl={videoId} comments={sampleComments} />
+					) : null}
 				</section>
 			</div>
 		</>

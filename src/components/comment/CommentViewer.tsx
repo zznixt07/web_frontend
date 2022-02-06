@@ -168,9 +168,12 @@ const AllComments = ({
 	comments: CommentProps[]
 }) => {
 	// const [nestedComments, setNestedComments] = useState([...comments]) // cannot use props directly in state
-	const [nestedComments, setNestedComments] =
-		React.useState<CommentProps[]>(comments)
+	const [nestedComments, setNestedComments] = React.useState<CommentProps[]>([
+		...comments,
+	])
 	// const flatComments: FlatComment[] = insertIndentAndflatten(nestedComments)
+	console.log('comments', comments)
+	console.log('nestedComments', nestedComments)
 	const flatComments: FlatComment[] = insertIndents(
 		nestedComments,
 		'id',
@@ -189,7 +192,7 @@ const AllComments = ({
 					// but its-not-a-bug-its-a-feature
 					setNestedComments((comms) => {
 						const updatedComms = [...comms]
-						updatedComms.splice(index + 1, 0, resp.data)
+						updatedComms.splice(0, 0, resp.data)
 						return updatedComms
 					})
 				}}
