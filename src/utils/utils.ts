@@ -35,11 +35,8 @@ export const prettyDate = (time: string) => {
 	return r
 }
 
-type ProbabilyIndentedComment = CommentProps & { indent?: number }
-type IndentedComment = CommentProps & { indent: number }
-type FlatComment = Omit<IndentedComment, 'children'>
 
-const insertIndents = (
+export const insertIndents = (
 	flattened: CommentProps[],
 	key: string,
 	parentKey: string
@@ -67,6 +64,10 @@ const insertIndents = (
 	})
 	return flattenedWithContext
 }
+
+// type ProbabilyIndentedComment = CommentProps & { indent?: number }
+// type IndentedComment = CommentProps & { indent: number }
+// type FlatComment = Omit<IndentedComment, 'children'>
 
 // const insertIndentAndflatten = (comms: CommentProps[]): FlatComment[] => {
 // 	const flattened: FlatComment[] = []

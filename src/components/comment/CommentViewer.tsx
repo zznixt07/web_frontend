@@ -3,6 +3,7 @@ import * as React from 'react'
 import SingleComment, { ReactionProp } from './SingleComment'
 import CommentBox from './CommentBox'
 import axios from 'axios'
+import { insertIndents } from '../../utils/utils'
 
 type CommentRequest = {
 	videoId: string
@@ -25,15 +26,15 @@ export const createComment = async (
 	return resp
 }
 
-const onReact = async (commentId, reaction, reactionRemoved) => {
+const onReact = async (commentId, reaction, removeReactionNow) => {
 	const payload = {
 		reaction: {
 			emoji: reaction,
-			value: reactionRemoved,
+			value: !removeReactionNow,
 		},
 	}
-	data = await axios.put('/comments/' + commentId, payload)
-	return data
+	const resp = await axios.put('/comments/' + commentId, payload)
+	return resp
 }
 
 const AllComments = ({
@@ -85,22 +86,21 @@ const AllComments = ({
 						<SingleComment
 							// TODO remove unrequired kwargs
 							id={comment.id}
-							reactionUpdateEndpoint={''}
 							author={comment.author}
 							content={comment.body}
 							datetime={comment.updatedOn}
-							wasEdited={false} // if mongoose, be careful with created=updated logic.
+							wasEdited={false} // if mongoose, be careful using created=updated logic.
 							nestLevel={2 * comment.indent}
 							replyIdSetter={setReplyId}
 							reactionsArr={reactions}
 							onReactAsync={async (
 								reactionId: string,
-								reactionRemoved: boolean
+								removeReaction: boolean
 							) => {
 								const resp = await onReact(
 									comment.id,
 									reactionId,
-									reactionRemoved
+									removeReaction
 								)
 								setNestedComments((cs: CommentProps[]) =>
 									cs.map((c: CommentProps, i) => {
@@ -111,7 +111,7 @@ const AllComments = ({
 										return c
 									})
 								)
-								return data
+								return resp.data.success
 							}}
 						/>
 						{comment.id === replyId ? (

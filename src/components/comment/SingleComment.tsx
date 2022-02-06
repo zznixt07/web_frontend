@@ -125,166 +125,147 @@ type ReactionItemProp = {
 }
 
 type CommentProp = {
-    id: string
-    author: {
-        name: string
-        channelLink: string
-        imageLink: string
-    }
-    content: string
-    datetime: string
-    wasEdited: boolean
-    nestLevel: number
-    replyIdSetter: any
-    reactionUpdateEndpoint: string
-    reactionsArr: any[]
-    onReactAsync: any
+	id: string
+	author: {
+		name: string
+		channelLink: string
+		imageLink: string
+	}
+	content: string
+	datetime: string
+	wasEdited: boolean
+	nestLevel: number
+	replyIdSetter: any
+	reactionsArr: any[]
+	onReactAsync: any
 }
 
 type ReactionProp = {
-    id: string
-    count: number
-    reacted: boolean
+	id: string
+	count: number
+	reacted: boolean
 }
 
 const ReactionItem = ({ emoji, count, reacted, onClick }: ReactionItemProp) => {
-    return (
-        <ReactionList
-            as='li'
-            reacted={reacted}
-            onClick={onClick}
-            data-id={emoji}
-        >
-            <div>{emoji}</div>
-            <div>{count}</div>
-        </ReactionList>
-    )
+	return (
+		<ReactionList as='li' reacted={reacted} onClick={onClick} data-id={emoji}>
+			<div>{emoji}</div>
+			<div>{count}</div>
+		</ReactionList>
+	)
 }
 
 const SingleComment = ({
-    id,
-    reactionUpdateEndpoint,
-    author,
-    content,
-    datetime,
-    wasEdited,
-    nestLevel,
-    replyIdSetter,
-    reactionsArr,
-    onReactAsync,
+	id,
+	author,
+	content,
+	datetime,
+	wasEdited,
+	nestLevel,
+	replyIdSetter,
+	reactionsArr,
+	onReactAsync,
 }: CommentProp) => {
-    const [reactions, setReactions] = React.useState(reactionsArr)
-    const [reactionUpdateUrl, setReactionUpdateUrl] = React.useState(reactionUpdateEndpoint)
+	const [reactions, setReactions] = React.useState(reactionsArr)
 
-    const reactionClicked = async (reaction: any) => {
-        const recs = []
-        for (const r of reactions) {
-            if (r.id === reaction.id) {
-                // setLoadingIndicator(reactionId, true)
-                const reactionRemoved = !!r.reacted
+	const reactionClicked = async (reaction: any) => {
+		const recs = []
+		for (const r of reactions) {
+			if (r.id === reaction.id) {
+				// setLoadingIndicator(reactionId, true)
+				const removeReactionNow = r.reacted
 
-                const [data, createdUrl] = await onReactAsync(r.id, reactionRemoved)
-                if (!reactionUpdateUrl) {
-                    // if the POST succeeded, then we now know the PATCH url.
-                    // if failed, will be null which is what we want.
-                    setReactionUpdateUrl(createdUrl)
-                }
+				const success = await onReactAsync(r.id, removeReactionNow)
 
-                // setLoadingIndicator(reactionId, false)
-                if (data.error) {
-                    // showToast('failed')
-                } else {
-                    if (reactionRemoved) {
-                        r.count--
-                    } else {
-                        r.count++
-                    }
-                    r.reacted = !r.reacted
-                }
-            }
-            recs.push(r)
-        }
-        setReactions(recs)
-    }
+				// setLoadingIndicator(reactionId, false)
+				if (!success) {
+					// showToast('failed')
+				} else {
+					if (removeReactionNow) {
+						r.count--
+					} else {
+						r.count++
+					}
+					r.reacted = !r.reacted
+				}
+			}
+			recs.push(r)
+		}
+		setReactions(recs)
+	}
 
-    const AddReaction = ({ hiddenReactions }: any) => {
-        // console.log({ hiddenReactions })
-        return (
-            <>
-                <AddEmoji>
-                    ✨
-                    <EmojiChooser>
-                        {hiddenReactions.map((r: any) => (
-                            <PopupEmoji
-                                key={r.id}
-                                onClick={async () => await reactionClicked(r)}
-                            >
-                                {r.id}
-                            </PopupEmoji>
-                        ))}
-                    </EmojiChooser>
-                </AddEmoji>
-            </>
-        )
-    }
-    const unusedReactions = reactions.filter((r) => r.count === 0)
-    return (
-        <CommentContainer indent={nestLevel} data-id={id} id={id}>
-            <CommentHead>
-                <Author>
-                    <AuthorImage src={author.imageLink} width="32" height="32" />
-                    {<a href={author.channelLink}>{author.name}</a>}
-                    <span className='date'>
-                        {new Date(datetime).toLocaleString()}
-                    </span>
-                    {wasEdited ? (
-                        <span>
-                            <i>{'edited'}</i>
-                        </span>
-                    ) : null}
-                </Author>
-                <Options>
-                    <button>...</button>
-                </Options>
-            </CommentHead>
-            <CommentText>{content}</CommentText>
-            <CommentBottomAction>
-                <CommentAction>
-                    <Reaction as='ul'>
-                        {reactions.map((reaction) => {
-                            return reaction.count ? (
-                                <ReactionItem
-                                    key={reaction.id}
-                                    emoji={reaction.id}
-                                    count={reaction.count}
-                                    reacted={reaction.reacted}
-                                    onClick={async () =>
-                                        await reactionClicked(reaction)
-                                    }
-                                />
-                            ) : null
-                        })}
-                        <li>
-                            {unusedReactions.length > 0 ? (
-                                <AddReaction
-                                    hiddenReactions={unusedReactions}
-                                />
-                            ) : null}
-                        </li>
-                    </Reaction>
-                    <div className='reply'>
-                        <button
-                            // variant='outlined'
-                            onClick={() => replyIdSetter(id)}
-                        >
-                            Reply
-                        </button>
-                    </div>
-                </CommentAction>
-                <div className='expand-collapse'>Collapse</div>
-            </CommentBottomAction>
-        </CommentContainer>
-    )
+	const AddReaction = ({ hiddenReactions }: any) => {
+		// console.log({ hiddenReactions })
+		return (
+			<>
+				<AddEmoji>
+					✨
+					<EmojiChooser>
+						{hiddenReactions.map((r: any) => (
+							<PopupEmoji
+								key={r.id}
+								onClick={async () => await reactionClicked(r)}
+							>
+								{r.id}
+							</PopupEmoji>
+						))}
+					</EmojiChooser>
+				</AddEmoji>
+			</>
+		)
+	}
+	const unusedReactions = reactions.filter((r) => r.count === 0)
+	return (
+		<CommentContainer indent={nestLevel} data-id={id} id={id}>
+			<CommentHead>
+				<Author>
+					<AuthorImage src={author.imageLink} width='32' height='32' />
+					{<a href={author.channelLink}>{author.name}</a>}
+					<span className='date'>{new Date(datetime).toLocaleString()}</span>
+					{wasEdited ? (
+						<span>
+							<i>{'edited'}</i>
+						</span>
+					) : null}
+				</Author>
+				<Options>
+					<button>...</button>
+				</Options>
+			</CommentHead>
+			<CommentText>{content}</CommentText>
+			<CommentBottomAction>
+				<CommentAction>
+					<Reaction as='ul'>
+						{reactions.map((reaction) => {
+							return reaction.count ? (
+								<ReactionItem
+									key={reaction.id}
+									emoji={reaction.id}
+									count={reaction.count}
+									reacted={reaction.reacted}
+									onClick={async () => await reactionClicked(reaction)}
+								/>
+							) : null
+						})}
+						<li>
+							{unusedReactions.length > 0 ? (
+								<AddReaction hiddenReactions={unusedReactions} />
+							) : null}
+						</li>
+					</Reaction>
+					<div className='reply'>
+						<button
+							// variant='outlined'
+							onClick={() => replyIdSetter(id)}
+						>
+							Reply
+						</button>
+					</div>
+				</CommentAction>
+				<div className='expand-collapse'>Collapse</div>
+			</CommentBottomAction>
+		</CommentContainer>
+	)
 }
 
 export default SingleComment
