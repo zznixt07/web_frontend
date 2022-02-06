@@ -164,7 +164,7 @@ const VideoCard = ({ video, cardFlow = 'column' }: any) => {
 					</ChannelInfo>
 					<VideoInfo justify='flex-start' $wrap='wrap'>
 						<span>{video.views} views</span>
-						<span>{prettyDate(video.uploaded)}</span>
+						<span>{prettyDate(video.published)}</span>
 					</VideoInfo>
 				</Info>
 			</div>

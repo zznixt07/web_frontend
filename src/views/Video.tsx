@@ -2,10 +2,8 @@ import * as React from 'react'
 import { Flex, Grid } from '../components/Structure'
 import VideoCard from '../components/VideoCard'
 import styled from 'styled-components'
-import horiz from '../assets/vids/horizontal.mp4'
-import vert from '../assets/vids/vertical.mp4'
 import SubscribeButton from '../components/SubscribeButton'
-import AllComments, { CommentProps } from '../components/comment/CommentViewer'
+import AllComments from '../components/comment/CommentViewer'
 import NavBar from '../components/NavBar'
 import PopupModel, { PopupModelContainer } from '../components/PopupModel'
 import { PlaylistProps, AddToPaylistDialog } from 'components/AddToPlaylist'
@@ -18,28 +16,12 @@ import Share from '../assets/svg/Share'
 import AddToPlaylist from '../assets/svg/PlaylistAdd'
 import Flag from '../assets/svg/FlagOutlined'
 
-import img1 from '../assets/imgs/(1).jpg'
-import img2 from '../assets/imgs/(2).jpg'
-import img3 from '../assets/imgs/(3).jpg'
-import img4 from '../assets/imgs/(4).jpg'
-import img5 from '../assets/imgs/(5).jpg'
-import img6 from '../assets/imgs/(6).jpg'
-import img7 from '../assets/imgs/(7).jpg'
-import img8 from '../assets/imgs/(8).jpg'
 import { provide } from '../components/Provider'
 import { Link, useParams } from 'react-router-dom'
 import axios from 'axios'
-import { VideoDetailResponse } from 'types/video'
+import { VideoCardProps, VideoDetailResponse } from 'types/video'
 import Player from 'components/Player'
-
-const thumbs = [img1, img2, img3, img4, img5, img6, img7, img8]
-const randomName = (): string => {
-	const names = [
-		'10 hour meme song loop',
-		'Amogus night 3am SUS challenge. OMG!!! Pranking ghost in the after life. Family vlogs video insert text 1 inster line five.',
-	]
-	return names[Math.floor(Math.random() * names.length)]
-}
+import { CommentProps } from 'types/comment'
 
 const ActionButton = styled(Flex)`
 	cursor: pointer;
@@ -77,9 +59,6 @@ const MoreLessBtn = styled.span`
 	cursor: pointer;
 	margin: 0.5rem 0;
 `
-
-const sampledesc =
-	'This is the greatest description of all time. Lorem ipsum dolor sit amet consectetur adipisicing, elit. Ducimus, saepe incidunt fugiat consequuntur sequi error a debitis cupiditate distinctio harum at magnam reprehenderit id omnis ipsa nam quisquam nisi nihil. Lorem ipsum dolor sit amet consectetur adipisicing, elit. Ducimus, saepe incidunt fugiat consequuntur sequi error a debitis cupiditate distinctio harum at magnam reprehenderit id omnis ipsa nam quisquam nisi nihil. Lorem ipsum dolor sit amet consectetur adipisicing, elit. Ducimus, saepe incidunt fugiat consequuntur sequi error a debitis cupiditate distinctio harum at magnam reprehenderit id omnis ipsa nam quisquam nisi nihil. Lorem ipsum dolor sit amet consectetur adipisicing, elit. Ducimus, saepe incidunt fugiat consequuntur sequi error a debitis cupiditate distinctio harum at magnam reprehenderit id omnis ipsa nam quisquam nisi nihil. Lorem ipsum dolor sit amet consectetur adipisicing, elit. Ducimus, saepe incidunt fugiat consequuntur sequi error a debitis cupiditate distinctio harum at magnam reprehenderit id omnis ipsa nam quisquam nisi nihil.Lorem ipsum dolor sit amet consectetur adipisicing, elit. Ducimus, saepe incidunt fugiat consequuntur sequi error a debitis cupiditate distinctio harum at magnam reprehenderit id omnis ipsa nam quisquam nisi nihil.Lorem ipsum dolor sit amet consectetur adipisicing, elit. Ducimus, saepe incidunt fugiat consequuntur sequi error a debitis cupiditate distinctio harum at magnam reprehenderit id omnis ipsa nam quisquam nisi nihil.Lorem ipsum dolor sit amet consectetur adipisicing, elit. Ducimus, saepe incidunt fugiat consequuntur sequi error a debitis cupiditate distinctio harum at magnam reprehenderit id omnis ipsa nam quisquam nisi nihil.Lorem ipsum dolor sit amet consectetur adipisicing, elit. Ducimus, saepe incidunt fugiat consequuntur sequi error a debitis cupiditate distinctio harum at magnam reprehenderit id omnis ipsa nam quisquam nisi nihil.Lorem ipsum dolor sit amet consectetur adipisicing, elit. Ducimus, saepe incidunt fugiat consequuntur sequi error a debitis cupiditate distinctio harum at magnam reprehenderit id omnis ipsa nam quisquam nisi nihil.Lorem ipsum dolor sit amet consectetur adipisicing, elit. Ducimus, saepe incidunt fugiat consequuntur sequi error a debitis cupiditate distinctio harum at magnam reprehenderit id omnis ipsa nam quisquam nisi nihil.Lorem ipsum dolor sit amet consectetur adipisicing, elit. Ducimus, saepe incidunt fugiat consequuntur sequi error a debitis cupiditate distinctio harum at magnam reprehenderit id omnis ipsa nam quisquam nisi nihil.Lorem ipsum dolor sit amet consectetur adipisicing, elit. Ducimus, saepe incidunt fugiat consequuntur sequi error a debitis cupiditate distinctio harum at magnam reprehenderit id omnis ipsa nam quisquam nisi nihil.'
 
 const playlists: PlaylistProps[] = [
 	{
@@ -251,21 +230,31 @@ const CurrentVideo = ({ videoId }: CurrentVideoProps) => {
 }
 
 const RelatedVideos = () => {
+	const [videos, setVideos] = React.useState<VideoCardProps[]>([])
+	React.useEffect(() => {
+		const fetchData = async () => {
+			const response = await axios.get('/videos')
+			setVideos(response.data)
+		}
+		fetchData()
+	}, [])
 	return (
 		<Related>
 			<Grid maxColumns={1} itemBaseWidth='350px' gap='1rem'>
-				{thumbs.map((i, j) => (
+				{videos.map((video) => (
 					<VideoCard
-						key={j}
+						key={video.id}
 						video={{
-							thumbSrc: i,
-							title: randomName(),
-							views: '1.2M',
-							channel: randomName(),
-							durationSecs: 101,
-							isLive: false,
+							id: video.id,
+							thumbSrc: video.thumbnail,
+							title: video.title,
+							views: video.viewCount,
+							channel: video.channel,
+							published: video.published,
+							durationSecs: video.duration,
+							isLive: video.isLive,
 						}}
-						cardFlow='row'
+						cardFlow={'row'}
 					/>
 				))}
 			</Grid>

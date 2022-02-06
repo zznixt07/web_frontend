@@ -1,3 +1,5 @@
+import { CommentProps } from 'types/comment'
+
 export const randomInt = (min: number, max: number) => {
 	return Math.floor(Math.random() * (max - min + 1)) + min
 }
@@ -32,3 +34,79 @@ export const prettyDate = (time: string) => {
 		(day_diff < 31 && Math.ceil(day_diff / 7) + ' weeks ago')
 	return r
 }
+
+type ProbabilyIndentedComment = CommentProps & { indent?: number }
+type IndentedComment = CommentProps & { indent: number }
+type FlatComment = Omit<IndentedComment, 'children'>
+
+const insertIndents = (
+	flattened: CommentProps[],
+	key: string,
+	parentKey: string
+) => {
+	let MAX_DEPTH = 100
+	const context: any = {}
+	// @ts-ignore
+	flattened.forEach((item) => (context[item[key]] = item[parentKey]))
+
+	const flattenedWithContext: any[] = []
+	flattened.forEach((item) => {
+		// @ts-ignore
+		let id = item[key]
+		let indent = 0
+		while (true) {
+			// even if parent key is not present, below will break the loop.
+			if (!context[id]) break
+			indent++
+			id = context[id]
+			if (indent > MAX_DEPTH) break
+		}
+		// @ts-ignore
+		item.indent = indent
+		flattenedWithContext.push(item)
+	})
+	return flattenedWithContext
+}
+
+// const insertIndentAndflatten = (comms: CommentProps[]): FlatComment[] => {
+// 	const flattened: FlatComment[] = []
+// 	const nextSiblingsLeft: CommentProps[] = []
+// 	let arr = [...comms]
+// 	let indent: number = 0
+// 	while (true) {
+// 		let broken = false
+// 		for (let i = 0; i < arr.length; i++) {
+// 			const item: ProbabilyIndentedComment = arr[i]
+// 			const { children, ...rest } = item
+// 			const indentValue =
+// 				item.hasOwnProperty('indent') && item.indent !== undefined
+// 					? item.indent
+// 					: indent
+// 			flattened.push({ ...rest, indent: indentValue })
+// 			if (children.length === 0) {
+// 				// # if no children, either go to item's next sibling or remaining siblings
+// 				continue
+// 			}
+// 			// # if item has children, then keep track of the next sibling.
+// 			// # if item was the last element then nothing to track. check for index error
+// 			if (i + 1 < arr.length) {
+// 				const sibling: ProbabilyIndentedComment = arr[i + 1]
+// 				sibling.indent = indent
+// 				nextSiblingsLeft.push(sibling)
+// 			}
+
+// 			// # prepare to iterate on children instead by breaking out.
+// 			indent++
+// 			arr = children
+// 			broken = true
+// 			break
+// 		}
+// 		if (!broken) {
+// 			indent--
+// 			const lastItem: CommentProps | undefined = nextSiblingsLeft.pop()
+// 			if (lastItem === undefined) break
+// 			arr = [lastItem]
+// 		}
+// 	}
+// 	return flattened
+// }

@@ -4,28 +4,28 @@ export type Channel = {
 	pp: string
 }
 
-export interface VideoCard {
+export interface VideoCardProps {
 	id: string
 	title: string
-	description: string
-	duration: number
 	viewCount: number
-	created: Date
-	published: Date | null
+	thumbnail: string
+	duration: number
+	published: Date
+	isLive: boolean
+	channel: string
 	categories: string[]
 }
 
-export interface VideoDetail extends VideoCard {
+export interface VideoDetail extends VideoCardProps {
+	description: string
 	path: string
 	likes: number
 	dislikes: number
-	comments: any[]
-	isLive: boolean
 	isOwnerViewing: boolean
 }
 
 export type VideoDetailResponse = {
 	elements: any[]
 	channel: Channel
-	video: VideoDetail
+	video: Omit<VideoDetail, 'thumbnail' | 'channel'>
 }
