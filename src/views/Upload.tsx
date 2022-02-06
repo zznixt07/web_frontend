@@ -6,14 +6,10 @@ import { Formik, Form, Field, ErrorMessage, FormikHelpers } from 'formik'
 import * as Yup from 'yup'
 import { Flex, Grid } from 'components/Structure'
 import AspectRatioImg, { ResponsiveImg } from 'components/AspectRatioImg'
-
-import horiz from 'assets/vids/horizontal.mp4'
 import AddImageRawSVG from 'assets/svg/BxBxsImageAdd.svg'
 
 import UploadSVG from 'assets/svg/UiwUpload'
-import img1 from 'assets/imgs/(6).jpg'
-import img2 from 'assets/imgs/(7).jpg'
-import img3 from 'assets/imgs/(8).jpg'
+
 import Player from 'components/Player'
 import getFramesData from 'utils/getFrames'
 import { HTMLPlyrVideoElement } from 'plyr-react'
@@ -338,7 +334,7 @@ const DraftVideo = ({ file }: { file: File }) => {
 		formData.append('duration', `${duration}`)
 		console.log(duration)
 
-		const response = await axios.post('/video', formData, {
+		const response = await axios.post('/videos', formData, {
 			onUploadProgress: (progressEvent) => {
 				const percentCompleted = Math.round(
 					(progressEvent.loaded * 100) / progressEvent.total

@@ -131,18 +131,37 @@ const CurrentVideo = ({ videoId }: CurrentVideoProps) => {
 		fetchVideoInfo()
 	}, [videoId])
 
-	const handleLike = () => {
+	const [perception, setPerception] = React.useState<boolean | null>(null)
+	React.useEffect(() => {
+		if (isLiked) {
+			setPerception(true)
+		}
+		if (isDisLiked) {
+			setPerception(false)
+		}
+		if (isLiked === isDisLiked) {
+			setPerception(null)
+		}
+	}, [isLiked, isDisLiked])
+
+	const handleLike = async () => {
 		// in backend set a field called
 		// `perception`: true(like) | false(dislike) | null(neither liked nor disliked.)
 		setIsLiked((s) => {
 			if (!s === isDisLiked && !s === true) setIsDisLiked(s)
 			return !s
 		})
+		const resp = await axios.post('/videos/actions/' + videoId, {
+			likes: isLiked,
+		})
 	}
-	const handleDisLike = () => {
+	const handleDisLike = async () => {
 		setIsDisLiked((s) => {
 			if (!s === isLiked && !s === true) setIsLiked(s)
 			return !s
+		})
+		const resp = await axios.post('/videos/actions/' + videoId, {
+			dislikes: isDisLiked,
 		})
 	}
 
@@ -182,11 +201,11 @@ const CurrentVideo = ({ videoId }: CurrentVideoProps) => {
 				<Flex justify='flex-start' gap='1rem'>
 					<ActionButton onClick={handleLike}>
 						{isLiked ? <Liked /> : <Like />}
-						{videoInfo.video.likes}
+						{videoInfo.video.likes + (isLiked ? 1 : 0)}
 					</ActionButton>
 					<ActionButton onClick={handleDisLike}>
 						{isDisLiked ? <DisLiked /> : <DisLike />}
-						{videoInfo.video.dislikes}
+						{videoInfo.video.dislikes + (isDisLiked ? 1 : 0)}
 					</ActionButton>
 					<ActionButton>
 						<Share />
