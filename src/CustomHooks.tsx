@@ -42,6 +42,7 @@ const useInterval = (
 	return intervalRef
 }
 
+// sauce: https://www.joshwcomeau.com/snippets/react-hooks/use-prefers-reduced-motion/
 const QUERY = '(prefers-reduced-motion: no-preference)'
 const isRenderingOnServer = typeof window === 'undefined'
 const getInitialState = () => {
@@ -76,4 +77,4 @@ const usePrefersReducedMotion = () => {
 	return prefersReducedMotion
 }
 
-export { useTimeout, useInterval. usePrefersReducedMotion }
+export { useTimeout, useInterval, usePrefersReducedMotion }
