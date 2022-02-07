@@ -218,6 +218,9 @@ a {
 
 input {
   width: inherit;
+  padding: 0.3rem;
+  border-radius: 0.3rem;
+  border: none;
 }
 
 #root {
