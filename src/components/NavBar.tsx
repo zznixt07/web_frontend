@@ -5,6 +5,7 @@ import { Flex } from './Structure'
 import logo from '../logo.svg'
 import FeatherMenu from '../assets/svg/FeatherMenu'
 import FeatherBell from '../assets/svg/FeatherBell'
+import MyButton from './MyButton'
 
 type ProfileProps = {
 	avatar: string
@@ -61,7 +62,9 @@ const NavBar = () => {
 				<Search />
 			</section>
 			<Flex as='section'>
-				<Link to='/upload'>Upload</Link>
+				<Link to='/upload'>
+					<MyButton>Upload</MyButton>
+				</Link>
 				<FeatherBell />
 				{isLoggedIn ? <Profile avatar={''} /> : <Login />}
 			</Flex>

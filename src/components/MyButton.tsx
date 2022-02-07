@@ -85,3 +85,5 @@ const MyButton = (props: ReactProp) => {
 		</Pushable>
 	)
 }
+
+export default MyButton
