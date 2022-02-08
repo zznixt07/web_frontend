@@ -6,6 +6,8 @@ import logo from '../logo.svg'
 import FeatherMenu from '../assets/svg/FeatherMenu'
 import FeatherBell from '../assets/svg/FeatherBell'
 import MyButton from './MyButton'
+import { useBoop } from 'AnimationHooks'
+import { animated } from '@react-spring/web'
 
 type ProfileProps = {
 	avatar: string
@@ -19,13 +21,14 @@ const Profile = React.memo(({ avatar }: ProfileProps): JSX.Element => {
 	)
 })
 
-const Search = (): JSX.Element => {
+const Search = () => {
+	const [style, trigger] = useBoop({ y: 2 })
 	return (
 		<Flex>
 			<input type='text' placeholder='Search...' />
-			<div>
+			<animated.div onMouseEnter={trigger} style={style}>
 				<button>Search</button>
-			</div>
+			</animated.div>
 		</Flex>
 	)
 }

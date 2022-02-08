@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { useSpring } from '@react-spring/web'
+import { SpringValue, useSpring } from '@react-spring/web'
 import { usePrefersReducedMotion } from './CustomHooks'
 
 // sauce: https://www.joshwcomeau.com/snippets/react-hooks/use-boop/
@@ -13,7 +13,7 @@ const useBoop = ({
 		tension: 300,
 		friction: 10,
 	},
-}) => {
+}): [{ transform?: SpringValue<string> }, () => void] => {
 	const prefersReducedMotion = usePrefersReducedMotion()
 	const [isBooped, setIsBooped] = React.useState(false)
 	const style = useSpring({
