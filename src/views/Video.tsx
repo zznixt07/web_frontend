@@ -22,6 +22,7 @@ import axios from 'axios'
 import { VideoCardProps, VideoDetailResponse } from 'types/video'
 import Player from 'components/Player'
 import { CommentProps } from 'types/comment'
+import { useMediaQuery } from 'CustomHooks'
 
 const ActionButton = styled(Flex)`
 	cursor: pointer;
@@ -274,6 +275,7 @@ const RelatedVideos = () => {
 							isLive: video.isLive,
 						}}
 						cardFlow={'row'}
+						style={{ maxHeight: '100px' }}
 					/>
 				))}
 			</Grid>
@@ -284,7 +286,7 @@ const RelatedVideos = () => {
 const Video = () => {
 	const params = useParams<{ id: string }>()
 	const videoId = params.id!
-	console.log(params)
+	const isSmall = useMediaQuery('(max-width: 950px)')
 	const [sampleComments, setSampleComments] = React.useState<CommentProps[]>([])
 	React.useEffect(() => {
 		const fetchComments = async () => {
@@ -297,7 +299,12 @@ const Video = () => {
 		<>
 			<NavBar />
 			<div>
-				<div style={{ display: 'grid', gridTemplateColumns: '70% 30%' }}>
+				<div
+					style={{
+						display: 'grid',
+						gridTemplateColumns: isSmall ? '1fr' : '7fr 3fr',
+					}}
+				>
 					<CurrentVideo videoId={videoId} />
 					<RelatedVideos />
 				</div>

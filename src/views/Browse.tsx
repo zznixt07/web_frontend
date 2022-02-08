@@ -14,7 +14,7 @@ const Browse = ({ cardFlow = 'column' }: any) => {
 		fetchData()
 	}, [])
 	return (
-		<Grid maxColumns={10} itemBaseWidth='350px' gap='0.2rem'>
+		<Grid maxColumns={10} itemBaseWidth='310px' gap='0.2rem' fill='auto-fill'>
 			{videos.map((video) => (
 				<VideoCard
 					key={video.id}
@@ -28,6 +28,7 @@ const Browse = ({ cardFlow = 'column' }: any) => {
 						durationSecs: video.duration,
 						isLive: video.isLive,
 					}}
+					// style={{ height: '310px' }}
 					cardFlow={cardFlow}
 				/>
 			))}

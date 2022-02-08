@@ -179,15 +179,16 @@ body {
 }
 
 button {
-  /* background-color: transparent; */
-  /* font-family: inherit;
+  background-color: var(--surface3);
+  font-family: inherit;
   font-size: inherit;
   font-style: inherit;
   font-weight: inherit;
-  line-height: inherit; */
-  /* padding: 0.1 0.5rem; */
-  /* border-radius: 0.3rem; */
-  /* border-width: 0; */
+  line-height: inherit;
+  padding: 0.3rem 0.8rem;
+  border-radius: 0.3rem;
+  border-width: 0;
+  /* outline: 1px solid var(--text2); */
 }
 
 a {

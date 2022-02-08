@@ -10,9 +10,15 @@ const MyCard = styled(Flex)`
 	padding: 0.3rem;
 	position: relative;
 	border-radius: 0.3rem;
+	box-shadow: 0 0 3px 2px var(--surface1);
+	transition: transform 0.2s ease-in-out;
 	&:hover {
-		box-shadow: 0 0 0.5rem 0 var(--surface4);
+		box-shadow: 0 0 0.5rem 0 var(--surface2);
+		transition: transform 0.4s ease-in-out;
+		transform: translateY(0.2rem);
 	}
+	// aspect-ratio: 16 / 13;
+	// max-width: 210px;
 `
 
 // this anchor tag covers whole card. Which means the text inside the card are
@@ -92,7 +98,7 @@ const Thumbnail = ({
 }: ThumbProp): JSX.Element => {
 	return (
 		<Thumb>
-			<ThumbImage loading='lazy' src={src} width='350' height='200' />
+			<ThumbImage loading='lazy' src={src} width='350' height='170' />
 			<LenIndicator>
 				{isLive ? (
 					<>
@@ -121,13 +127,16 @@ const secToHumanReadable = (seconds: number): string => {
 }
 
 const VideoCard = ({ video, cardFlow = 'column' }: any) => {
+	console.log(video.published)
+	console.log(prettyDate(video.published))
 	return (
 		/*position: relative for capturing CardLink's position: absolute*/
+
 		<MyCard
 			$direction={cardFlow}
 			align='flex-start'
 			justify='flex-start'
-			$wrap='wrap'
+			// $wrap='wrap'
 		>
 			{/* If content jumps set aspect-ratio on videocard*/}
 			<CardLink href={`/videos/${video.id}`} style={{ flex: '1 1 40px' }}>
@@ -139,7 +148,14 @@ const VideoCard = ({ video, cardFlow = 'column' }: any) => {
 				/>
 			</CardLink>
 			{/* width is needed for truncate and stop overflow */}
-			<div style={{ maxWidth: '100%', minWidth: '0', flex: '1 1 100px' }}>
+			<div
+				style={{
+					maxWidth: '100%',
+					minWidth: '0',
+					flex: '1 1 100px',
+					width: '100%',
+				}}
+			>
 				<Flex justify='space-between' $wrap='nowrap' align='baseline'>
 					<VideoTitle>{video.title}</VideoTitle>
 					<MiOptionsVertical style={{ flexShrink: '0' }} />

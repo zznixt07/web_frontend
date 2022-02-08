@@ -1,6 +1,20 @@
 import styled from 'styled-components'
 import { ReactProp } from 'types/ReactProp'
 
+
+const Front = styled.span`
+	display: block;
+	position: relative;
+	padding: 4px 28px;
+	border-radius: 12px;
+	font-size: 1.25rem;
+	color: white;
+	background: hsl(345deg 100% 47%);
+	will-change: transform;
+	transform: translateY(-4px);
+	transition: transform 600ms cubic-bezier(0.3, 0.7, 0.4, 1);
+`
+
 const Shadow = styled.span`
 	position: absolute;
 	top: 0;
@@ -30,18 +44,6 @@ const Edge = styled.span`
 	);
 `
 
-const Front = styled.span`
-	display: block;
-	position: relative;
-	padding: 12px 42px;
-	border-radius: 12px;
-	font-size: 1.25rem;
-	color: white;
-	background: hsl(345deg 100% 47%);
-	will-change: transform;
-	transform: translateY(-4px);
-	transition: transform 600ms cubic-bezier(0.3, 0.7, 0.4, 1);
-`
 
 const Pushable = styled.button`
 	position: relative;

@@ -64,7 +64,7 @@ const NavBar = () => {
 			<section>
 				<Search />
 			</section>
-			<Flex as='section'>
+			<Flex as='section' gap='1rem'>
 				<Link to='/upload'>
 					<MyButton>Upload</MyButton>
 				</Link>
