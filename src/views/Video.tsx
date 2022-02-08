@@ -103,7 +103,7 @@ const Description = (props: { children?: React.ReactNode }) => {
 }
 
 const MemoizedPlayer = React.memo(({ src }: any) => (
-	<Player src={src} width='1200' height='600' />
+	<Player muted={false} src={src} width='1200' height='600' />
 ))
 
 type CurrentVideoProps = {
@@ -301,6 +301,7 @@ const Video = () => {
 			<div>
 				<div
 					style={{
+						padding: '1rem',
 						display: 'grid',
 						gridTemplateColumns: isSmall ? '1fr' : '7fr 3fr',
 					}}
@@ -309,9 +310,7 @@ const Video = () => {
 					<RelatedVideos />
 				</div>
 				<section style={{ margin: '0.5rem' }}>
-					{sampleComments.length > 0 ? (
-						<AllComments pageUrl={videoId} comments={sampleComments} />
-					) : null}
+					<AllComments pageUrl={videoId} comments={sampleComments} />
 				</section>
 			</div>
 		</>

@@ -12,14 +12,16 @@ type PlayerProps = {
 
 const OPTIONS = {
 	controls: [
-		'play',
+		// 'play',
 		'play-large',
 		'progress',
 		'settings',
 		'current-time',
 		'fullscreen',
+		'mute',
+		'volume',
 	],
-	// settings: ["captions", "quality", "loop"],
+	// settings: ['captions', 'quality', 'loop'],
 	disableContextMenu: true,
 	// resetOnEnd: true,
 	tooltips: { controls: true, seek: true },

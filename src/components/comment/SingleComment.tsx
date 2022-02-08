@@ -9,119 +9,126 @@ const FlexWrapAlign = styled(Flex)`
 `
 
 const GeneralCommentContainer = styled.div`
-    border: 1px solid #eae6e6;
-    padding: 1rem 0.8rem;
-    border-radius: 0.4rem;
-    margin: 0.3rem 0;
+	// border: 1px solid #eae6e6;
+	background-color: var(--surface2);
+	padding: 1rem 0.8rem;
+	border-radius: 1.4rem;
+	margin: 0.6rem 0;
 `
 
-const CommentContainer = styled(GeneralCommentContainer)<{indent: number}>`
-    margin-left: ${(props) => props.indent + 'rem'};
+const CommentContainer = styled(GeneralCommentContainer)<{ indent: number }>`
+	margin-left: ${(props) => props.indent + 'rem'};
 `
 
 const CommentHead = styled(FlexWrapAlign)`
-    justify-content: space-between;
+	justify-content: space-between;
 `
 
 const Author = styled(FlexWrapAlign)`
-    gap: 0.4rem;
-    flex: 1 1 0;
-    & > ::before {
-        content: '· ';
-    }
-    span:first-of-type::before {
-        content: '';
-    }
+	font-weight: 400;
+	gap: 0.4rem;
+	flex: 1 1 0;
+	& > ::before {
+		content: '· ';
+	}
+	span:first-of-type::before {
+		content: '';
+	}
+	.date {
+		color: var(--text2);
+		font-size: 0.82em;
+	}
 `
 
-const Options = styled.div``
+const Options = styled.button`
+	border-radius: 0 50% 0 0;
+`
 
 const AuthorImage = styled.img`
-    object-fit: cover;
-    border-radius: 50%;
+	object-fit: cover;
+	border-radius: 50%;
 `
 
 const CommentText = styled.div`
-    margin: 0.4rem 0.2rem 0.6rem 0.2rem;
+	margin: 0.4rem 0.2rem 0.6rem 0.2rem;
 `
 
 const CommentBottomAction = styled(FlexWrapAlign)`
-    justify-content: space-between;
-    margin: 0.3rem;
+	justify-content: space-between;
+	margin: 0.3rem;
 `
 
 const CommentAction = styled(FlexWrapAlign)`
-    gap: 1rem;
+	gap: 1rem;
 `
 
 const Reaction = styled(FlexWrapAlign)`
-    position: relative;
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
+	position: relative;
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
 `
 
-const ReactionList = styled(FlexWrapAlign)<{reacted?: boolean}>`
-    gap: 0.2rem;
-    cursor: pointer;
-    padding: 0.1rem 0.4rem;
-    border: 1px solid black;
-    border-radius: 1rem;
-    &::selection,
-    & *::selection {
-        background: #ffffff00;
-    }
-    &::-moz-selection,
-    & *::-moz-selection {
-        background: #ffffff00;
-    }
-    &:hover {
-        background-color: #6c9ae227;
-    }
-    ${(props) =>
-        props.reacted &&
-        css`
-            background-color: #6c9ae247;
-            color: blue;
-        `}
+const ReactionList = styled(FlexWrapAlign)<{ reacted?: boolean }>`
+	gap: 0.2rem;
+	cursor: pointer;
+	padding: 0.1rem 0.4rem;
+	outline: 1px solid var(--surface4);
+	border-radius: 1rem;
+	&::selection,
+	& *::selection {
+		background: #ffffff00;
+	}
+	&::-moz-selection,
+	& *::-moz-selection {
+		background: #ffffff00;
+	}
+	&:hover {
+		background-color: #6c9ae227;
+	}
+	${(props) =>
+		props.reacted &&
+		css`
+			background-color: #6c9ae247;
+		`}
 `
 
 const EmojiChooser = styled.div`
-    display: none;
-    font-size: 1.2rem;
-    position: absolute;
-    top: -200%;
-    left: -5px;
-    gap: 0.2rem;
-    outline: 2px solid #c47d1e;
-    border-radius: 0.6rem;
-    padding: 0.2rem;
-    z-index: 1;
+	display: none;
+	font-size: 1.2rem;
+	position: absolute;
+	top: -200%;
+	left: -5px;
+	gap: 0.2rem;
+	outline: 2px solid #c47d1e;
+	border-radius: 0.6rem;
+	padding: 0.2rem;
+	z-index: 1;
 `
 
 const AddEmoji = styled.span`
-    position: relative;
-    cursor: pointer;
-    &:hover > ${EmojiChooser} {
-        display: flex;
-    }
+	position: relative;
+	cursor: pointer;
+	&:hover > ${EmojiChooser} {
+		display: flex;
+	}
 `
 
 const PopupEmoji = styled.span`
-    padding: 0.2rem;
-    border-radius: 1rem;
-    &:hover {
-        background-color: #d8dfea;
-        outline: 1px solid;
-        cursor: pointer;
-    }
+	padding: 0.2rem;
+	border-radius: 1rem;
+	&:hover {
+		background-color: #d8dfea;
+		outline: 1px solid;
+		cursor: pointer;
+	}
 `
 
 type ReactionItemProp = {
-    emoji: string
-    count: number
-    reacted: boolean
-    onClick: () => void
+	emoji: string
+	count: number
+	reacted: boolean
+	onClick: () => void
 }
 
 type CommentProp = {
@@ -228,9 +235,7 @@ const SingleComment = ({
 						</span>
 					) : null}
 				</Author>
-				<Options>
-					<button>...</button>
-				</Options>
+				<Options>...</Options>
 			</CommentHead>
 			<CommentText>{content}</CommentText>
 			<CommentBottomAction>
@@ -262,7 +267,7 @@ const SingleComment = ({
 						</button>
 					</div>
 				</CommentAction>
-				<div className='expand-collapse'>Collapse</div>
+				<div className='expand-collapse'></div>
 			</CommentBottomAction>
 		</CommentContainer>
 	)
