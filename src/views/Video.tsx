@@ -309,7 +309,7 @@ const Video = () => {
 					<CurrentVideo videoId={videoId} />
 					<RelatedVideos />
 				</div>
-				<section style={{ margin: '0.5rem' }}>
+				<section style={{ padding: '0.5rem' }}>
 					<AllComments pageUrl={videoId} comments={sampleComments} />
 				</section>
 			</div>

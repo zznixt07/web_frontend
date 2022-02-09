@@ -1,11 +1,12 @@
 import * as React from 'react'
 import styled, { css } from 'styled-components'
-import {Flex} from '../Structure'
+import { AuthorProps } from 'types/comment'
+import { Flex } from '../Structure'
 
 const FlexWrapAlign = styled(Flex)`
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    justify-content: flex-start;
+	flex-wrap: wrap;
+	gap: 0.5rem;
+	justify-content: flex-start;
 `
 
 const GeneralCommentContainer = styled.div`
@@ -133,11 +134,7 @@ type ReactionItemProp = {
 
 type CommentProp = {
 	id: string
-	author: {
-		name: string
-		channelLink: string
-		imageLink: string
-	}
+	author: AuthorProps
 	content: string
 	datetime: string
 	wasEdited: boolean
@@ -227,7 +224,7 @@ const SingleComment = ({
 			<CommentHead>
 				<Author>
 					<AuthorImage src={author.imageLink} width='32' height='32' />
-					{<a href={author.channelLink}>{author.name}</a>}
+					{<a href={''}>{author.name}</a>}
 					<span className='date'>{new Date(datetime).toLocaleString()}</span>
 					{wasEdited ? (
 						<span>

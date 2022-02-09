@@ -1,4 +1,4 @@
-type AuthorProps = {
+export type AuthorProps = {
 	name: string
 	channelLink: string
 	imageLink: string

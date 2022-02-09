@@ -45,9 +45,8 @@ const AllComments = ({
 	comments: CommentProps[]
 }) => {
 	// const [nestedComments, setNestedComments] = useState([...comments]) // cannot use props directly in state
-	const [nestedComments, setNestedComments] = React.useState<CommentProps[]>([
-		...comments,
-	])
+	const [nestedComments, setNestedComments] = React.useState<CommentProps[]>([])
+	React.useEffect(() => setNestedComments([...comments]), [comments])
 	// const flatComments: FlatComment[] = insertIndentAndflatten(nestedComments)
 	console.log('comments', comments)
 	console.log('nestedComments', nestedComments)
