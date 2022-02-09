@@ -4,7 +4,7 @@ import * as React from 'react'
 import SingleComment, { ReactionProp } from './SingleComment'
 import CommentBox from './CommentBox'
 import axios from 'axios'
-import { insertIndents } from '../../utils/utils'
+import { insertIndents, FlatComment } from '../../utils/utils'
 
 type CommentRequest = {
 	videoId: string
@@ -68,9 +68,10 @@ const AllComments = ({
 	const [replyId, setReplyId] = React.useState<string | null>(null)
 	const handleCommentEdit = async (
 		comment: FlatComment,
+		index: number,
 		newContent: string
 	) => {
-		const resp = await editComment(id, newContent)
+		const resp = await editComment(comment.id, newContent)
 		if (resp.data.success) {
 			setNestedComments((comments) => {
 				const updatedComments = [...comments]
@@ -79,9 +80,10 @@ const AllComments = ({
 					body: newContent,
 					updatedAt: new Date(),
 				}
-				updatedComments.splice(index + 1, 1, updatedComment)
+				updatedComments.splice(index, 1, updatedComment)
 				return updatedComments
 			})
+			toast.success('Comment edited!')
 		} else {
 			toast.error('Failed to edit comment')
 		}
@@ -108,7 +110,7 @@ const AllComments = ({
 					count: Object.values(o)[0],
 					reacted: comment.authUserReaction.includes(Object.keys(o)[0]),
 				}))
-
+				console.log(comment)
 				return (
 					<React.Fragment key={comment.id}>
 						<SingleComment
@@ -116,12 +118,12 @@ const AllComments = ({
 							id={comment.id}
 							author={comment.author}
 							content={comment.body}
-							datetime={comment.updatedOn}
-							wasEdited={false} // if mongoose, be careful using created=updated logic.
+							datetime={comment.updatedAt}
+							wasEdited={comment.createdAt !== comment.updatedAt}
 							nestLevel={2 * comment.indent}
 							replyIdSetter={setReplyId}
 							onCommentEdit={async (content: string) =>
-								await handleCommentEdit(comment, content)
+								await handleCommentEdit(comment, index, content)
 							}
 							reactionsArr={reactions}
 							onReactAsync={async (

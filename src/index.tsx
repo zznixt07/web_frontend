@@ -8,6 +8,7 @@ import Upload from './views/Upload'
 import reportWebVitals from './reportWebVitals'
 import axios from 'axios'
 import { LoginForm } from 'components/LoginSignUp'
+import { Toaster } from 'react-hot-toast'
 
 axios.defaults.baseURL = process.env.REACT_APP_BACKEND_ORIGIN
 axios.defaults.headers.common['Content-Type'] = 'application/json'
@@ -15,6 +16,9 @@ axios.defaults.headers.common['Content-Type'] = 'application/json'
 ReactDOM.render(
 	<React.StrictMode>
 		<BrowserRouter>
+			<div>
+				<Toaster />
+			</div>
 			<Routes>
 				<Route path='/'>
 					<Route index element={<App />}></Route>

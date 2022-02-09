@@ -10,8 +10,8 @@ export type CommentProps = {
 	id: string
 	body: string
 	author: AuthorProps
-	createdOn: string
-	updatedOn: string
+	createdAt: string
+	updatedAt: string
 	authUserReaction: string[]
 	reactions: ReactionProps[]
 	parent: string | null

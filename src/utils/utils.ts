@@ -65,9 +65,9 @@ export const insertIndents = (
 	return flattenedWithContext
 }
 
+type IndentedComment = CommentProps & { indent: number }
+export type FlatComment = Omit<IndentedComment, 'children'>
 // type ProbabilyIndentedComment = CommentProps & { indent?: number }
-// type IndentedComment = CommentProps & { indent: number }
-// type FlatComment = Omit<IndentedComment, 'children'>
 
 // const insertIndentAndflatten = (comms: CommentProps[]): FlatComment[] => {
 // 	const flattened: FlatComment[] = []

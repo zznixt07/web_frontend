@@ -1,4 +1,5 @@
 import * as React from 'react'
+import toast from 'react-hot-toast'
 import styled, { css } from 'styled-components'
 import { AuthorProps } from 'types/comment'
 import { Flex } from '../Structure'
@@ -276,9 +277,21 @@ const SingleComment = ({
 				<form
 					id='commentedit'
 					onSubmit={async (e) => {
+						console.log('submitting form')
 						e.preventDefault()
-						await onCommentEdit(content)
+						const fd = new FormData(e.currentTarget)
+						const newComment = fd.get('content')
+						if (!newComment) {
+							toast.error('comment cannot be empty')
+							return
+						}
+						if (newComment === content) {
+							toast.error('no changes made')
+							return
+						}
+						await onCommentEdit(newComment)
 						setIsEditing(false)
+						toast.success('comment updated!')
 					}}
 				>
 					<CommentEditText required name='content' defaultValue={content} />
