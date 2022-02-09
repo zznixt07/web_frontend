@@ -274,15 +274,14 @@ const SingleComment = ({
 			</CommentHead>
 			{isEditing ? (
 				<form
-					id='comment-edit'
-					onSubmit={() => {
-						console.log('editing comment')
+					id='commentedit'
+					onSubmit={async (e) => {
+						e.preventDefault()
+						await onCommentEdit(content)
 						setIsEditing(false)
 					}}
 				>
-					<CommentEditText required name='content'>
-						{content}
-					</CommentEditText>
+					<CommentEditText required name='content' defaultValue={content} />
 				</form>
 			) : (
 				<CommentText>{content}</CommentText>
@@ -320,7 +319,7 @@ const SingleComment = ({
 				{isEditing ? (
 					<div>
 						<button>Cancel</button>
-						<Edit className='success' type='submit' form='comment-edit'>
+						<Edit className='success' type='submit' form='commentedit'>
 							Update
 						</Edit>
 					</div>
