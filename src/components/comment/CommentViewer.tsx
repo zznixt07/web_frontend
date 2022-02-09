@@ -26,6 +26,14 @@ export const createComment = async (
 	return resp
 }
 
+const editComment = async (commentId, content) => {
+	const payload = {
+		comment: content,
+	}
+	const resp = await axios.put('/comments/' + commentId, payload)
+	return resp
+}
+
 const onReact = async (commentId, reaction, removeReactionNow) => {
 	const payload = {
 		reaction: {
@@ -56,7 +64,8 @@ const AllComments = ({
 		'parent'
 	)
 	console.log('flatComments', flatComments)
-	const [replyId, setReplyId] = React.useState(null)
+	const [replyId, setReplyId] = React.useState<string | null>(null)
+	const [editCommentId, setEditCommentId] = React.useState<string | null>(null)
 	return (
 		<>
 			<CommentBox
@@ -82,52 +91,75 @@ const AllComments = ({
 
 				return (
 					<React.Fragment key={comment.id}>
-						<SingleComment
-							// TODO remove unrequired kwargs
-							id={comment.id}
-							author={comment.author}
-							content={comment.body}
-							datetime={comment.updatedOn}
-							wasEdited={false} // if mongoose, be careful using created=updated logic.
-							nestLevel={2 * comment.indent}
-							replyIdSetter={setReplyId}
-							reactionsArr={reactions}
-							onReactAsync={async (
-								reactionId: string,
-								removeReaction: boolean
-							) => {
-								const resp = await onReact(
-									comment.id,
-									reactionId,
-									removeReaction
-								)
-								setNestedComments((cs: CommentProps[]) =>
-									cs.map((c: CommentProps, i) => {
-										if (i === index)
-											c.authUserReaction = resp.data.authUserReaction
-										// no need to add reaction count cuz
-										// the count is internally managed in CommentProps
-										return c
-									})
-								)
-								return resp.data.success
-							}}
-						/>
-						{comment.id === replyId ? (
+						{editCommentId === comment.id ? (
 							<CommentBox
-								onComment={async (content: any) => {
-									const resp = await createComment(content, pageUrl, replyId)
-									// nested reply is at top. should be at bottom
-									// because comment follows cronological order.
-									// but its-not-a-bug-its-a-feature
+								onComment={async (content: string) => {
+									const resp = await editComment(content, editCommentId)
 									setNestedComments((comms) => {
 										const updatedComms = [...comms]
-										updatedComms.splice(index + 1, 0, resp.data)
+										const updatedComment = {...comment, body: content, updatedAt: new Date()}
+										updatedComms.splice(index + 1, 1, updatedComment)
 										return updatedComms
 									})
+									// what about setting it from where it was called?
+									setEditCommentId(null)
 								}}
 							/>
-						) : null}
+						) : (
+							<>
+								<SingleComment
+									// TODO remove unrequired kwargs
+									id={comment.id}
+									author={comment.author}
+									content={comment.body}
+									datetime={comment.updatedOn}
+									wasEdited={false} // if mongoose, be careful using created=updated logic.
+									nestLevel={2 * comment.indent}
+									replyIdSetter={setReplyId}
+									onCommentEdit={setEditCommentId}
+									reactionsArr={reactions}
+									onReactAsync={async (
+										reactionId: string,
+										removeReaction: boolean
+									) => {
+										const resp = await onReact(
+											comment.id,
+											reactionId,
+											removeReaction
+										)
+										setNestedComments((cs: CommentProps[]) =>
+											cs.map((c: CommentProps, i) => {
+												if (i === index)
+													c.authUserReaction = resp.data.authUserReaction
+												// no need to add reaction count cuz
+												// the count is internally managed in CommentProps
+												return c
+											})
+										)
+										return resp.data.success
+									}}
+								/>
+								{comment.id === replyId ? (
+									<CommentBox
+										onComment={async (content: any) => {
+											const resp = await createComment(
+												content,
+												pageUrl,
+												replyId
+											)
+											// nested reply is at top. should be at bottom
+											// because comment follows cronological order.
+											// but its-not-a-bug-its-a-feature
+											setNestedComments((comms) => {
+												const updatedComms = [...comms]
+												updatedComms.splice(index + 1, 0, resp.data)
+												return updatedComms
+											})
+										}}
+									/>
+								) : null}
+							</>
+						)}
 					</React.Fragment>
 				)
 			})}

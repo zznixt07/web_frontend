@@ -23,9 +23,9 @@ type CommentFields = {
 	content: string
 }
 
-const CommentBox = ({ onComment }: any) => {
+const CommentBox = ({ onComment, initialValue }: any) => {
 	const defaultValues: CommentFields = {
-		content: '',
+		content: initialValue || '',
 	}
 	const onSubmit = async (
 		values: CommentFields,

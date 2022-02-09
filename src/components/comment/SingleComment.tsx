@@ -41,9 +41,29 @@ const Author = styled(FlexWrapAlign)`
 	}
 `
 
-const Options = styled.button`
+const OptionsContainer = styled.button`
 	border-radius: 0 50% 0 0;
+	position: relative;
 `
+
+const Options = styled.ul`
+	position: absolute;
+	top: 0;
+	right: 110%;
+	list-style: none;
+	border-radius: 50% 0 0 0;
+	li {
+		padding: 0.5rem 2rem;
+		background-color: var(--surface4);
+		cursor: pointer;
+	}
+	li:hover {
+		color: var(--surface1);
+		background-color: var(--text1);
+	}
+`
+
+const Edit = styled.button``
 
 const AuthorImage = styled.img`
 	object-fit: cover;
@@ -52,6 +72,10 @@ const AuthorImage = styled.img`
 
 const CommentText = styled.div`
 	margin: 0.4rem 0.2rem 0.6rem 0.2rem;
+`
+
+const CommentEditText = styled.textarea`
+	width: 100%;
 `
 
 const CommentBottomAction = styled(FlexWrapAlign)`
@@ -140,6 +164,7 @@ type CommentProp = {
 	wasEdited: boolean
 	nestLevel: number
 	replyIdSetter: any
+	onCommentEdit: any
 	reactionsArr: any[]
 	onReactAsync: any
 }
@@ -167,10 +192,14 @@ const SingleComment = ({
 	wasEdited,
 	nestLevel,
 	replyIdSetter,
+	onCommentEdit,
 	reactionsArr,
 	onReactAsync,
 }: CommentProp) => {
+	console.log('rendering comment', id)
 	const [reactions, setReactions] = React.useState(reactionsArr)
+	const [isOptionsRevealed, setIsOptionsRevealed] = React.useState(false)
+	const [isEditing, setIsEditing] = React.useState(false)
 
 	const reactionClicked = async (reaction: any) => {
 		const recs = []
@@ -232,9 +261,32 @@ const SingleComment = ({
 						</span>
 					) : null}
 				</Author>
-				<Options>...</Options>
+				<OptionsContainer onClick={() => setIsOptionsRevealed(true)}>
+					<span>...</span>
+					{isOptionsRevealed ? (
+						<Options onMouseLeave={() => setIsOptionsRevealed(false)}>
+							{/* <li onClick={() => onCommentEdit(id)}>edit</li> */}
+							<li onClick={() => setIsEditing(true)}>edit</li>
+							<li className='danger'>delete</li>
+						</Options>
+					) : null}
+				</OptionsContainer>
 			</CommentHead>
-			<CommentText>{content}</CommentText>
+			{isEditing ? (
+				<form
+					id='comment-edit'
+					onSubmit={() => {
+						console.log('editing comment')
+						setIsEditing(false)
+					}}
+				>
+					<CommentEditText required name='content'>
+						{content}
+					</CommentEditText>
+				</form>
+			) : (
+				<CommentText>{content}</CommentText>
+			)}
 			<CommentBottomAction>
 				<CommentAction>
 					<Reaction as='ul'>
@@ -265,6 +317,14 @@ const SingleComment = ({
 					</div>
 				</CommentAction>
 				<div className='expand-collapse'></div>
+				{isEditing ? (
+					<div>
+						<button>Cancel</button>
+						<Edit className='success' type='submit' form='comment-edit'>
+							Update
+						</Edit>
+					</div>
+				) : null}
 			</CommentBottomAction>
 		</CommentContainer>
 	)
