@@ -92,7 +92,7 @@ export const LoginForm = () => {
 		// <FormContainer $direction='column'>
 		<Flex style={{ height: 'inherit' }}>
 			<FormContainer maxColumns={1} itemBaseWidth='500px'>
-				<Top>
+				<Top as='a' href='/'>
 					<img src={logo} width='64' height='64' />
 					<h1>Framemotion</h1>
 				</Top>

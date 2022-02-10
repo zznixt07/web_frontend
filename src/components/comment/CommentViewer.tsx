@@ -83,7 +83,7 @@ const AllComments = ({
 				updatedComments.splice(index, 1, updatedComment)
 				return updatedComments
 			})
-			toast.success('Comment edited!')
+			// toast.success('Comment edited!')
 		} else {
 			toast.error('Failed to edit comment')
 		}
