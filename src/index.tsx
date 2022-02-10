@@ -12,6 +12,15 @@ import { Toaster } from 'react-hot-toast'
 
 axios.defaults.baseURL = process.env.REACT_APP_BACKEND_ORIGIN
 axios.defaults.headers.common['Content-Type'] = 'application/json'
+axios.interceptors.response.use(
+	(resp) => resp,
+	(err) => {
+		if (err.response.status === 401) {
+			window.location.href = '/login'
+		}
+		return Promise.reject(err)
+	}
+)
 
 ReactDOM.render(
 	<React.StrictMode>
@@ -36,4 +45,3 @@ ReactDOM.render(
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals()
-																																																																																																																																			 																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																		
