@@ -7,8 +7,10 @@ import Video from './views/Video'
 import Upload from './views/Upload'
 import reportWebVitals from './reportWebVitals'
 import axios from 'axios'
-import { LoginForm } from 'components/LoginSignUp'
+import { LoginForm } from 'components/Login'
+
 import { Toaster } from 'react-hot-toast'
+import { Register } from 'components/Register'
 
 axios.defaults.baseURL = process.env.REACT_APP_BACKEND_ORIGIN
 axios.defaults.headers.common['Content-Type'] = 'application/json'
@@ -34,6 +36,7 @@ ReactDOM.render(
 					<Route path='videos/:id' element={<Video />}></Route>
 					<Route path='upload' element={<Upload />}></Route>
 					<Route path='login' element={<LoginForm />}></Route>
+					<Route path='register' element={<Register />}></Route>
 				</Route>
 			</Routes>
 		</BrowserRouter>

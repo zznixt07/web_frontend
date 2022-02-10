@@ -1,6 +1,5 @@
+import { ButtonHTMLAttributes } from 'react'
 import styled from 'styled-components'
-import { ReactProp } from 'types/ReactProp'
-
 
 const Front = styled.span`
 	display: block;
@@ -44,7 +43,6 @@ const Edge = styled.span`
 	);
 `
 
-
 const Pushable = styled.button`
 	position: relative;
 	border: none;
@@ -78,9 +76,9 @@ const Pushable = styled.button`
 	}
 `
 
-const MyButton = (props: ReactProp) => {
+const MyButton = (props: ButtonHTMLAttributes<HTMLButtonElement>) => {
 	return (
-		<Pushable>
+		<Pushable {...props}>
 			<Shadow />
 			<Edge />
 			<Front>{props.children}</Front>
