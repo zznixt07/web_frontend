@@ -68,7 +68,7 @@ const Middle = () => {
 		{ setSubmitting }: FormikHelpers<SignupFields>
 	) => {
 		setSubmitting(true)
-		const res = await axios.post('/users', {
+		const res = await axios.post('/users/register', {
 			username: values.username,
 			password: values.password,
 			email: values.email,
@@ -89,7 +89,7 @@ const Middle = () => {
 
 	return (
 		<div>
-			<h3>Register account</h3>
+			<h3>Sign up</h3>
 			<Formik
 				initialValues={defaultValues}
 				onSubmit={handleSubmit}
@@ -119,7 +119,7 @@ const Middle = () => {
 							<ErrorContainer name='password' />
 						</Label>
 
-						<Flex justify='space-between' style={{ width: '100%' }}>
+						<Flex justify='center' style={{ width: '100%' }}>
 							<MyButton disabled={isSubmitting} type='submit'>
 								Register
 							</MyButton>
@@ -154,9 +154,9 @@ export const Register = () => {
 					<h1>Framemotion</h1>
 				</Top>
 				<Middle />
-				<Flex as={Link} to='/signup' justify='center' gap='1rem'>
+				<Flex as={Link} to='/login' justify='center' gap='1rem'>
 					<span>Already have an account?</span>
-					<button>Login Now</button>
+					<button>Login</button>
 				</Flex>
 			</FormContainer>
 		</Flex>

@@ -63,7 +63,7 @@ const Middle = () => {
 		{ setSubmitting }: FormikHelpers<LoginFields>
 	) => {
 		setSubmitting(true)
-		const res = await axios.post('/users', {
+		const res = await axios.post('/users/login', {
 			username: values.username,
 			password: values.password,
 		})
