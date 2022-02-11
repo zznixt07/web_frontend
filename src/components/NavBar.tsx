@@ -47,14 +47,13 @@ const Profile = React.memo(
 )
 
 const Search = ({ onSearch }: any) => {
-	const navigate = useNavigate()
 	const [style, trigger] = useBoop({ y: 2 })
 	const isSmall = useMediaQuery('(min-width: 800px)')
 	const handleSearch = () => {
 		if (searchBox.current) {
 			const searchFor = searchBox.current.value
 			// navigate(`/?q=${searchFor}`)
-			onSearch({q: searchFor})
+			onSearch({ q: searchFor })
 		}
 	}
 	const searchBox = React.useRef<HTMLInputElement>(null)

@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import styled from 'styled-components'
 import { Formik, Form, Field, ErrorMessage, FormikHelpers } from 'formik'
@@ -304,6 +304,7 @@ type DraftFields = {
 
 const DraftVideo = ({ file }: { file: File }) => {
 	console.log('drafting video')
+	const navigate = useNavigate()
 	const [categories, setCategories] = React.useState<Category[] | null>([
 		{ name: 'Fun', value: 'fun' },
 		{ name: 'Action', value: 'action' },
@@ -332,7 +333,6 @@ const DraftVideo = ({ file }: { file: File }) => {
 		formData.append('thumbnail', values.thumbnail, values.thumbnail.name)
 		formData.append('staticvideo', values.staticvideo, values.staticvideo.name)
 		formData.append('duration', `${duration}`)
-		console.log(duration)
 
 		const response = await axios.post('/videos', formData, {
 			onUploadProgress: (progressEvent) => {
@@ -345,7 +345,7 @@ const DraftVideo = ({ file }: { file: File }) => {
 			},
 		})
 		if (!response.data.error) {
-			window.location.href = '/'
+			navigate('/')
 		}
 		setSubmitting(false)
 	}

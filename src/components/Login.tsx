@@ -13,7 +13,7 @@ import {
 import * as Yup from 'yup'
 import axios from 'axios'
 import toast from 'react-hot-toast'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import MyButton from './MyButton'
 
 const Top = styled(Flex)`
@@ -59,6 +59,7 @@ type LoginFields = {
 }
 
 const Middle = () => {
+	const navigate = useNavigate()
 	const handleSubmit = async (
 		values: LoginFields,
 		{ setSubmitting }: FormikHelpers<LoginFields>
@@ -71,7 +72,7 @@ const Middle = () => {
 
 		if (res.data.success) {
 			toast.success('Successfully logged in!')
-			window.location.href = '/'
+			navigate('/')
 		} else {
 			toast.error('Login failed: ' + res.data.message)
 		}
