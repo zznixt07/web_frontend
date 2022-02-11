@@ -49,7 +49,8 @@ const loginValidator = Yup.object({
 		.max(32, 'Must be 32 characters or less'),
 	password: Yup.string()
 		.required('Required')
-		.max(255, 'Must be 255 characters or less'),
+		.min(5, 'Password must be 5 characters or more')
+		.max(32, 'Must be 32 characters or less'),
 })
 
 type LoginFields = {
@@ -67,12 +68,14 @@ const Middle = () => {
 			username: values.username,
 			password: values.password,
 		})
+
 		if (res.data.success) {
 			toast.success('Successfully logged in!')
 			window.location.href = '/'
 		} else {
-			toast.error('Failed to log in!')
+			toast.error('Login failed: ' + res.data.message)
 		}
+		window.localStorage.setItem('token', res.data.token)
 		setSubmitting(false)
 	}
 	const defaultValues = {

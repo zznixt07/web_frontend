@@ -9,17 +9,26 @@ import reportWebVitals from './reportWebVitals'
 import axios from 'axios'
 import { LoginForm } from 'components/Login'
 
-import { Toaster } from 'react-hot-toast'
+import toast, { Toaster } from 'react-hot-toast'
 import { Register } from 'components/Register'
 
 axios.defaults.baseURL = process.env.REACT_APP_BACKEND_ORIGIN
 axios.defaults.headers.common['Content-Type'] = 'application/json'
+axios.defaults.validateStatus = (status) => status >= 200 && status < 500
+
+// first param is for validateStatus that returns true and
+// second param is for validateStatus that returns false
 axios.interceptors.response.use(
-	(resp) => resp,
-	(err) => {
-		if (err.response.status === 401) {
-			window.location.href = '/login'
+	(resp) => {
+		if (resp.status === 401) {
+			if (window.location.pathname !== '/login') {
+				toast.error('You must be logged in to do that')
+				window.location.href = '/login'
+			}
 		}
+		return resp
+	},
+	(err) => {
 		return Promise.reject(err)
 	}
 )

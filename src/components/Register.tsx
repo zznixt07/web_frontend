@@ -49,17 +49,22 @@ const signupValidator = Yup.object({
 		.max(32, 'Must be 32 characters or less'),
 	password: Yup.string()
 		.required('Required')
-		.max(255, 'Must be 255 characters or less'),
+		.min(5, 'Password must be 5 characters or more')
+		.max(32, 'Must be 32 characters or less'),
 	email: Yup.string()
 		.required('Required')
 		.max(255, 'Must be 255 characters or less')
 		.email('Must be a valid email address'),
+	fullname: Yup.string()
+		.required('Required')
+		.max(255, 'Must be 255 characters or less'),
 })
 
 type SignupFields = {
 	username: string
 	password: string
 	email: string
+	fullname: string
 }
 
 const Middle = () => {
@@ -72,12 +77,13 @@ const Middle = () => {
 			username: values.username,
 			password: values.password,
 			email: values.email,
+			fullname: values.fullname,
 		})
 		if (res.data.success) {
-			toast.success('Successfully logged in!')
-			window.location.href = '/'
+			toast.success('Successfully Registerd!')
+			window.location.href = '/login'
 		} else {
-			toast.error('Failed to log in!')
+			toast.error('Registration failed! ' + res.data.message)
 		}
 		setSubmitting(false)
 	}
@@ -85,6 +91,7 @@ const Middle = () => {
 		username: '',
 		password: '',
 		email: '',
+		fullname: '',
 	}
 
 	return (
@@ -103,10 +110,16 @@ const Middle = () => {
 						style={{ width: '100%' }}
 					>
 						<Label>
+							<LabelText>Full Name</LabelText>
+							<Field name='fullname' type='text' />
+							<ErrorContainer name='fullname' />
+						</Label>
+						<Label>
 							<LabelText>Username</LabelText>
 							<Field name='username' type='text' />
 							<ErrorContainer name='username' />
 						</Label>
+
 						<Label>
 							<LabelText>Email</LabelText>
 							<Field name='email' type='email' />
