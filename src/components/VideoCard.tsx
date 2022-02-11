@@ -127,8 +127,6 @@ const secToHumanReadable = (seconds: number): string => {
 }
 
 const VideoCard = ({ video, cardFlow = 'column' }: any) => {
-	console.log(video.published)
-	console.log(prettyDate(video.published))
 	return (
 		/*position: relative for capturing CardLink's position: absolute*/
 

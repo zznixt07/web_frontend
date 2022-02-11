@@ -75,7 +75,9 @@ const Middle = () => {
 		} else {
 			toast.error('Login failed: ' + res.data.message)
 		}
-		window.localStorage.setItem('token', res.data.token)
+		const token = res.data.token
+		axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
+		window.localStorage.setItem('auth', JSON.stringify(res.data))
 		setSubmitting(false)
 	}
 	const defaultValues = {

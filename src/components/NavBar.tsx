@@ -9,18 +9,42 @@ import MyButton from './MyButton'
 import { useBoop } from 'AnimationHooks'
 import { animated } from '@react-spring/web'
 import { useMediaQuery } from 'CustomHooks'
+import Avatar, { genConfig } from 'react-nice-avatar'
 
 type ProfileProps = {
 	avatar: string
+	id: string
+	username: string
 }
 
-const Profile = React.memo(({ avatar }: ProfileProps): JSX.Element => {
-	return (
-		<span>
-			<img src={avatar} alt='logo' width='50' height='50' />
-		</span>
-	)
+const config = genConfig({
+	sex: 'man',
+	faceColor: '#F9C9B6',
+	earSize: 'small',
+	eyeStyle: 'smile',
+	noseStyle: 'long',
+	mouthStyle: 'smile',
+	shirtStyle: 'polo',
+	glassesStyle: 'none',
+	hairColor: '#000',
+	hairStyle: 'normal',
+	hatStyle: 'beanie',
+	hatColor: '#fff',
+	eyeBrowStyle: 'up',
+	shirtColor: '#77311D',
+	bgColor: 'linear-gradient(45deg, #178bff 0%, #ff6868 100%)',
 })
+
+const Profile = React.memo(
+	({ avatar, id, username }: ProfileProps): JSX.Element => {
+		console.log(id)
+		return (
+			<span>
+				<Avatar style={{ width: '50px', height: '50px', id: id }} {...config} />
+			</span>
+		)
+	}
+)
 
 const Search = () => {
 	const [style, trigger] = useBoop({ y: 2 })
@@ -46,11 +70,20 @@ const Login = () => {
 }
 
 const NavBar = () => {
-	const [isLoggedIn, setIsLoggedIn] = React.useState(false)
+	const [userInfo, setUserInfo] = React.useState<ProfileProps | null>(null)
+	React.useEffect(() => {
+		const auth = localStorage.getItem('auth')
+		if (auth) {
+			const data = JSON.parse(auth)
+			setUserInfo(data)
+		} else {
+			setUserInfo(null)
+		}
+	}, [])
 	const isSmall = useMediaQuery('(min-width: 800px)')
 	React.useEffect(() => {}, [])
 	return (
-		<Flex as='nav' justify='space-between' style={{ margin: '0 1rem' }}>
+		<Flex as='nav' justify='space-between' style={{ margin: '0.2rem 1rem' }}>
 			<Flex>
 				<FeatherMenu />
 				<Flex as='a' href='/'>
@@ -72,7 +105,15 @@ const NavBar = () => {
 					<MyButton>Upload</MyButton>
 				</Link>
 				<FeatherBell />
-				{isLoggedIn ? <Profile avatar={''} /> : <Login />}
+				{userInfo ? (
+					<Profile
+						avatar={userInfo.avatar}
+						id={userInfo.id}
+						username={userInfo.username}
+					/>
+				) : (
+					<Login />
+				)}
 			</Flex>
 		</Flex>
 	)
