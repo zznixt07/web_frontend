@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 import { Flex } from './Structure'
 import logo from '../logo.svg'
@@ -46,14 +46,25 @@ const Profile = React.memo(
 	}
 )
 
-const Search = () => {
+const Search = ({ onSearch }: any) => {
+	const navigate = useNavigate()
 	const [style, trigger] = useBoop({ y: 2 })
 	const isSmall = useMediaQuery('(min-width: 800px)')
+	const handleSearch = () => {
+		if (searchBox.current) {
+			const searchFor = searchBox.current.value
+			// navigate(`/?q=${searchFor}`)
+			onSearch({q: searchFor})
+		}
+	}
+	const searchBox = React.useRef<HTMLInputElement>(null)
 	return (
 		<Flex>
-			{isSmall ? <input type='text' placeholder='Search...' /> : null}
+			{isSmall ? (
+				<input type='text' ref={searchBox} placeholder='Search...' />
+			) : null}
 			<animated.div onMouseEnter={trigger} style={style}>
-				<button>Search</button>
+				<button onClick={handleSearch}>Search</button>
 			</animated.div>
 		</Flex>
 	)
@@ -69,7 +80,7 @@ const Login = () => {
 	)
 }
 
-const NavBar = () => {
+const NavBar = ({onSearch = null}: any) => {
 	const [userInfo, setUserInfo] = React.useState<ProfileProps | null>(null)
 	React.useEffect(() => {
 		const auth = localStorage.getItem('auth')
@@ -98,7 +109,7 @@ const NavBar = () => {
 				</Flex>
 			</Flex>
 			<section>
-				<Search />
+				<Search onSearch={onSearch} />
 			</section>
 			<Flex as='section' gap='1rem'>
 				<Link to='/upload'>

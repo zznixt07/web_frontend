@@ -46,6 +46,7 @@ ReactDOM.render(
 					<Route path='upload' element={<Upload />}></Route>
 					<Route path='login' element={<LoginForm />}></Route>
 					<Route path='register' element={<Register />}></Route>
+					{/* <Route path='search' element={} */}
 				</Route>
 			</Routes>
 		</BrowserRouter>
