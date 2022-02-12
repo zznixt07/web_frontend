@@ -239,3 +239,7 @@ input, textarea {
   color: #fff !important;
   background-color: #45793a !important;
 }
+
+.p-md {
+  padding: 1rem;
+}

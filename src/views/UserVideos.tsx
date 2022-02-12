@@ -8,11 +8,12 @@ import { VideoDetail } from 'types/video'
 
 const RowGrid = styled.div`
 	display: grid;
-	grid-template-columns: 2fr repeat(4, 1fr);
+	grid-template-columns: 2fr repeat(5, 1fr);
 	justify-items: start;
 	justify-content: center;
 	font-size: 0.9em;
 	gap: 0.2rem;
+	padding: 0.5rem 0;
 `
 
 type RowProps = {
@@ -35,12 +36,13 @@ const HeaderRow = () => {
 			<div>Published</div>
 			<div>Visible</div>
 			<div>Likes / dislikes</div>
+			<div style={{ justifySelf: 'center' }}>Action</div>
 		</RowGrid>
 	)
 }
 
 const Title = styled.span`
-	font-size: 0.7em;
+	font-size: 0.76em;
 `
 
 const Row = ({
@@ -67,6 +69,9 @@ const Row = ({
 			<div>
 				{likes} / {dislikes}
 			</div>
+			<div style={{ justifySelf: 'center' }}>
+				<span></span>
+			</div>
 		</RowGrid>
 	)
 }
@@ -83,7 +88,7 @@ const TableContents = ({ username }: { username: string }) => {
 		fetchData()
 	}, [username])
 	return (
-		<div>
+		<div className='p-md'>
 			<HeaderRow />
 			{userVideos.map((video) => (
 				<Row
