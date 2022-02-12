@@ -1,7 +1,9 @@
+import DeleteBin from 'assets/svg/DeleteBin'
 import axios from 'axios'
 import AspectRatioImg from 'components/AspectRatioImg'
 import { Flex, Grid } from 'components/Structure'
 import * as React from 'react'
+import toast from 'react-hot-toast'
 import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
 import { VideoDetail } from 'types/video'
@@ -26,6 +28,7 @@ type RowProps = {
 	likes: number
 	dislikes: number
 	thumbnail: string
+	onDelete: any
 }
 
 const HeaderRow = () => {
@@ -45,6 +48,14 @@ const Title = styled.span`
 	font-size: 0.76em;
 `
 
+const DelBtn = styled.button`
+	background-color: transparent;
+	padding: 0.4rem;
+	&:hover > * {
+		transform: rotate(-45deg);
+	}
+`
+
 const Row = ({
 	id,
 	title,
@@ -55,8 +66,8 @@ const Row = ({
 	likes,
 	dislikes,
 	thumbnail,
+	onDelete,
 }: RowProps) => {
-	console.log(published)
 	return (
 		<RowGrid>
 			<Flex align='flex-start'>
@@ -64,13 +75,15 @@ const Row = ({
 				<Title>{title}</Title>
 			</Flex>
 			<div>{views}</div>
-			<div>{published.toLocaleDateString()}</div>
+			<div>{published.toLocaleString()}</div>
 			<div>{visible}</div>
 			<div>
 				{likes} / {dislikes}
 			</div>
 			<div style={{ justifySelf: 'center' }}>
-				<span></span>
+				<DelBtn onClick={() => onDelete(id)} className='danger'>
+					<DeleteBin className='no-evt' />
+				</DelBtn>
 			</div>
 		</RowGrid>
 	)
@@ -78,6 +91,15 @@ const Row = ({
 
 const TableContents = ({ username }: { username: string }) => {
 	const [userVideos, setUserVideos] = React.useState<VideoDetail[]>([])
+	const deleteVideo = async (id: string) => {
+		const resp = await axios.delete(`/videos/${id}`)
+		if (resp.data.success) {
+			toast.success('Video deleted')
+			setUserVideos(userVideos.filter((video: any) => video.id !== id))
+		} else {
+			toast.error('Video could not be deleted. Try again.')
+		}
+	}
 
 	React.useEffect(() => {
 		const fetchData = async () => {
@@ -102,6 +124,7 @@ const TableContents = ({ username }: { username: string }) => {
 					likes={video.likes}
 					dislikes={video.dislikes}
 					thumbnail={video.thumbnail}
+					onDelete={deleteVideo}
 				/>
 			))}
 		</div>
