@@ -68,7 +68,7 @@ const Profile = React.memo(
 					<SmallDropDown onMouseLeave={() => setShowMore(false)}>
 						<li>{username}</li>
 						<li>
-							<Link to='/user/videos'>My videos</Link>
+							<Link to={'/user/videos/' + username}>My videos</Link>
 						</li>
 					</SmallDropDown>
 				)}

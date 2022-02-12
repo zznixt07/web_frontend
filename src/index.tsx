@@ -11,6 +11,7 @@ import { LoginForm } from 'components/Login'
 
 import toast, { Toaster } from 'react-hot-toast'
 import { Register } from 'components/Register'
+import UserVideos from 'views/UserVideos'
 
 axios.defaults.baseURL = process.env.REACT_APP_BACKEND_ORIGIN
 axios.defaults.headers.common['Content-Type'] = 'application/json'
@@ -46,7 +47,7 @@ ReactDOM.render(
 					<Route path='upload' element={<Upload />}></Route>
 					<Route path='login' element={<LoginForm />}></Route>
 					<Route path='register' element={<Register />}></Route>
-					{/* <Route path='search' element={} */}
+					<Route path='user/videos/:username' element={<UserVideos />}></Route>
 				</Route>
 			</Routes>
 		</BrowserRouter>
