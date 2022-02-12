@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import { Flex } from './Structure'
 import logo from '../logo.svg'
@@ -35,12 +35,43 @@ const config = genConfig({
 	bgColor: 'linear-gradient(45deg, #178bff 0%, #ff6868 100%)',
 })
 
+const SmallDropDown = styled.ul`
+	position: absolute;
+	top: 100%;
+	right: 0px;
+	border-radius: 5px;
+	width: max-content;
+	box-shadow: 0px 0px 5px #000;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	& > li {
+		padding: 1rem;
+		cursor: pointer;
+	}
+	& > li:hover {
+		color: var(--surface1);
+		background-color: var(--text1);
+	}
+`
+
 const Profile = React.memo(
 	({ avatar, id, username }: ProfileProps): JSX.Element => {
-		console.log(id)
+		const [showMore, setShowMore] = React.useState(false)
 		return (
-			<span>
+			<span
+				onMouseEnter={() => setShowMore(true)}
+				style={{ position: 'relative' }}
+			>
 				<Avatar style={{ width: '50px', height: '50px', id: id }} {...config} />
+				{showMore && (
+					<SmallDropDown onMouseLeave={() => setShowMore(false)}>
+						<li>{username}</li>
+						<li>
+							<Link to='/user/videos'>My videos</Link>
+						</li>
+					</SmallDropDown>
+				)}
 			</span>
 		)
 	}
@@ -52,7 +83,6 @@ const Search = ({ onSearch }: any) => {
 	const handleSearch = () => {
 		if (searchBox.current) {
 			const searchFor = searchBox.current.value
-			// navigate(`/?q=${searchFor}`)
 			onSearch({ q: searchFor })
 		}
 	}
