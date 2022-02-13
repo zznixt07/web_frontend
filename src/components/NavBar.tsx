@@ -36,6 +36,14 @@ const config = genConfig({
 	bgColor: 'linear-gradient(45deg, #178bff 0%, #ff6868 100%)',
 })
 
+const Nav = styled(Flex)`
+	padding: 0.2rem 1rem;
+	position: sticky;
+	top: 0;
+	background-color: var(--surface3);
+	z-index: 1;
+`
+
 const SmallDropDown = styled.ul`
 	position: absolute;
 	top: 100%;
@@ -54,6 +62,7 @@ const SmallDropDown = styled.ul`
 		color: var(--surface1);
 		background-color: var(--text1);
 	}
+	z-index: 1;
 `
 
 const Profile = React.memo(
@@ -68,7 +77,11 @@ const Profile = React.memo(
 		return (
 			<span
 				onMouseEnter={() => setShowMore(true)}
-				style={{ position: 'relative' }}
+				style={{
+					position: 'relative',
+					cursor: 'pointer',
+					opacity: '0.99',
+				}}
 			>
 				<Avatar style={{ width: '50px', height: '50px', id: id }} {...config} />
 				{showMore && (
@@ -117,7 +130,7 @@ const Login = () => {
 	)
 }
 
-const NavBar = ({onSearch = null}: any) => {
+const NavBar = ({ onSearch = null }: any) => {
 	const [userInfo, setUserInfo] = React.useState<ProfileProps | null>(null)
 	React.useEffect(() => {
 		const auth = localStorage.getItem('auth')
@@ -131,7 +144,7 @@ const NavBar = ({onSearch = null}: any) => {
 	const isSmall = useMediaQuery('(min-width: 800px)')
 	React.useEffect(() => {}, [])
 	return (
-		<Flex as='nav' justify='space-between' style={{ margin: '0.2rem 1rem' }}>
+		<Nav as='nav' justify='space-between'>
 			<Flex>
 				<FeatherMenu />
 				<Flex as='a' href='/'>
@@ -163,7 +176,7 @@ const NavBar = ({onSearch = null}: any) => {
 					<Login />
 				)}
 			</Flex>
-		</Flex>
+		</Nav>
 	)
 }
 export default NavBar

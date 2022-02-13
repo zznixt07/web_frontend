@@ -16,7 +16,7 @@ const App = (): JSX.Element => {
 		<div className='App'>
 			<NavBar onSearch={setSearchParams} />
 			<Flex align='flex-start'>
-				<SideBar />
+				{/* <SideBar /> */}
 				<main style={{ flex: 1 }}>
 					<Browse searchFor={searchFor} />
 				</main>
