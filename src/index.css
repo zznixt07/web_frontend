@@ -247,3 +247,7 @@ input, textarea {
 .no-evt {
   pointer-events: none;
 }
+
+.relative {
+  position: relative;
+}

@@ -10,6 +10,7 @@ import { useBoop } from 'AnimationHooks'
 import { animated } from '@react-spring/web'
 import { useMediaQuery } from 'CustomHooks'
 import Avatar, { genConfig } from 'react-nice-avatar'
+import axios from 'axios'
 
 type ProfileProps = {
 	avatar: string
@@ -58,6 +59,12 @@ const SmallDropDown = styled.ul`
 const Profile = React.memo(
 	({ avatar, id, username }: ProfileProps): JSX.Element => {
 		const [showMore, setShowMore] = React.useState(false)
+		const handleLogout = () => {
+			window.localStorage.removeItem('auth')
+			//  remove authorization header from default axios config
+			delete axios.defaults.headers.common['Authorization']
+			window.location.reload()
+		}
 		return (
 			<span
 				onMouseEnter={() => setShowMore(true)}
@@ -70,6 +77,7 @@ const Profile = React.memo(
 						<li>
 							<Link to={'/user/videos/' + username}>My videos</Link>
 						</li>
+						<li onClick={handleLogout}>Logout</li>
 					</SmallDropDown>
 				)}
 			</span>

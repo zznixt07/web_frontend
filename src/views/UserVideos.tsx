@@ -1,10 +1,13 @@
 import DeleteBin from 'assets/svg/DeleteBin'
+import IcRoundEdit from 'assets/svg/IcRoundEdit'
+import MdiOpenInApp from 'assets/svg/MdiOpenInApp'
 import axios from 'axios'
 import AspectRatioImg from 'components/AspectRatioImg'
+import NavBar from 'components/NavBar'
 import { Flex, Grid } from 'components/Structure'
 import * as React from 'react'
 import toast from 'react-hot-toast'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import styled from 'styled-components'
 import { VideoDetail } from 'types/video'
 
@@ -71,8 +74,25 @@ const Row = ({
 	return (
 		<RowGrid>
 			<Flex align='flex-start'>
-				<AspectRatioImg src={thumbnail} alt={title} width='100' height='60' />
-				<Title>{title}</Title>
+				<div style={{ flexShrink: '0' }}>
+					<AspectRatioImg src={thumbnail} alt={title} width='100' height='60' />
+				</div>
+				<Flex
+					$direction='column'
+					align='flex-start'
+					justify='space-between'
+					style={{ height: '100%' }}
+				>
+					<Title>{title}</Title>
+					<Flex>
+						<Link to={'/videos/' + id} title='Open video'>
+							<MdiOpenInApp />
+						</Link>
+						<Link to={'/videos/edit/' + id} title='Edit video'>
+							<IcRoundEdit />
+						</Link>
+					</Flex>
+				</Flex>
 			</Flex>
 			<div>{views}</div>
 			<div>{published.toLocaleString()}</div>
@@ -136,6 +156,8 @@ const UserVideos = () => {
 	const username = params.username
 	return (
 		<div>
+			<NavBar />
+			<h1>Your videos</h1>
 			<TableContents username={username!} />
 		</div>
 	)
