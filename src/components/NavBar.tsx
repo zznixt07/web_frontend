@@ -117,13 +117,16 @@ const Search = ({ onSearch }: any) => {
 			{isSmall ? (
 				<>
 					<input type='text' ref={searchBox} placeholder='Search...' />
-					<animated.div onMouseEnter={trigger} style={style}>
-						<button onClick={handleSearch}>Search</button>
-					</animated.div>
 				</>
-			) : (
-				<RiSearchLine />
-			)}
+			) : null}
+			<animated.div
+				onClick={handleSearch}
+				title='Search'
+				onMouseEnter={trigger}
+				style={style}
+			>
+				<RiSearchLine className='no-evt' />
+			</animated.div>
 		</Flex>
 	)
 }
