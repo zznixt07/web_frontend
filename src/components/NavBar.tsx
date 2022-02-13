@@ -11,6 +11,7 @@ import { animated } from '@react-spring/web'
 import { useMediaQuery } from 'CustomHooks'
 import Avatar, { genConfig } from 'react-nice-avatar'
 import axios from 'axios'
+import RiSearchLine from 'assets/svg/RiSearchLine'
 
 type ProfileProps = {
 	avatar: string
@@ -38,6 +39,7 @@ const config = genConfig({
 
 const Nav = styled(Flex)`
 	padding: 0.2rem 1rem;
+	font-size: 1.15em;
 	position: sticky;
 	top: 0;
 	background-color: var(--surface3);
@@ -48,15 +50,17 @@ const SmallDropDown = styled.ul`
 	position: absolute;
 	top: 100%;
 	right: 0px;
-	border-radius: 5px;
+	border-radius: 1rem;
 	width: max-content;
 	box-shadow: 0px 0px 5px #000;
 	list-style: none;
 	margin: 0;
 	padding: 0;
+	background-color: var(--surface3);
 	& > li {
 		padding: 1rem;
 		cursor: pointer;
+		border-radius: 1rem 1rem 1rem 0;
 	}
 	& > li:hover {
 		color: var(--surface1);
@@ -111,11 +115,15 @@ const Search = ({ onSearch }: any) => {
 	return (
 		<Flex>
 			{isSmall ? (
-				<input type='text' ref={searchBox} placeholder='Search...' />
-			) : null}
-			<animated.div onMouseEnter={trigger} style={style}>
-				<button onClick={handleSearch}>Search</button>
-			</animated.div>
+				<>
+					<input type='text' ref={searchBox} placeholder='Search...' />
+					<animated.div onMouseEnter={trigger} style={style}>
+						<button onClick={handleSearch}>Search</button>
+					</animated.div>
+				</>
+			) : (
+				<RiSearchLine />
+			)}
 		</Flex>
 	)
 }
@@ -162,16 +170,18 @@ const NavBar = ({ onSearch = null }: any) => {
 				<Search onSearch={onSearch} />
 			</section>
 			<Flex as='section' gap='1rem'>
-				<Link to='/upload'>
-					<MyButton>Upload</MyButton>
-				</Link>
-				<FeatherBell />
 				{userInfo ? (
-					<Profile
-						avatar={userInfo.avatar}
-						id={userInfo.id}
-						username={userInfo.username}
-					/>
+					<>
+						<Link to='/upload'>
+							<MyButton>Upload</MyButton>
+						</Link>
+						<FeatherBell />
+						<Profile
+							avatar={userInfo.avatar}
+							id={userInfo.id}
+							username={userInfo.username}
+						/>
+					</>
 				) : (
 					<Login />
 				)}
