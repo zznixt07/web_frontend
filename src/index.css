@@ -251,3 +251,8 @@ input, textarea {
 .relative {
   position: relative;
 }
+
+svg {
+  min-width: 1.5rem;
+  min-height: 1.5rem;
+}
