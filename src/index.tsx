@@ -15,6 +15,17 @@ import UserVideos from 'views/UserVideos'
 
 axios.defaults.baseURL = process.env.REACT_APP_BACKEND_ORIGIN
 axios.defaults.headers.common['Content-Type'] = 'application/json'
+const localAuth = localStorage.getItem('auth')
+if (localAuth) {
+	try {
+		const auth = JSON.parse(localAuth)
+		if (auth.token) {
+			axios.defaults.headers.common['Authorization'] = `Bearer ${auth.token}`
+		}
+	} catch (e: any) {
+		console.error(e)
+	}
+}
 axios.defaults.validateStatus = (status) => status >= 200 && status < 500
 
 // first param is for validateStatus that returns true and
@@ -33,6 +44,7 @@ axios.interceptors.response.use(
 		return Promise.reject(err)
 	}
 )
+;(window as any).axios = axios
 
 ReactDOM.render(
 	<React.StrictMode>
