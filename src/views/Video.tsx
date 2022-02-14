@@ -23,6 +23,7 @@ import { VideoCardProps, VideoDetailResponse } from 'types/video'
 import Player from 'components/Player'
 import { CommentProps } from 'types/comment'
 import { useMediaQuery } from 'CustomHooks'
+import toast from 'react-hot-toast'
 
 const ActionButton = styled(Flex)`
 	cursor: pointer;
@@ -116,7 +117,7 @@ const CurrentVideo = ({ videoId }: CurrentVideoProps) => {
 	const [channelNotification, setChannelNotification] =
 		React.useState<boolean>(false)
 	const [isLiked, setIsLiked] = React.useState<boolean>(false)
-	const [isDisLiked, setIsDisLiked] = React.useState<boolean>(false)
+	const [isDisliked, setIsDisliked] = React.useState<boolean>(false)
 	const [isPlaylistClicked, setIsPlaylistClicked] =
 		React.useState<boolean>(false)
 	const [videoInfo, setVideoInfo] = React.useState<VideoDetailResponse | null>(
@@ -132,38 +133,50 @@ const CurrentVideo = ({ videoId }: CurrentVideoProps) => {
 		fetchVideoInfo()
 	}, [videoId])
 
-	const [perception, setPerception] = React.useState<boolean | null>(null)
-	React.useEffect(() => {
-		if (isLiked) {
-			setPerception(true)
-		}
-		if (isDisLiked) {
-			setPerception(false)
-		}
-		if (isLiked === isDisLiked) {
-			setPerception(null)
-		}
-	}, [isLiked, isDisLiked])
+	// const [perception, setPerception] = React.useState<boolean | null>(null)
+	// React.useEffect(() => {
+	// 	if (isLiked) {
+	// 		setPerception(true)
+	// 	}
+	// 	if (isDisliked) {
+	// 		setPerception(false)
+	// 	}
+	// 	if (isLiked === isDisliked) {
+	// 		setPerception(null)
+	// 	}
+	// }, [isLiked, isDisliked])
 
 	const handleLike = async () => {
 		// in backend set a field called
 		// `perception`: true(like) | false(dislike) | null(neither liked nor disliked.)
+		const prevState = isLiked
+		const newState = !prevState
 		setIsLiked((s) => {
-			if (!s === isDisLiked && !s === true) setIsDisLiked(s)
+			if (!s === isDisliked && !s === true) setIsDisliked(s)
 			return !s
 		})
 		const resp = await axios.post('/videos/actions/' + videoId, {
-			likes: isLiked,
+			likes: newState,
 		})
+		if (!resp.data?.success) {
+			toast.error('Something went wrong! Try again.')
+			setIsLiked(prevState)
+		}
 	}
 	const handleDisLike = async () => {
-		setIsDisLiked((s) => {
+		const prevState = isDisliked
+		const newState = !prevState
+		setIsDisliked((s) => {
 			if (!s === isLiked && !s === true) setIsLiked(s)
 			return !s
 		})
 		const resp = await axios.post('/videos/actions/' + videoId, {
-			dislikes: isDisLiked,
+			dislikes: newState,
 		})
+		if (!resp.data?.success) {
+			toast.error('Something went wrong! Try again.')
+			setIsDisliked(prevState)
+		}
 	}
 
 	const handlePlaylist = () => {
@@ -205,8 +218,8 @@ const CurrentVideo = ({ videoId }: CurrentVideoProps) => {
 						{videoInfo.video.likes + (isLiked ? 1 : 0)}
 					</ActionButton>
 					<ActionButton onClick={handleDisLike}>
-						{isDisLiked ? <DisLiked /> : <DisLike />}
-						{videoInfo.video.dislikes + (isDisLiked ? 1 : 0)}
+						{isDisliked ? <DisLiked /> : <DisLike />}
+						{videoInfo.video.dislikes + (isDisliked ? 1 : 0)}
 					</ActionButton>
 					<ActionButton>
 						<Share />
