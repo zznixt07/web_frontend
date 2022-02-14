@@ -135,7 +135,7 @@ const Login = () => {
 	return (
 		<Flex>
 			<Link to='/login'>
-				<button>Login</button>
+				<MyButton>Login</MyButton>
 			</Link>
 		</Flex>
 	)
