@@ -32,6 +32,21 @@ const editComment = async (commentId, content) => {
 		comment: content,
 	}
 	const resp = await axios.put('/comments/' + commentId, payload)
+	if (resp.data.success) {
+		toast.success('Comment edited successfully.')
+	} else {
+		toast.error('Error editing comment. Try Again.')
+	}
+	return resp
+}
+
+const deleteComment = async (commentId) => {
+	const resp = await axios.delete('/comments/' + commentId)
+	if (resp.data.success) {
+		toast.success('Comment deleted')
+	} else {
+		toast.error('Error deleting comment. Try again.')
+	}
 	return resp
 }
 
@@ -49,22 +64,24 @@ const onReact = async (commentId, reaction, removeReactionNow) => {
 const AllComments = ({
 	pageUrl,
 	comments,
+	username,
 }: {
 	pageUrl: string
 	comments: CommentProps[]
+	username: string
 }) => {
 	// const [nestedComments, setNestedComments] = useState([...comments]) // cannot use props directly in state
 	const [nestedComments, setNestedComments] = React.useState<CommentProps[]>([])
 	React.useEffect(() => setNestedComments([...comments]), [comments])
 	// const flatComments: FlatComment[] = insertIndentAndflatten(nestedComments)
-	console.log('comments', comments)
-	console.log('nestedComments', nestedComments)
+	// console.log('comments', comments)
+	// console.log('nestedComments', nestedComments)
 	const flatComments: FlatComment[] = insertIndents(
 		nestedComments,
 		'id',
 		'parent'
 	)
-	console.log('flatComments', flatComments)
+	// console.log('flatComments', flatComments)
 	const [replyId, setReplyId] = React.useState<string | null>(null)
 	const handleCommentEdit = async (
 		comment: FlatComment,
@@ -110,7 +127,7 @@ const AllComments = ({
 					count: Object.values(o)[0],
 					reacted: comment.authUserReaction.includes(Object.keys(o)[0]),
 				}))
-				console.log(comment)
+				// console.log(comment)
 				return (
 					<React.Fragment key={comment.id}>
 						<SingleComment
@@ -125,6 +142,10 @@ const AllComments = ({
 							onCommentEdit={async (content: string) =>
 								await handleCommentEdit(comment, index, content)
 							}
+							onCommentDelete={async () => {
+								const resp = await deleteComment(comment.id)
+							}}
+							isCurrentUser={comment.author.name === username}
 							reactionsArr={reactions}
 							onReactAsync={async (
 								reactionId: string,

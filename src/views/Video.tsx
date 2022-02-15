@@ -126,8 +126,15 @@ const CurrentVideo = ({ videoId }: CurrentVideoProps) => {
 
 	React.useEffect(() => {
 		const fetchVideoInfo = async () => {
-			const fetchedVideoInfo = await axios.get('/videos/' + videoId)
-			setVideoInfo(fetchedVideoInfo.data as VideoDetailResponse)
+			const resp = await axios.get('/videos/' + videoId)
+			if (!resp.data.success) {
+				toast.error('Error fetching video:' + resp.data.message)
+				return
+			}
+			const fetchedVideoInfo: VideoDetailResponse = resp.data.message
+			setVideoInfo(fetchedVideoInfo)
+			setIsLiked(fetchedVideoInfo.authUser.likedVideo)
+			setIsDisliked(fetchedVideoInfo.authUser.dislikedVideo)
 		}
 		console.log('fetching video info')
 		fetchVideoInfo()
@@ -299,6 +306,10 @@ const RelatedVideos = () => {
 const Video = () => {
 	const params = useParams<{ id: string }>()
 	const videoId = params.id!
+	let username = null
+	try {
+		username = JSON.parse(localStorage.getItem('auth') as string).username
+	} catch (e) {}
 	const isSmall = useMediaQuery('(max-width: 950px)')
 	const [sampleComments, setSampleComments] = React.useState<CommentProps[]>([])
 	React.useEffect(() => {
@@ -323,7 +334,11 @@ const Video = () => {
 					<RelatedVideos />
 				</div>
 				<section style={{ padding: '0.5rem' }}>
-					<AllComments pageUrl={videoId} comments={sampleComments} />
+					<AllComments
+						pageUrl={videoId}
+						comments={sampleComments}
+						username={username}
+					/>
 				</section>
 			</div>
 		</>

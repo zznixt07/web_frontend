@@ -166,6 +166,8 @@ type CommentProp = {
 	nestLevel: number
 	replyIdSetter: any
 	onCommentEdit: any
+	isCurrentUser: boolean
+	onCommentDelete: any
 	reactionsArr: any[]
 	onReactAsync: any
 }
@@ -194,10 +196,12 @@ const SingleComment = ({
 	nestLevel,
 	replyIdSetter,
 	onCommentEdit,
+	isCurrentUser,
+	onCommentDelete,
 	reactionsArr,
 	onReactAsync,
 }: CommentProp) => {
-	console.log('rendering comment', id)
+	// console.log('rendering comment', id)
 	const [reactions, setReactions] = React.useState(reactionsArr)
 	const [isOptionsRevealed, setIsOptionsRevealed] = React.useState(false)
 	const [isEditing, setIsEditing] = React.useState(false)
@@ -267,8 +271,14 @@ const SingleComment = ({
 					{isOptionsRevealed ? (
 						<Options onMouseLeave={() => setIsOptionsRevealed(false)}>
 							{/* <li onClick={() => onCommentEdit(id)}>edit</li> */}
-							<li onClick={() => setIsEditing(true)}>edit</li>
-							<li className='danger'>delete</li>
+							{isCurrentUser ? (
+								<>
+									<li onClick={() => setIsEditing(true)}>edit</li>
+									<li onClick={onCommentDelete} className='danger'>
+										delete
+									</li>
+								</>
+							) : null}
 						</Options>
 					) : null}
 				</OptionsContainer>

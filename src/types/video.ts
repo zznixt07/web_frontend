@@ -28,4 +28,8 @@ export type VideoDetailResponse = {
 	elements: any[]
 	channel: Channel
 	video: Omit<VideoDetail, 'thumbnail' | 'channel'>
+	authUser: {
+		likedVideo: boolean
+		dislikedVideo: boolean
+	}
 }
