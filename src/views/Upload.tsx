@@ -7,17 +7,19 @@ import * as Yup from 'yup'
 import { Flex, Grid } from 'components/Structure'
 import AspectRatioImg, { ResponsiveImg } from 'components/AspectRatioImg'
 import AddImageRawSVG from 'assets/svg/BxBxsImageAdd.svg'
+import BGSVG from 'assets/imgs/bg.png'
 
 import UploadSVG from 'assets/svg/UiwUpload'
 
+import Select, { components, IndicatorsContainerProps } from 'react-select'
 import Player from 'components/Player'
 import getFramesData from 'utils/getFrames'
-import { HTMLPlyrVideoElement } from 'plyr-react'
 import imgToFile from 'utils/imgToFile'
 import { ImageAtPercentages } from 'types/frames'
 import { randomInt } from 'utils/utils'
-import { ProgressBarComponent, useProgress } from 'components/ProgressViewer'
+// import { ProgressBarComponent, useProgress } from 'components/ProgressViewer'
 import ProgressBar from '@ramonak/react-progress-bar'
+import MyButton from 'components/MyButton'
 const FileChooserBtn = styled.div`
 	margin: 1rem;
 	padding: 0.8rem;
@@ -30,13 +32,13 @@ const VideoDetails = styled.div`
 	flex: 1 1 600px;
 `
 
-// const Label = styled(Field)`
 const Label = styled.label`
 	padding: 0.4rem;
 	margin: 0.2rem;
 	width: 100%;
-	outline: 1px solid var(--surface4);
-	border-radius: 0.2rem;
+	// outline: 1px solid var(--surface4);
+	box-shadow: 0 0 0.2rem #dadada;
+	border-radius: 0.1rem;
 `
 
 const ErrorContainer = styled.div`
@@ -54,11 +56,18 @@ const CommonField = styled(Field)`
 	border: none;
 	border-radius: inherit;
 	padding: 0.4rem;
+	background-color: transparent;
 `
 
 const TitleField = styled(CommonField)``
 const DescriptionField = styled(CommonField)`
 	resize: vertical;
+`
+const CategoriesField = styled(CommonField)`
+	outline: 1px solid var(--text1);
+	option {
+		background-color: inherit;
+	}
 `
 
 const SimpleGrid = styled(Grid)`
@@ -80,7 +89,7 @@ const BgImg = styled.div`
 	background-repeat: no-repeat;
 	background-position: center;
 	background-size: contain;
-	background-color: var(--surface3);
+	background-color: 'transparent';
 	height: 100%;
 	cursor: pointer;
 `
@@ -91,8 +100,11 @@ const ThumbnailText = styled(Flex)`
 `
 
 const Draft = styled(Flex)`
-	margin: 2rem auto;
-	padding: 1% 10%;
+	padding: 3% 10%;
+	background-image: url('${BGSVG}');
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: cover;
 `
 
 const UploadThumbnail = ({
@@ -202,17 +214,54 @@ type CategoriesProps = {
 	categories: Category[]
 }
 
+const SelectField = ({ options, field, form }: any) => {
+	const color = '#2d1f3500'
+	return (
+		<Select
+			styles={{
+				control: (provided: any) => ({
+					...provided,
+					background: color,
+					color: 'white',
+					border: 'none',
+					width: '100%',
+				}),
+				menu: (provided: any) => ({
+					...provided,
+					background: '#97979730',
+					color: 'black',
+				}),
+				option: (provided: any, state: any) => ({
+					...provided,
+					color: 'black',
+				}),
+				singleValue: (provided: any) => ({
+					...provided,
+					background: color,
+					color: 'white',
+				}),
+			}}
+			options={options}
+			name={field.name}
+			value={
+				options
+					? options.find((option: any) => option.value === field.value)
+					: ''
+			}
+			onChange={(option: any) => form.setFieldValue(field.name, option.value)}
+			onBlur={field.onBlur}
+		/>
+	)
+}
+
 const Categories = ({ name, categories }: CategoriesProps) => {
 	return (
-		<Field as='select' name={name} id='category'>
-			{categories.map((category) => {
-				return (
-					<option key={category.value} value={category.value}>
-						{category.name}
-					</option>
-				)
-			})}
-		</Field>
+		<Field
+			id='category'
+			name={name}
+			component={SelectField}
+			options={[...categories.map((c) => ({ value: c.value, label: c.name }))]}
+		/>
 	)
 }
 
@@ -288,7 +337,18 @@ const UploadedVideo = React.memo(
 					// onLoadedData={videoLoaded}
 					ref={videoRef}
 				/>
-				<button onClick={videoLoaded}>Generate Thumbnail</button>
+				<Flex gap='2rem' $direction='column'>
+					<span></span>
+					<button
+						style={{
+							backgroundColor: 'transparent',
+							outline: '1px solid white',
+						}}
+						onClick={videoLoaded}
+					>
+						Generate Thumbnail ✨
+					</button>
+				</Flex>
 			</div>
 		)
 	}
@@ -339,7 +399,7 @@ const DraftVideo = ({ file }: { file: File }) => {
 				const percentCompleted = Math.round(
 					(progressEvent.loaded * 100) / progressEvent.total
 				)
-				console.log('percentCompleted', percentCompleted)
+				// console.log('percentCompleted', percentCompleted)
 				// if (setProgress) setProgress(percentCompleted)
 				setProgressPercent(percentCompleted)
 			},
@@ -370,7 +430,7 @@ const DraftVideo = ({ file }: { file: File }) => {
 					onSubmit={onSubmit}
 				>
 					{({ isSubmitting, setFieldValue }) => (
-						<Flex as={Form} $direction='column'>
+						<Flex as={Form} $direction='column' gap='1rem'>
 							<Label>
 								<LabelText>Title</LabelText>
 								<TitleField type='text' name='title' />
@@ -387,6 +447,13 @@ const DraftVideo = ({ file }: { file: File }) => {
 									placeholder='Describe your video...'
 								/>
 								<ErrorMessage name='description'>
+									{(msg) => <ErrorContainer>{msg}</ErrorContainer>}
+								</ErrorMessage>
+							</Label>
+							<Label>
+								<LabelText>Categories</LabelText>
+								<Categories name='category' categories={categories || []} />
+								<ErrorMessage name='category'>
 									{(msg) => <ErrorContainer>{msg}</ErrorContainer>}
 								</ErrorMessage>
 							</Label>
@@ -408,20 +475,17 @@ const DraftVideo = ({ file }: { file: File }) => {
 									{(msg) => <ErrorContainer>{msg}</ErrorContainer>}
 								</ErrorMessage>
 							</Label>
-							<Label>
-								<LabelText>Categories</LabelText>
-								<Categories name='category' categories={categories || []} />
-								<ErrorMessage name='category'>
-									{(msg) => <ErrorContainer>{msg}</ErrorContainer>}
-								</ErrorMessage>
-							</Label>
-							<button type='submit' disabled={isSubmitting}>
-								Submit
-							</button>
-							{/* <ProgressBarComponent progressPercent={progressPercent} /> */}
-							<div style={{ width: '100%' }}>
-								<ProgressBar completed={progressPercent} />
+							<div style={{ width: '100%', marginBottom: '0.5rem' }}>
+								<ProgressBar
+									baseBgColor='#979797'
+									height='9px'
+									completed={progressPercent}
+								/>
 							</div>
+							<MyButton type='submit' disabled={isSubmitting}>
+								Submit
+							</MyButton>
+							{/* <ProgressBarComponent progressPercent={progressPercent} /> */}
 						</Flex>
 					)}
 				</Formik>
