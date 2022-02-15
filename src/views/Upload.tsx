@@ -477,7 +477,7 @@ const DraftVideo = ({ file }: { file: File }) => {
 							</Label>
 							<div style={{ width: '100%', marginBottom: '0.5rem' }}>
 								<ProgressBar
-									baseBgColor='#979797'
+									baseBgColor='#97979710'
 									height='9px'
 									completed={progressPercent}
 								/>
@@ -500,6 +500,7 @@ const DraftVideo = ({ file }: { file: File }) => {
 }
 
 const Upload = () => {
+	// const params = useParams<{ id: string }>()
 	const [chosenVideo, setIsChosenVideo] = React.useState<File | null>(null)
 	const fileInput = React.useRef<HTMLInputElement>(null)
 	const handleSelectedFile = (e: any) => {

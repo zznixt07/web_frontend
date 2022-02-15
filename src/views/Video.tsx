@@ -103,6 +103,11 @@ const Description = (props: { children?: React.ReactNode }) => {
 	)
 }
 
+const Hr = styled.div`
+	margin: 0.5rem 0;
+	border-top: 1px solid var(--text2);
+`
+
 const MemoizedPlayer = React.memo(({ src }: any) => (
 	<Player muted={false} src={src} width='1200' height='600' />
 ))
@@ -210,15 +215,15 @@ const CurrentVideo = ({ videoId }: CurrentVideoProps) => {
 	}
 
 	return (
-		<div>
+		<div style={{ padding: '0 0.4rem' }}>
 			<PopupModelContainer />
 			<MemoizedPlayer src={videoInfo.video.path} />
 			<h3>{videoInfo.video.title}</h3>
-			<Flex justify='space-between'>
-				<div>
+			<Flex justify='space-between' $wrap='wrap' gap='2rem'>
+				<Flex gap='1rem' $wrap='wrap' style={{ fontSize: '0.85em' }}>
 					<span>{videoInfo.video.viewCount} views</span>
 					<span>{new Date(videoInfo.video.published!).toLocaleString()}</span>
-				</div>
+				</Flex>
 				<Flex justify='flex-start' gap='1rem'>
 					<ActionButton onClick={handleLike}>
 						{isLiked ? <Liked /> : <Like />}
@@ -242,13 +247,13 @@ const CurrentVideo = ({ videoId }: CurrentVideoProps) => {
 					</ActionButton>
 				</Flex>
 			</Flex>
-			<hr />
+			<Hr />
 			<Flex justify='space-between'>
 				<Flex justify='flex-start'>
 					<img
 						src={videoInfo.channel.pp}
-						width='20'
-						height='20'
+						width='40'
+						height='40'
 						className='rounded'
 						alt='channel profile pic'
 					/>
@@ -264,7 +269,6 @@ const CurrentVideo = ({ videoId }: CurrentVideoProps) => {
 				/>
 			</Flex>
 			<Description>{videoInfo.video.description}</Description>
-			<hr />
 		</div>
 	)
 }
