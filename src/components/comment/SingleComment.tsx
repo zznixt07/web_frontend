@@ -301,7 +301,6 @@ const SingleComment = ({
 						}
 						await onCommentEdit(newComment)
 						setIsEditing(false)
-						toast.success('comment updated!')
 					}}
 				>
 					<CommentEditText required name='content' defaultValue={content} />

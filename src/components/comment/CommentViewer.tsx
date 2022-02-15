@@ -32,21 +32,12 @@ const editComment = async (commentId, content) => {
 		comment: content,
 	}
 	const resp = await axios.put('/comments/' + commentId, payload)
-	if (resp.data.success) {
-		toast.success('Comment edited successfully.')
-	} else {
-		toast.error('Error editing comment. Try Again.')
-	}
 	return resp
 }
 
 const deleteComment = async (commentId) => {
 	const resp = await axios.delete('/comments/' + commentId)
-	if (resp.data.success) {
-		toast.success('Comment deleted')
-	} else {
-		toast.error('Error deleting comment. Try again.')
-	}
+
 	return resp
 }
 
@@ -100,11 +91,26 @@ const AllComments = ({
 				updatedComments.splice(index, 1, updatedComment)
 				return updatedComments
 			})
-			// toast.success('Comment edited!')
+			toast.success('Comment edited!')
 		} else {
 			toast.error('Failed to edit comment')
 		}
 	}
+
+	const handleCommentRemove = async (id: string, index: number) => {
+		const resp = await deleteComment(id)
+		if (resp.data.success) {
+			setNestedComments((comments) => {
+				const updatedComments = [...comments]
+				delete updatedComments[index]
+				return updatedComments
+			})
+			toast.success('Comment deleted')
+		} else {
+			toast.error(resp.data.message)
+		}
+	}
+
 	return (
 		<>
 			<CommentBox
@@ -143,7 +149,7 @@ const AllComments = ({
 								await handleCommentEdit(comment, index, content)
 							}
 							onCommentDelete={async () => {
-								const resp = await deleteComment(comment.id)
+								await handleCommentRemove(comment.id, index)
 							}}
 							isCurrentUser={comment.author.name === username}
 							reactionsArr={reactions}

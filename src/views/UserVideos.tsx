@@ -157,7 +157,7 @@ const UserVideos = () => {
 	return (
 		<div>
 			<NavBar />
-			<h1>Your videos</h1>
+			<h3>Your videos</h3>
 			<TableContents username={username!} />
 		</div>
 	)
