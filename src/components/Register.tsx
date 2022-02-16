@@ -15,6 +15,8 @@ import axios from 'axios'
 import toast from 'react-hot-toast'
 import { Link, Navigate, useNavigate } from 'react-router-dom'
 import MyButton from './MyButton'
+import RiEyeCloseLine from 'assets/svg/RiEyeCloseLine'
+import IconParkOutlineEyes from 'assets/svg/IconParkOutlineEyes'
 
 const Top = styled(Flex)`
 	background-color: transparent;
@@ -60,6 +62,17 @@ const signupValidator = Yup.object({
 		.max(255, 'Must be 255 characters or less'),
 })
 
+const PasswordField = styled.div`
+	position: relative;
+	width: 100%;
+`
+const Eye = styled.div`
+	position: absolute;
+	right: 5px;
+	top: 50%;
+	transform: translateY(-50%);
+`
+
 type SignupFields = {
 	username: string
 	password: string
@@ -94,6 +107,7 @@ const Middle = () => {
 		email: '',
 		fullname: '',
 	}
+	const [showPass, setShowPass] = React.useState(false)
 
 	return (
 		<div>
@@ -129,7 +143,12 @@ const Middle = () => {
 
 						<Label>
 							<LabelText>Password</LabelText>
-							<Field name='password' type='password' />
+							<PasswordField>
+								<Field name='password' type={showPass ? 'text' : 'password'} />
+								<Eye onClick={() => setShowPass((s) => !s)}>
+									{showPass ? <RiEyeCloseLine /> : <IconParkOutlineEyes />}
+								</Eye>
+							</PasswordField>
 							<ErrorContainer name='password' />
 						</Label>
 

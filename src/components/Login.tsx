@@ -15,6 +15,8 @@ import axios from 'axios'
 import toast from 'react-hot-toast'
 import { Link, useNavigate } from 'react-router-dom'
 import MyButton from './MyButton'
+import RiEyeCloseLine from 'assets/svg/RiEyeCloseLine'
+import IconParkOutlineEyes from 'assets/svg/IconParkOutlineEyes'
 
 const Top = styled(Flex)`
 	background-color: transparent;
@@ -36,6 +38,17 @@ const Err = styled.div`
 	color: #fff;
 	font-size: 0.7em;
 	color: #883a00;
+`
+
+const PasswordField = styled.div`
+	position: relative;
+	width: 100%;
+`
+const Eye = styled.div`
+	position: absolute;
+	right: 5px;
+	top: 50%;
+	transform: translateY(-50%);
 `
 
 const ErrorContainer = (props: ErrorMessageProps) => (
@@ -85,6 +98,7 @@ const Middle = () => {
 		username: '',
 		password: '',
 	}
+	const [showPass, setShowPass] = React.useState(false)
 
 	return (
 		<div>
@@ -108,7 +122,12 @@ const Middle = () => {
 						</Label>
 						<Label>
 							<LabelText>Password</LabelText>
-							<Field name='password' type='password' />
+							<PasswordField>
+								<Field name='password' type={showPass ? 'text' : 'password'} />
+								<Eye onClick={() => setShowPass((s) => !s)}>
+									{showPass ? <RiEyeCloseLine /> : <IconParkOutlineEyes />}
+								</Eye>
+							</PasswordField>
 							<ErrorContainer name='password' />
 						</Label>
 						<Flex justify='space-between' style={{ width: '100%' }}>
